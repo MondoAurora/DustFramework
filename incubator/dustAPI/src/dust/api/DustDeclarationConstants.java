@@ -6,4 +6,6 @@ public interface DustDeclarationConstants {
 	public static interface TypeDef {};
 	
 	public static interface MsgDef {};
+	
+	public static interface SharedDef {};
 }

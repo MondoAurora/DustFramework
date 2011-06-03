@@ -1,4 +1,4 @@
-This boot sources are required for Modular builds.
+These boot sources are required for Modular builds.
 
 Modular builds start up without a kernel, but the startup routines require some API
 functions to create the deployment information objects, and perhaps extend them with
