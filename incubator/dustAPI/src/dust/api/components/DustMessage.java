@@ -1,4 +1,11 @@
 package dust.api.components;
 
-public interface DustMessage extends DustVariantStructure {
+import dust.api.DustConstants;
+
+
+public interface DustMessage extends DustConstants {
+	DustDeclId getTypeId();
+	DustDeclId getMessageId();
+	
+	DustVariant getField(Enum<? extends FieldId> field);
 }

@@ -40,3 +40,23 @@ module loading according to the settings (maybe an URLClassLoader, but it can al
 a remote loader from a database or whatever...). Thus, the binary loader must reside
 outside any module, as a "toolkit", but accessible only for the boot process and the 
 kernel...
+
+Message
+Going forward along the generated codes, it would be possible to generate normal Java
+classes. However, in Java I have a built-in RTTI which is not always available, so I
+can't rely on it in other languages. Any 'solution' would let the coder some 'cheating'
+with the types and the content, which I would not like to allow.
+This is why I stick to the original approach of having the Messages handled internally 
+by the world, not in the user code.
+
+API - World
+I have to use more telling names. The API in fact the "world" that you can reach through
+the available functions. So, the API is dustWorld from now on: the world is the active
+and communicating entity set invoked from the persistent storages, play their roles and
+get dismissed again, on a single running environment. The attributes of this world are
+the deployment configuration information.
+There is another level, the dustUniverse, which are the worlds connected to each other.
+A world knows about a portion of this universe, and this knowledge is extended by new 
+types: like the "Person" type is hosted on big public servers; when I have to get a Person,
+my world gets the type declaration which contains the link to this other world, extending
+my knowledge about the dust Universe.     

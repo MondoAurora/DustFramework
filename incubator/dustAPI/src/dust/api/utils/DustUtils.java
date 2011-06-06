@@ -3,25 +3,32 @@ package dust.api.utils;
 import java.util.ArrayList;
 
 import dust.api.DustConstants;
-import dust.api.components.DustAPI;
+import dust.api.components.DustEntity;
+import dust.api.components.DustVariant;
+import dust.api.components.DustWorld;
 
 public class DustUtils implements DustConstants {
-	private static DustAPI api = null;
+	private static DustWorld world = null;
 	private static boolean booted = false;
 
-	public static DustAPI getApi() {
-		return api;
+	public static DustWorld getWorld() {
+		return world;
 	}
 
-	public static void setApi(DustAPI api_, boolean boot) {
-		if ( (null == api ) || ( !booted && !boot) ) {
-			api = api_;
+	public static void setWorld(DustWorld world_, boolean boot) {
+		if ( (null == world ) || ( !booted && !boot) ) {
+			world = world_;
 			booted = !boot;
 		} else {
 			throw new IllegalStateException("Invalid call to DustUtils.setAPI().");
 		}
 	}
 
+	public static DustEntity getEntity(DustDeclId primaryType, DustVariant[] knownFields) throws Exception {
+		DustUtilInvokeEntityProcessor iep = new DustUtilInvokeEntityProcessor(true, true);
+		return iep.searchOrCreate(primaryType, knownFields, true);
+	}
+	
 	public static String getModuleId(String vendor, String domain, String version) {
 		return new StringBuilder(vendor).append(".").append(domain).append(".").append(version).toString();
 	}

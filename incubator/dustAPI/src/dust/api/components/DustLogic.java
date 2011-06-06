@@ -1,23 +1,26 @@
 package dust.api.components;
 
+import dust.api.DustConstants.DustDeclId;
 import dust.api.utils.DustUtils;
 
 public abstract class DustLogic {
-	DustAspect myAspect;
+	DustEntity myEntity;
+	DustDeclId myTypeId;
 	
-	final void initInt(DustAspect ob) throws Exception {
-		myAspect = ob;
-		init(myAspect);
+	final void initInt(DustDeclId typeId, DustEntity ob) throws Exception {
+		myTypeId = typeId;
+		myEntity = ob;
+		init(myEntity);
 	}
 	
-	final void processMessage(DustAspect from, DustMessage msg) throws Exception {
-		processMessage(myAspect, from, msg);
+	final void processMessage(DustEntity from, DustMessage msg) throws Exception {
+		processMessage(myEntity, from, msg);
 	}
 	
-	protected final void send(DustAspect target, DustMessage msg) throws Exception {
-		DustUtils.getApi().send(myAspect, target, msg);
+	protected final void send(DustEntity target, DustMessage msg) throws Exception {
+		DustUtils.getWorld().send(myEntity, target, msg);
 	}
 	
-	protected abstract void init(DustAspect myAspect) throws Exception;
-	protected abstract void processMessage(DustAspect myObject, DustAspect from, DustMessage msg) throws Exception;	
+	protected abstract void init(DustEntity myAspect) throws Exception;
+	protected abstract void processMessage(DustEntity myObject, DustEntity from, DustMessage msg) throws Exception;	
 }

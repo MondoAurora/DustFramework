@@ -1,32 +1,29 @@
 package sandbox;
 
 import dust.api.DustConstants;
-import dust.api.boot.DustBootAPI;
-import dust.api.components.DustAPI;
-import dust.api.components.DustVariant;
-import dust.api.components.DustVariantStructure;
-import dust.api.utils.DustUtils;
-
-import dust.units.dust.common.v0_1.Common.Identified;
-import dust.units.dust.kernel.v0_1.TypeManagement.Type;
 
 public class Test implements DustConstants {
+	public static abstract class TestItem {
+		public void init(String[] args) {
+			
+		}
+		public abstract void test() throws Exception;
+	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DustAPI api = new DustBootAPI();
-		
-		DustUtils.setApi(api, true);
-		
-		DustDeclId idType = api.getTypeId(Type.class);
-		
-		DustVariantStructure vs = api.getVarStruct(idType, new DustVariant[] {
-			api.getVar(Identified.Fields.Identifier, FieldType.String, "Ahoy!"),
-			api.getVar(Type.Fields.AutoInit, FieldType.Boolean, false),
-		});
-		
-		System.out.print(vs.getField(Identified.Fields.Identifier).getValueString());
+		runTest(TestBootEntity.class, args);
+	}
+	
+	public static void runTest(Class<? extends TestItem> testClass, String[] args) {
+		try {
+			TestItem ti = testClass.newInstance();
+			ti.init(args);
+			ti.test();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

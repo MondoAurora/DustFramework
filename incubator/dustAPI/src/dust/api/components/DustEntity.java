@@ -1,10 +1,15 @@
 package dust.api.components;
 
+import java.util.Enumeration;
+
 import dust.api.DustConstants;
 
 public interface DustEntity extends DustConstants {
-	DustVariantStructure getPrimaryAspect();
-	DustVariantStructure getAspect(Class <? extends TypeDef> aspect);
+	DustDeclId getPrimaryTypeId();
+	Enumeration<DustDeclId> getTypes();
 	
-	DustInstanceId getInstanceId();
+	EntityState getState();
+	EntityType getType();
+
+	DustVariant getField(Enum<? extends FieldId> field);
 }

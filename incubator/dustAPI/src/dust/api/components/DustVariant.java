@@ -44,11 +44,6 @@ public abstract class DustVariant implements Iterable<DustVariant>, DustConstant
 		return (Boolean) getData();
 	}
 
-	public Class<?> getValueClass() {
-		testType(FieldType.JavaClass);
-		return (Class<?>) getData();
-	}
-
 	public Long getValueLong() {
 		testType(FieldType.Long);
 		return (Long) getData();
@@ -83,9 +78,9 @@ public abstract class DustVariant implements Iterable<DustVariant>, DustConstant
 		return (DustByteBuffer) getData();
 	}
 
-	public DustAspect getValueObject() {
+	public DustEntity getValueObject() {
 		testType(FieldType.ObSingle);
-		return (DustAspect) getData();
+		return (DustEntity) getData();
 	}
 
 	public abstract void setData(Object value, VariantSetMode mode, String key);

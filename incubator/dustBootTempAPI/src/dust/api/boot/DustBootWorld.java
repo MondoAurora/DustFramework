@@ -1,17 +1,14 @@
 package dust.api.boot;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import dust.api.components.DustAPI;
-import dust.api.components.DustAspect;
 import dust.api.components.DustEntity;
 import dust.api.components.DustMessage;
 import dust.api.components.DustVariant;
-import dust.api.components.DustVariantStructure;
+import dust.api.components.DustWorld;
 
-public class DustBootAPI extends DustAPI {
+public class DustBootWorld extends DustWorld {
 	Map<Class<?>, DustBootTypeId> mapTypes = new HashMap<Class<?>, DustBootTypeId>();
 
 	DustBootTypeId getId(Class<?> cc) {
@@ -41,32 +38,22 @@ public class DustBootAPI extends DustAPI {
 	}
 
 	@Override
-	public DustVariantStructure getVarStruct(DustDeclId typeId, DustVariant[] fields) {
-		return new DustBootVariantStructure(typeId, fields);
-	}
-
-	@Override
 	public DustMessage getMessage(DustDeclId msgId, DustVariant[] fields) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DustEntity getEntity(DustDeclId primaryType, DustInstanceId instId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Enumeration<DustEntity> getEntities(DustDeclId primaryType, DustVariantStructure[] aspects) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void send(DustAspect from, DustAspect to, DustMessage msg) throws Exception {
+	protected void send(DustEntity from, DustEntity to, DustMessage msg) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void invoke(InvokeResponseProcessor irProc, DustDeclId primaryType, DustVariant[] knownFields,
+		boolean createIfMissing, Enum<? extends FieldId>[] requiredFields, DustEntity filter) {
+		irProc.searchStarted();
+		irProc.entityFound(new DustBootEntity(primaryType, knownFields));
+		irProc.searchFinished();
 	}
 
 }
