@@ -19,14 +19,14 @@ public abstract class DustWorld implements DustConstants {
 		DustEntity filter
 	);
 	
-	public void send(DustEntity to, DustMessage msg) throws Exception {
+	public void send(DustAspect to, DustMessage msg) throws Exception {
 		send(null, to, msg);
 	}
 	
-	protected abstract void send(DustEntity from, DustEntity to, DustMessage msg) throws Exception;
+	protected abstract void send(DustEntity from, DustAspect to, DustMessage msg) throws Exception;
 
-	protected void initLogic(DustLogic logic, DustDeclId typeId, DustEntity entity) throws Exception {
-		logic.initInt(typeId, entity);
+	protected void initLogic(DustLogic logic, DustDeclId typeId, DustAspect aspect) throws Exception {
+		logic.initInt(typeId, aspect);
 	}
 	
 	protected void callProcess(DustLogic logic, DustEntity from, DustMessage msg) throws Exception {

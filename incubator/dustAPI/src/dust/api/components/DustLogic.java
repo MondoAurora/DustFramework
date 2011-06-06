@@ -4,23 +4,23 @@ import dust.api.DustConstants.DustDeclId;
 import dust.api.utils.DustUtils;
 
 public abstract class DustLogic {
-	DustEntity myEntity;
+	DustAspect myAspect;
 	DustDeclId myTypeId;
 	
-	final void initInt(DustDeclId typeId, DustEntity ob) throws Exception {
+	final void initInt(DustDeclId typeId, DustAspect ob) throws Exception {
 		myTypeId = typeId;
-		myEntity = ob;
-		init(myEntity);
+		myAspect = ob;
+		init(myAspect);
 	}
 	
 	final void processMessage(DustEntity from, DustMessage msg) throws Exception {
-		processMessage(myEntity, from, msg);
+		processMessage(myAspect, from, msg);
 	}
 	
-	protected final void send(DustEntity target, DustMessage msg) throws Exception {
-		DustUtils.getWorld().send(myEntity, target, msg);
+	protected final void send(DustAspect target, DustMessage msg) throws Exception {
+		DustUtils.getWorld().send(myAspect.getEntity(), target, msg);
 	}
 	
-	protected abstract void init(DustEntity myAspect) throws Exception;
-	protected abstract void processMessage(DustEntity myObject, DustEntity from, DustMessage msg) throws Exception;	
+	protected abstract void init(DustAspect myAspect) throws Exception;
+	protected abstract void processMessage(DustAspect myAspect, DustEntity from, DustMessage msg) throws Exception;	
 }

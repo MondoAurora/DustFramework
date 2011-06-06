@@ -4,10 +4,11 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import dust.api.components.DustAspect;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
 
-public class DustBootEntity implements DustEntity {
+public class DustBootEntity implements DustEntity, DustAspect {
 	DustDeclId typeId;
 	
 	Map<Enum<? extends FieldId>, DustVariant> mapFields = new HashMap<Enum<? extends FieldId>, DustVariant>();
@@ -51,5 +52,15 @@ public class DustBootEntity implements DustEntity {
 	@Override
 	public DustVariant getField(Enum<? extends FieldId> field) {
 		return mapFields.get(field);
+	}
+
+	@Override
+	public DustAspect getAspect(DustDeclId type) {
+		return this;
+	}
+
+	@Override
+	public DustEntity getEntity() {
+		return this;
 	}
 }

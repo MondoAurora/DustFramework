@@ -3,6 +3,7 @@ package dust.api.boot;
 import java.util.HashMap;
 import java.util.Map;
 
+import dust.api.components.DustAspect;
 import dust.api.components.DustEntity;
 import dust.api.components.DustMessage;
 import dust.api.components.DustVariant;
@@ -44,16 +45,17 @@ public class DustBootWorld extends DustWorld {
 	}
 
 	@Override
-	protected void send(DustEntity from, DustEntity to, DustMessage msg) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
 	public void invoke(InvokeResponseProcessor irProc, DustDeclId primaryType, DustVariant[] knownFields,
 		boolean createIfMissing, Enum<? extends FieldId>[] requiredFields, DustEntity filter) {
 		irProc.searchStarted();
 		irProc.entityFound(new DustBootEntity(primaryType, knownFields));
 		irProc.searchFinished();
+	}
+	
+	@Override
+	protected void send(DustEntity from, DustAspect to, DustMessage msg) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

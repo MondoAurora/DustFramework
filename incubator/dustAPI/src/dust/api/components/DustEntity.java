@@ -11,5 +11,5 @@ public interface DustEntity extends DustConstants {
 	EntityState getState();
 	EntityType getType();
 
-	DustVariant getField(Enum<? extends FieldId> field);
+	DustAspect getAspect(DustDeclId type);
 }
