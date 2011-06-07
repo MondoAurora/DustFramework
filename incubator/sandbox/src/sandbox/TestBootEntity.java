@@ -1,7 +1,6 @@
 package sandbox;
 
 import dust.api.DustConstants;
-import dust.api.boot.DustBootWorld;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
 import dust.api.components.DustWorld;
@@ -12,15 +11,13 @@ import dust.units.dust.kernel.v0_1.TypeManagement.Type;
 public class TestBootEntity extends Test.TestItem implements DustConstants {
 	@Override
 	public void test() throws Exception {
-		DustWorld world = new DustBootWorld();
-		
-		DustUtils.setWorld(world, true);
+		DustWorld world = DustUtils.getWorld();
 		
 		DustDeclId idType = world.getTypeId(Type.class);
 		
 		DustEntity e = DustUtils.getEntity(idType, new DustVariant[] {
-			world.getVar(Identified.Fields.Identifier, FieldType.String, "Ahoy!"),
-			world.getVar(Type.Fields.AutoInit, FieldType.Boolean, false),
+			world.getVar(null, Identified.Fields.Identifier, "Ahoy!"),
+			world.getVar(null, Type.Fields.Unit, "Bambam"),
 		});
 		
 		System.out.print(e.getAspect(idType).getField(Identified.Fields.Identifier).getValueString());

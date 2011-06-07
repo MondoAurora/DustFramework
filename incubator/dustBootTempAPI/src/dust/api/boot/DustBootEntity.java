@@ -2,6 +2,7 @@ package dust.api.boot;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import dust.api.components.DustAspect;
@@ -62,5 +63,15 @@ public class DustBootEntity implements DustEntity, DustAspect {
 	@Override
 	public DustEntity getEntity() {
 		return this;
+	}
+	
+	public String toString() {
+		StringBuilder b = new StringBuilder("[");
+		
+		for ( Iterator<Map.Entry<Enum<? extends FieldId>, DustVariant>> it = mapFields.entrySet().iterator(); it.hasNext(); ) {
+			Map.Entry<Enum<? extends FieldId>, DustVariant> e = it.next();
+			b.append(e.getKey()).append(": ").append(e.getValue()).append("; ");
+		}
+		return b.append("]").toString();
 	}
 }

@@ -1,9 +1,12 @@
 package sandbox;
 
 import dust.api.DustConstants;
+import dust.api.boot.DustBootWorld;
+import dust.api.components.DustWorld;
+import dust.api.utils.DustUtils;
 
 public class Test implements DustConstants {
-	public static abstract class TestItem {
+	public static abstract class TestItem implements DustConstants {
 		public void init(String[] args) {
 			
 		}
@@ -14,7 +17,11 @@ public class Test implements DustConstants {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		runTest(TestBootEntity.class, args);
+		DustWorld world = new DustBootWorld();
+		DustUtils.setWorld(world, true);
+
+//		runTest(TestBootEntity.class, args);
+		runTest(TestInitTypeManagement.class, args);
 	}
 	
 	public static void runTest(Class<? extends TestItem> testClass, String[] args) {

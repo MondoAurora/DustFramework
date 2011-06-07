@@ -1,17 +1,17 @@
 package dust.api;
 
 import dust.api.components.DustEntity;
+import dust.api.wrappers.DustIdentifier;
 
 public interface DustConstants extends DustDeclarationConstants {
-	enum FieldType { Identifier, String, Long, Double, ImmutableDate, Boolean, ValueSet, ByteArray, 
-		ObSingle, ObSet, ObArray, ObMap };
-
 		enum VariantSetMode { set, addFirst, addLast, insert, remove, clear };
 			
 		enum EntityType { Temporal, Ghost, Persistent };
 		enum EntityState { Creating, Changing, Steady };
 		
-		public interface DustDeclId {};
+		public interface DustDeclId {
+			DustIdentifier getIdentifier();
+		};
 		
 		public static interface InvokeResponseProcessor {
 			void searchStarted();

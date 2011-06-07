@@ -8,6 +8,7 @@ import dust.api.components.DustEntity;
 import dust.api.components.DustMessage;
 import dust.api.components.DustVariant;
 import dust.api.components.DustWorld;
+import dust.api.utils.DustUtilVariant;
 
 public class DustBootWorld extends DustWorld {
 	Map<Class<?>, DustBootTypeId> mapTypes = new HashMap<Class<?>, DustBootTypeId>();
@@ -31,11 +32,8 @@ public class DustBootWorld extends DustWorld {
 	}
 
 	@Override
-	public DustVariant getVar(Enum<? extends FieldId> fieldId, FieldType fieldType, Object value) {
-		DustBootVariant bv = new DustBootVariant(fieldId, fieldType);
-		bv.setData(value, null, null);
-		
-		return bv;
+	public DustVariant getVar(DustDeclId typeId, Enum<? extends FieldId> fieldId, Object value) {
+		return new DustUtilVariant(fieldId, value);
 	}
 
 	@Override

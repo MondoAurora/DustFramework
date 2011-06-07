@@ -32,7 +32,8 @@ public class DustUtils implements DustConstants {
 	public static String getModuleId(String vendor, String domain, String version) {
 		return new StringBuilder(vendor).append(".").append(domain).append(".").append(version).toString();
 	}
-
+	
+/*
 	public static final boolean isList(FieldType fldType) {
 		switch (fldType) {
 		case ObArray:
@@ -55,7 +56,7 @@ public class DustUtils implements DustConstants {
 			return true;
 		}
 	}
-
+*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static final int safeCmp(Comparable c, Object o) {
 		return (null == c) ? (null == o) ? 0 : -1 : (null == o) ? 1 : c.compareTo(o);

@@ -1,5 +1,13 @@
 package dust.api.wrappers;
 
 public class DustIdentifier {
-// a wrapper around an ASCII encoded final String
+	private final String id;
+
+	public DustIdentifier(String id) {
+		this.id = id;
+	}
+	
+	public String toString() {
+		return id;
+	}
 }
