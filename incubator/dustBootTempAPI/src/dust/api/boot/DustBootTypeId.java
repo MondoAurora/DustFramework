@@ -14,4 +14,8 @@ public class DustBootTypeId implements DustDeclId {
 	public DustIdentifier getIdentifier() {
 		return new DustIdentifier(className);
 	}
+	
+	public String toString() {
+		return className;
+	}
 }

@@ -14,7 +14,8 @@ import dust.api.wrappers.DustDateImmutable;
 import dust.api.wrappers.DustIdentifier;
 
 public class DustUtilVariant implements DustVariant {
-	Enum<? extends FieldId> fieldId;
+	final Enum<? extends FieldId> fieldId;
+	final DustDeclId typeId;
 
 	static enum ContentType {
 		Unknown, Single, Array, Set, Map
@@ -24,18 +25,29 @@ public class DustUtilVariant implements DustVariant {
 
 	Object data;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected DustUtilVariant(Enum<? extends FieldId> fieldId) {
 		this.fieldId = fieldId;
+
+		DustDeclId id = null;
+		for (Class cc = fieldId.getDeclaringClass(); (null != cc) && (null == id); cc = cc.getDeclaringClass()) {
+			if (TypeDef.class.isAssignableFrom(cc)) {
+				id = DustUtils.getWorld().getTypeId(cc);
+				break;
+			}
+		}
+
+		typeId = id;
 	}
 
 	public DustUtilVariant(Enum<? extends FieldId> fieldId, Object value) {
-		this.fieldId = fieldId;
-		
-		if ( value instanceof DustUtilInitValue[] ) {
-			for ( DustUtilInitValue iv : (DustUtilInitValue[]) value ) {
+		this(fieldId);
+
+		if (value instanceof DustUtilInitValue[]) {
+			for (DustUtilInitValue iv : (DustUtilInitValue[]) value) {
 				setData(iv.value, VariantSetMode.insert, iv.key);
 			}
-		} else if ( null != value ) {
+		} else if (null != value) {
 			setData(value, VariantSetMode.set, null);
 		}
 	}
@@ -52,8 +64,8 @@ public class DustUtilVariant implements DustVariant {
 		return (Boolean) getData();
 	}
 
-	public Long getValueLong() {
-		return (Long) getData();
+	public Integer getValueInteger() {
+		return (Integer) getData();
 	}
 
 	public Double getValueDouble() {
@@ -68,12 +80,9 @@ public class DustUtilVariant implements DustVariant {
 		return (String) getData();
 	}
 
-	public String getValueValSet() {
-		return (String) getData();
-	}
-
+	@SuppressWarnings("unchecked")
 	public <T extends Enum<T>> T getValueValSet(Class<T> enumType) {
-		return Enum.valueOf(enumType, getValueValSet());
+		return (T) getData();
 	}
 
 	public DustByteBuffer getValueBuffer() {
@@ -114,8 +123,8 @@ public class DustUtilVariant implements DustVariant {
 
 	@SuppressWarnings("unchecked")
 	public void setData(Object value, VariantSetMode mode, String key) {
-		if ( ContentType.Unknown == cType ) {
-			if ( VariantSetMode.set == mode ) {
+		if (ContentType.Unknown == cType) {
+			if (VariantSetMode.set == mode) {
 				cType = ContentType.Single;
 			} else {
 				switch (mode) {
@@ -125,7 +134,7 @@ public class DustUtilVariant implements DustVariant {
 					data = new ArrayList<DustVariant>();
 					break;
 				case insert:
-					if ( null == key ) {
+					if (null == key) {
 						cType = ContentType.Set;
 						data = new HashSet<DustVariant>();
 					} else {
@@ -136,21 +145,21 @@ public class DustUtilVariant implements DustVariant {
 				}
 			}
 		}
-		
+
 		switch (cType) {
-		case Single: 
+		case Single:
 			this.data = value;
 			break;
 		case Map:
 			switch (mode) {
 			case insert:
-				((Map<String, DustVariant>)data).put(key, new DustUtilVariant(fieldId, (DustEntity)value));
+				((Map<String, DustVariant>) data).put(key, new DustUtilVariant(fieldId, (DustEntity) value));
 				break;
 			}
 		case Set:
 			switch (mode) {
 			case insert:
-				((Set<DustVariant>)data).add(new DustUtilVariant(fieldId, (DustEntity)value));
+				((Set<DustVariant>) data).add(new DustUtilVariant(fieldId, (DustEntity) value));
 				break;
 			}
 		}
@@ -160,27 +169,33 @@ public class DustUtilVariant implements DustVariant {
 		this.data = ((DustUtilVariant) from).getData();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Iterator<DustVariant> iterator() {
-		throw new IllegalAccessError("Not a collection!");
+	public Iterable<DustVariant> getMembers() {
+		switch (cType) {
+		case Set:
+			return ((Set<DustVariant>) data);
+		}
+		
+		return null;
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String toString() {
-		if ( ContentType.Single == cType ) {
+		if (ContentType.Single == cType) {
 			return String.valueOf(data);
 		} else {
 			StringBuilder b = new StringBuilder("{ ");
 			switch (cType) {
 			case Map:
-				for ( Iterator<Map.Entry<String, DustVariant>> it = ((Map)data).entrySet().iterator(); it.hasNext(); ) {
+				for (Iterator<Map.Entry<String, DustVariant>> it = ((Map) data).entrySet().iterator(); it.hasNext();) {
 					Map.Entry<String, DustVariant> e = it.next();
 					b.append(e.getKey()).append(" = ").append(e.getValue()).append(";");
 				}
 				break;
 
 			case Set:
-				for ( Iterator<DustVariant> it = ((Set)data).iterator(); it.hasNext(); ) {
+				for (Iterator<DustVariant> it = ((Set) data).iterator(); it.hasNext();) {
 					b.append(it.next()).append(";");
 				}
 				break;
@@ -189,8 +204,32 @@ public class DustUtilVariant implements DustVariant {
 				break;
 			}
 			b.append("}");
-			
+
 			return b.toString();
 		}
 	}
+
+	@Override
+	public DustDeclId getTypeId() {
+		return typeId;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DustUtilVariant) {
+			DustUtilVariant v = (DustUtilVariant) obj;
+			if (v.fieldId.equals(fieldId)) {
+				switch (cType) {
+				case Single:
+					return DustUtils.isEqual(v.data, data);
+				case Set:
+					// TODO Temporal!!!
+					return ((Set<DustVariant>) data).size() == ((Set<DustVariant>) v.data).size();
+				}
+			}
+		}
+		return super.equals(obj);
+	}
+
 }

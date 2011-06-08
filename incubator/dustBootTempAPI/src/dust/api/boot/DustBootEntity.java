@@ -1,6 +1,5 @@
 package dust.api.boot;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,61 +7,81 @@ import java.util.Map;
 import dust.api.components.DustAspect;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
+import dust.api.utils.DustUtils;
 
-public class DustBootEntity implements DustEntity, DustAspect {
-	DustDeclId typeId;
+public class DustBootEntity implements DustEntity {
+	class MyAspect implements DustAspect {
+		DustDeclId myId;
+		
+		MyAspect(DustDeclId id) {
+			myId = id;
+		}
+
+		@Override
+		public DustDeclId getType() {
+			return myId;
+		}
+
+		@Override
+		public DustVariant getField(Enum<? extends FieldId> field) {
+			return mapFields.get(field);
+		}
+
+		@Override
+		public DustEntity getEntity() {
+			return DustBootEntity.this;
+		}	
+	}
+	
+	DustDeclId primaryTypeId;
 	
 	Map<Enum<? extends FieldId>, DustVariant> mapFields = new HashMap<Enum<? extends FieldId>, DustVariant>();
+	Map<DustDeclId, MyAspect> mapTypes = new HashMap<DustDeclId, MyAspect>();
 
 	DustBootEntity(DustDeclId typeId, DustVariant[] fields) {
-		this.typeId = typeId;
+		this.primaryTypeId = typeId;
+		addType(primaryTypeId);
 		
 		for ( DustVariant v : fields ) {
 			setVariant(v);
 		}
 	}
 	
+	void addType(DustDeclId typeId) {
+		if ( !mapTypes.containsKey(typeId) ) {
+			mapTypes.put(typeId, new MyAspect(typeId));
+			((DustBootWorld)DustUtils.getWorld()).addEntity(typeId, this);
+		}
+	}
+	
 	void setVariant(DustVariant variant) {
 		mapFields.put(variant.getId(), variant);
+		addType(variant.getTypeId());
 	}
 
 	@Override
 	public DustDeclId getPrimaryTypeId() {
-		// TODO Auto-generated method stub
-		return null;
+		return primaryTypeId;
 	}
 
 	@Override
-	public Enumeration<DustDeclId> getTypes() {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterable<DustDeclId> getTypes() {
+		return mapTypes.keySet();
 	}
 
 	@Override
 	public EntityState getState() {
-		// TODO Auto-generated method stub
-		return null;
+		return EntityState.Creating;
 	}
 
 	@Override
 	public EntityType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public DustVariant getField(Enum<? extends FieldId> field) {
-		return mapFields.get(field);
+		return EntityType.Temporal;
 	}
 
 	@Override
 	public DustAspect getAspect(DustDeclId type) {
-		return this;
-	}
-
-	@Override
-	public DustEntity getEntity() {
-		return this;
+		return mapTypes.get(type);
 	}
 	
 	public String toString() {

@@ -10,4 +10,14 @@ public class DustIdentifier {
 	public String toString() {
 		return id;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DustIdentifier) {
+			return id.equals(((DustIdentifier) obj).id);
+		}
+		return super.equals(obj);
+	}
+	
+	
 }

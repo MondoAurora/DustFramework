@@ -1,8 +1,11 @@
 package dust.api.boot;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import dust.api.DustConstants;
 import dust.api.components.DustAspect;
 import dust.api.components.DustEntity;
 import dust.api.components.DustMessage;
@@ -12,6 +15,7 @@ import dust.api.utils.DustUtilVariant;
 
 public class DustBootWorld extends DustWorld {
 	Map<Class<?>, DustBootTypeId> mapTypes = new HashMap<Class<?>, DustBootTypeId>();
+	Map<DustDeclId, Set<DustEntity>> mapEntities = new HashMap<DustConstants.DustDeclId, Set<DustEntity>>();
 
 	DustBootTypeId getId(Class<?> cc) {
 		DustBootTypeId ti = mapTypes.get(cc);
@@ -21,6 +25,7 @@ public class DustBootWorld extends DustWorld {
 		}
 		return ti;
 	}
+	
 	@Override
 	public DustDeclId getTypeId(Class<? extends TypeDef> type) {
 		return getId(type);
@@ -46,8 +51,52 @@ public class DustBootWorld extends DustWorld {
 	public void invoke(InvokeResponseProcessor irProc, DustDeclId primaryType, DustVariant[] knownFields,
 		boolean createIfMissing, Enum<? extends FieldId>[] requiredFields, DustEntity filter) {
 		irProc.searchStarted();
-		irProc.entityFound(new DustBootEntity(primaryType, knownFields));
+		
+		boolean create = createIfMissing;
+		Set<DustEntity> setInstances = mapEntities.get(primaryType);
+		if ( null != setInstances ) {
+			for ( DustEntity e : setInstances ) {
+				boolean match = true;
+				
+				for ( DustVariant v : knownFields ) {
+					DustAspect asp = e.getAspect(v.getTypeId());
+					if ( (null == asp ) || !v.equals(asp.getField(v.getId())) ) {
+						match = false;
+						break;
+					}
+				}
+				
+				if ( match ) {
+					create = false;
+					irProc.entityFound(e);
+				}
+			}
+		}
+		
+		if ( create ) {
+			irProc.entityFound(new DustBootEntity(primaryType, knownFields));			
+		}
+		
 		irProc.searchFinished();
+	}
+	
+	void addEntity(DustDeclId id, DustEntity e) {
+		Set<DustEntity> setInstances = mapEntities.get(id);
+		if ( null == setInstances ) {
+			setInstances = new HashSet<DustEntity>();
+			mapEntities.put(id, setInstances);
+		} 
+		
+		setInstances.add(e);
+	}
+	
+	void dropEntity(DustEntity e) {
+		for ( DustDeclId id : e.getTypes() ) {
+			Set<DustEntity> setInstances = mapEntities.get(id);
+			if ( null != setInstances ) {
+				setInstances.remove(e);
+			} 
+		}
 	}
 	
 	@Override

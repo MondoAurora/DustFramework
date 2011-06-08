@@ -60,43 +60,6 @@ public interface KernelToolkit extends DustDeclarationConstants {
 		};
 	}
 
-	public interface PersistenceConnector extends TypeDef {
-		enum Fields {
-			LocalModify, // boolean yes/no
-			ExternalModify // valueset about the refresh methods
-		};
-		
-		static class Values {
-			enum ExternalModify {
-				None, // no external change, we own the persistence source
-				Passive, // we have to check for modifications "blind" without help
-				PassiveDiff, // we have to check but differential update is supported
-				Active, // sends events on changes, but no differential update is available
-				ActiveDiff // sends events and diff available
-			};
-		}
-
-		enum Messages {
-			Load, Save, Commit, Rollback;
-			
-			interface LoadMsg extends MsgDef {
-				enum Fields {
-					PersId;
-				};
-			}
-			
-			interface SaveMsg extends MsgDef {
-				enum Fields {
-					ObjectList, Immediate;
-				};
-			}
-		}
-		
-		enum Shared implements SharedDef {
-			BootConn
-		};
-	}
-	
 	public interface Filter extends TypeDef {
 		enum Messages {
 			isAccepted;

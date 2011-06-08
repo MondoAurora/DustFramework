@@ -1,13 +1,12 @@
 package dust.api.components;
 
-import java.util.Iterator;
-
 import dust.api.DustConstants;
 import dust.api.wrappers.DustByteBuffer;
 import dust.api.wrappers.DustDateImmutable;
 import dust.api.wrappers.DustIdentifier;
 
 public interface DustVariant extends DustConstants {
+	DustDeclId getTypeId();
 	Enum<? extends FieldId> getId();
 
 	boolean isNull();
@@ -16,11 +15,10 @@ public interface DustVariant extends DustConstants {
 
 	DustIdentifier getValueIdentifier();
 	boolean getValueBoolean();
-	Long getValueLong();
+	Integer getValueInteger();
 	Double getValueDouble();
 	DustDateImmutable getValueDate();
 	String getValueString();
-	String getValueValSet();
 	<T extends Enum<T>> T getValueValSet(Class<T> enumType);
 	DustByteBuffer getValueBuffer();
 	DustEntity getValueObject();
@@ -31,5 +29,5 @@ public interface DustVariant extends DustConstants {
 	void setValueValSet(String val);
 	void setValueValSet(Enum<?> val);
 
-	Iterator<DustVariant> iterator();
+	Iterable<DustVariant> getMembers();
 }

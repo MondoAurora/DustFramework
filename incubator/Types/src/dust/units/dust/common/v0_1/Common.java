@@ -6,7 +6,7 @@ public interface Common extends DustDeclarationConstants {
 	public interface ValIdentifier extends TypeDef {}
 	public interface ValString extends TypeDef {}
 	public interface ValJavaClass extends TypeDef {}
-	public interface ValLong extends TypeDef {}
+	public interface ValInteger extends TypeDef {}
 	public interface ValDouble extends TypeDef {}
 	public interface ValImmutableDate extends TypeDef {}
 	public interface ValBoolean extends TypeDef {}
@@ -16,6 +16,12 @@ public interface Common extends DustDeclarationConstants {
 	public interface Identified extends TypeDef {
 		enum Fields implements FieldId {
 			Identifier
+		};
+	}
+	
+	public interface FieldContainer extends TypeDef {
+		enum Fields implements FieldId {
+			Fields
 		};
 	}
 

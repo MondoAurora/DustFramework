@@ -15,7 +15,7 @@ public interface TypeManagement extends DustDeclarationConstants {
 
 	public interface Type extends TypeDef {
 		enum Fields implements FieldId {
-			Unit, Fields, Messages, Shared, Resource
+			Unit, isGlobal, Messages, Shared, Resource
 		};
 
 		enum Shared implements SharedDef {
@@ -36,15 +36,12 @@ public interface TypeManagement extends DustDeclarationConstants {
 
 		public static interface Values {
 			enum FieldType {
-				Identifier, String, Long, Double, ImmutableDate, Boolean, ValueSet, ByteArray, ObType, ObSingle, ObSet, ObArray, ObMap
+				Identifier, String, Integer, Double, ImmutableDate, Boolean, ValueSet, ByteArray, ObType, ObSingle, ObSet, ObArray, ObMap
 			};
 		}
 	}
 
 	public interface Resource extends TypeDef {
-		enum Fields implements FieldId {
-			Fields,
-		};
 	}
 
 	public interface Shared extends TypeDef {
@@ -54,18 +51,5 @@ public interface TypeManagement extends DustDeclarationConstants {
 	}
 
 	public interface Message extends TypeDef {
-		enum Fields implements FieldId {
-			Fields,
-		};
-
-		// enum MsgSynch { InSync, Parallel };
-		// enum MsgAccess { QueryOnly, ModifiesOthers, ModifiesThis };
-
-	}
-
-	public interface TypeLoader extends TypeDef {
-		enum Fields {
-			RootDir, Ext, Template
-		};
 	}
 }
