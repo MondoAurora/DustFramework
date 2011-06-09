@@ -1,7 +1,8 @@
 package sandbox;
 
 import sandbox.Test.TestItem;
-import sandbox.persistence.string.StreamDumper;
+import sandbox.persistence.db.DBDumper;
+import sandbox.persistence.stream.StreamDumper;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
 import dust.api.components.DustWorld;
@@ -256,5 +257,10 @@ public class TestInitTypeManagement extends TestItem {
 		System.out.println("\n----------------------\n");
 		
 		sd.dump(eTypeField);
+		
+		
+		DBDumper dd = new DBDumper();
+		
+		dd.dumpEntity(eTypeField);
 	}
 }

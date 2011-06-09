@@ -5,5 +5,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/dustAPI"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/dustBootTempAPI"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Types"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Jars"/>
+	<classpathentry kind="lib" path="/Jars/db/mysql-connector-java-5.1.13-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

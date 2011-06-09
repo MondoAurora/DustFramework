@@ -1,7 +1,7 @@
-package sandbox.persistence.string;
+package sandbox.persistence;
 
-import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import dust.api.DustConstants;
@@ -18,10 +18,64 @@ import dust.units.dust.common.v0_1.Common;
 import dust.units.dust.kernel.v0_1.TypeManagement;
 import dust.units.dust.kernel.v0_1.TypeManagement.Field;
 
-public class StreamDumper {
-	private static String indent = "  ";
-	StringBuffer header = new StringBuffer();
+public class PersistenceValueExtractor {
+	public class Value {
+		Enum<? extends FieldId> id;
+		Field.Values.FieldType type;
+		DustVariant value;
+		
+		public Enum<? extends FieldId> getId() {
+			return id;
+		}
+		public Field.Values.FieldType getType() {
+			return type;
+		}
+		public DustVariant getValue() {
+			return value;
+		}
+	}
+	
+	public class ValueIterator implements Iterable<Value>, Iterator<Value> {
+		Value v = new Value();
+		DustAspect target;
+		
+		Iterator<Map.Entry<Enum<? extends FieldId>, Field.Values.FieldType>> mapIt;
+		
+		public ValueIterator(DustAspect target) throws Exception {
+			this.target = target;
+			
+			Map<Enum<? extends FieldId>, Field.Values.FieldType> mapFields = getMapFields(target.getType());
+			
+			mapIt = (null == mapFields) ? null : mapFields.entrySet().iterator();
+		}
+		
+		@Override
+		public Iterator<Value> iterator() {
+			return this;
+		}
 
+		@Override
+		public boolean hasNext() {
+			return (null != mapIt) && mapIt.hasNext();
+		}
+
+		@Override
+		public Value next() {
+			Map.Entry<Enum<? extends FieldId>, Field.Values.FieldType> e = mapIt.next();
+			
+			v.id = e.getKey();
+			v.type = e.getValue();
+			v.value = target.getField(v.id);
+			
+			return v;
+		}
+
+		@Override
+		public void remove() {
+			throw new RuntimeException("This iterator is read-only!");
+		}
+		
+	}
 	DustWorld world = DustUtils.getWorld();
 
 	DustDeclId idIdentified = world.getTypeId(Common.Identified.class);
@@ -31,109 +85,13 @@ public class StreamDumper {
 	DustDeclId idField = world.getTypeId(TypeManagement.Field.class);
 
 	Map<DustDeclId, Map<Enum<? extends FieldId>, Field.Values.FieldType>> mapIdToFields = new HashMap<DustConstants.DustDeclId, Map<Enum<? extends FieldId>, Field.Values.FieldType>>();
-
-	public void dump(DustEntity entity) {
-		dump(entity, System.out);
+	
+	public boolean hasFields(DustAspect aspect) throws Exception {
+		return null != getMapFields(aspect.getType());
 	}
 
-	public void dump(DustEntity entity, PrintStream w) {
-		DustDeclId idPType = entity.getPrimaryTypeId();
-
-		newLine(w);
-		w.print("Entity [");
-		w.print(idPType.getIdentifier());
-		w.print("] {");
-
-		incIndent();
-
-		try {
-			dumpAspect(entity, idPType, w);
-
-			for (DustDeclId idAspType : entity.getTypes()) {
-				if (!DustUtils.isEqual(idPType, idAspType)) {
-					dumpAspect(entity, idAspType, w);
-				}
-			}
-
-			decIndent();
-			newLine(w);
-			w.print("}");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void dumpAspect(DustEntity entity, DustDeclId idAspType, PrintStream w) throws Exception {
-		DustAspect target = entity.getAspect(idAspType);
-
-		newLine(w);
-		w.print("Aspect ");
-		w.print(idAspType.getIdentifier());
-		w.print(" [");
-
-		Map<Enum<? extends FieldId>, Field.Values.FieldType> mapFields = getMapFields(idAspType);
-		if (null == mapFields) {
-			w.print(" NO FIELDS");
-		} else {
-			incIndent();
-
-			for (Map.Entry<Enum<? extends FieldId>, Field.Values.FieldType> eFld : mapFields.entrySet()) {
-				newLine(w);
-
-				w.print("Value ");
-				w.print(eFld.getKey().name());
-
-				DustVariant vTargetFld = target.getField(eFld.getKey());
-
-				if ((null == vTargetFld) || vTargetFld.isNull()) {
-					w.print(" is null ");
-				} else {
-					w.print(" = ");
-
-					switch (eFld.getValue()) {
-					case Identifier:
-						w.print(vTargetFld.getValueIdentifier());
-						break;
-					case Integer:
-						w.print(vTargetFld.getValueInteger());
-						break;
-					case ObSet:
-						w.print("Set of {");
-						incIndent();
-						for (DustVariant varMem : vTargetFld.getMembers()) {
-							dump(varMem.getValueObject(), w);
-						}
-						decIndent();
-						w.println();
-						w.print(header);
-						w.print("}");
-						break;
-					}
-				}
-			}
-
-			decIndent();
-			newLine(w);
-		}
-
-		w.print("]");
-
-	}
-
-	void newLine(PrintStream w) {
-		w.println();
-		w.print(header);
-	}
-
-	void incIndent() {
-		header.append(indent);
-	}
-
-	void decIndent() {
-		// ugly to add to the end and delete from start, but ok for a temp dump
-		header.delete(0, indent.length());
-
+	public Iterable<Value> getFields(DustAspect aspect) throws Exception {
+		return new ValueIterator(aspect);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
