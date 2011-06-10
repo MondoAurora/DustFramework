@@ -1,6 +1,7 @@
 package dust.api.components;
 
 import dust.api.DustConstants;
+import dust.api.DustConstants.VariantSetMode;
 import dust.api.wrappers.DustByteBuffer;
 import dust.api.wrappers.DustDateImmutable;
 import dust.api.wrappers.DustIdentifier;
@@ -25,9 +26,11 @@ public interface DustVariant extends DustConstants {
 
 	void setValueBoolean(boolean val);
 	void setValueIdentifier(DustIdentifier val);
+	void setValueInteger(Integer val);
 	void setValueString(String val);
 	void setValueValSet(String val);
 	void setValueValSet(Enum<?> val);
 
 	Iterable<DustVariant> getMembers();
+	void setData(Object value, VariantSetMode mode, String key);
 }

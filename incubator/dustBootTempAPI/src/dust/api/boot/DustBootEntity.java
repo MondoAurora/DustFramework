@@ -7,12 +7,13 @@ import java.util.Map;
 import dust.api.components.DustAspect;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
+import dust.api.utils.DustUtilVariant;
 import dust.api.utils.DustUtils;
 
 public class DustBootEntity implements DustEntity {
 	class MyAspect implements DustAspect {
 		DustDeclId myId;
-		
+
 		MyAspect(DustDeclId id) {
 			myId = id;
 		}
@@ -24,36 +25,54 @@ public class DustBootEntity implements DustEntity {
 
 		@Override
 		public DustVariant getField(Enum<? extends FieldId> field) {
-			return mapFields.get(field);
+			DustVariant v = mapFields.get(field);
+
+			if (null == v) {
+				v = new DustUtilVariant(field, null);
+				setVariant(v);
+			}
+			return v;
 		}
 
 		@Override
 		public DustEntity getEntity() {
 			return DustBootEntity.this;
-		}	
+		}
 	}
-	
+
 	DustDeclId primaryTypeId;
-	
+
 	Map<Enum<? extends FieldId>, DustVariant> mapFields = new HashMap<Enum<? extends FieldId>, DustVariant>();
 	Map<DustDeclId, MyAspect> mapTypes = new HashMap<DustDeclId, MyAspect>();
+	
+	EntityState state;
 
 	DustBootEntity(DustDeclId typeId, DustVariant[] fields) {
 		this.primaryTypeId = typeId;
 		addType(primaryTypeId);
-		
-		for ( DustVariant v : fields ) {
-			setVariant(v);
+
+		if (null != fields) {
+			for (DustVariant v : fields) {
+				setVariant(v);
+			}
+			state = EntityState.Steady;
+		} else {
+			state = EntityState.Creating;
 		}
 	}
-	
-	void addType(DustDeclId typeId) {
-		if ( !mapTypes.containsKey(typeId) ) {
-			mapTypes.put(typeId, new MyAspect(typeId));
-			((DustBootWorld)DustUtils.getWorld()).addEntity(typeId, this);
+
+	DustAspect addType(DustDeclId typeId) {
+		MyAspect asp = mapTypes.get(typeId);
+
+		if (null == asp) {
+			asp = new MyAspect(typeId);
+			mapTypes.put(typeId, asp);
+			((DustBootWorld) DustUtils.getWorld()).addEntity(typeId, this);
 		}
+
+		return asp;
 	}
-	
+
 	void setVariant(DustVariant variant) {
 		mapFields.put(variant.getId(), variant);
 		addType(variant.getTypeId());
@@ -71,7 +90,7 @@ public class DustBootEntity implements DustEntity {
 
 	@Override
 	public EntityState getState() {
-		return EntityState.Creating;
+		return state;
 	}
 
 	@Override
@@ -80,14 +99,14 @@ public class DustBootEntity implements DustEntity {
 	}
 
 	@Override
-	public DustAspect getAspect(DustDeclId type) {
-		return mapTypes.get(type);
+	public DustAspect getAspect(DustDeclId typeId) {
+		return addType(typeId);
 	}
-	
+
 	public String toString() {
 		StringBuilder b = new StringBuilder("[");
-		
-		for ( Iterator<Map.Entry<Enum<? extends FieldId>, DustVariant>> it = mapFields.entrySet().iterator(); it.hasNext(); ) {
+
+		for (Iterator<Map.Entry<Enum<? extends FieldId>, DustVariant>> it = mapFields.entrySet().iterator(); it.hasNext();) {
 			Map.Entry<Enum<? extends FieldId>, DustVariant> e = it.next();
 			b.append(e.getKey()).append(": ").append(e.getValue()).append("; ");
 		}

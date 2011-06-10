@@ -1,6 +1,7 @@
 package dust.api.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,18 +27,19 @@ public class DustUtilVariant implements DustVariant {
 	Object data;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected DustUtilVariant(Enum<? extends FieldId> fieldId) {
-		this.fieldId = fieldId;
-
-		DustDeclId id = null;
-		for (Class cc = fieldId.getDeclaringClass(); (null != cc) && (null == id); cc = cc.getDeclaringClass()) {
+	public static DustDeclId typeIDFromFieldId(Enum<? extends FieldId> fieldId) {
+		for (Class cc = fieldId.getDeclaringClass(); null != cc; cc = cc.getDeclaringClass()) {
 			if (TypeDef.class.isAssignableFrom(cc)) {
-				id = DustUtils.getWorld().getTypeId(cc);
-				break;
+				return DustUtils.getWorld().getTypeId(cc);
 			}
 		}
 
-		typeId = id;
+		return null;
+	}
+
+	protected DustUtilVariant(Enum<? extends FieldId> fieldId) {
+		this.fieldId = fieldId;
+		typeId = typeIDFromFieldId(fieldId);
 	}
 
 	public DustUtilVariant(Enum<? extends FieldId> fieldId, Object value) {
@@ -101,6 +103,10 @@ public class DustUtilVariant implements DustVariant {
 		setData(val, VariantSetMode.set, null);
 	}
 
+	public void setValueInteger(Integer val) {
+		setData(val, VariantSetMode.set, null);
+	}
+
 	public void setValueString(String val) {
 		setData(val, VariantSetMode.set, null);
 	}
@@ -114,7 +120,18 @@ public class DustUtilVariant implements DustVariant {
 	}
 
 	public boolean isNull() {
-		return (null == data);
+		if (null == data) {
+			return true;
+		} else {
+			switch (cType) {
+			case Map:
+			case Set:
+			case Array:
+				return ((Collection<?>) data).isEmpty();
+			default:
+				return false;
+			}
+		}
 	}
 
 	protected Object getData() {
@@ -176,7 +193,7 @@ public class DustUtilVariant implements DustVariant {
 		case Set:
 			return ((Set<DustVariant>) data);
 		}
-		
+
 		return null;
 	}
 
@@ -231,5 +248,4 @@ public class DustUtilVariant implements DustVariant {
 		}
 		return super.equals(obj);
 	}
-
 }

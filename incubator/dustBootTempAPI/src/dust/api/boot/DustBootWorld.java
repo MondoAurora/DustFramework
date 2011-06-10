@@ -19,13 +19,13 @@ public class DustBootWorld extends DustWorld {
 
 	DustBootTypeId getId(Class<?> cc) {
 		DustBootTypeId ti = mapTypes.get(cc);
-		if ( null == ti ) {
+		if (null == ti) {
 			ti = new DustBootTypeId(cc);
 			mapTypes.put(cc, ti);
 		}
 		return ti;
 	}
-	
+
 	@Override
 	public DustDeclId getTypeId(Class<? extends TypeDef> type) {
 		return getId(type);
@@ -51,58 +51,63 @@ public class DustBootWorld extends DustWorld {
 	public void invoke(InvokeResponseProcessor irProc, DustDeclId primaryType, DustVariant[] knownFields,
 		boolean createIfMissing, Enum<? extends FieldId>[] requiredFields, DustEntity filter) {
 		irProc.searchStarted();
-		
+
 		boolean create = createIfMissing;
-		Set<DustEntity> setInstances = mapEntities.get(primaryType);
-		if ( null != setInstances ) {
-			for ( DustEntity e : setInstances ) {
-				boolean match = true;
-				
-				for ( DustVariant v : knownFields ) {
-					DustAspect asp = e.getAspect(v.getTypeId());
-					if ( (null == asp ) || !v.equals(asp.getField(v.getId())) ) {
-						match = false;
-						break;
+		if (null != knownFields) {
+			Set<DustEntity> setInstances = mapEntities.get(primaryType);
+			if (null != setInstances) {
+				for (DustEntity e : setInstances) {
+					if ( EntityState.Creating == e.getState()) {
+						continue;
 					}
-				}
-				
-				if ( match ) {
-					create = false;
-					irProc.entityFound(e);
+					boolean match = true;
+
+					for (DustVariant v : knownFields) {
+						DustAspect asp = e.getAspect(v.getTypeId());
+						if ((null == asp) || !v.equals(asp.getField(v.getId()))) {
+							match = false;
+							break;
+						}
+					}
+
+					if (match) {
+						create = false;
+						irProc.entityFound(e);
+					}
 				}
 			}
 		}
-		
-		if ( create ) {
-			irProc.entityFound(new DustBootEntity(primaryType, knownFields));			
+
+		if (create) {
+			irProc.entityFound(new DustBootEntity(primaryType, knownFields));
 		}
-		
+
 		irProc.searchFinished();
 	}
-	
+
 	void addEntity(DustDeclId id, DustEntity e) {
 		Set<DustEntity> setInstances = mapEntities.get(id);
-		if ( null == setInstances ) {
+		if (null == setInstances) {
 			setInstances = new HashSet<DustEntity>();
 			mapEntities.put(id, setInstances);
-		} 
-		
+		}
+
 		setInstances.add(e);
 	}
-	
+
 	void dropEntity(DustEntity e) {
-		for ( DustDeclId id : e.getTypes() ) {
+		for (DustDeclId id : e.getTypes()) {
 			Set<DustEntity> setInstances = mapEntities.get(id);
-			if ( null != setInstances ) {
+			if (null != setInstances) {
 				setInstances.remove(e);
-			} 
+			}
 		}
 	}
-	
+
 	@Override
 	protected void send(DustEntity from, DustAspect to, DustMessage msg) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

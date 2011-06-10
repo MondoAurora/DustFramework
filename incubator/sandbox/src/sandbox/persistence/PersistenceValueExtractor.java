@@ -90,11 +90,31 @@ public class PersistenceValueExtractor {
 		return null != getMapFields(aspect.getType());
 	}
 
+	public Value getField(DustAspect aspect, String fieldId, Value value) throws Exception {
+		if ( null == value ) {
+			value = new Value();
+		}
+		
+		DustDeclId typeId = aspect.getType();
+		Map<Enum<? extends FieldId>, Field.Values.FieldType> typeFields = getMapFields(typeId);
+		
+		value.id = getEnumForField(typeId.toString(), fieldId);
+		value.type = typeFields.get(value.id);
+		value.value = aspect.getField(value.id);
+
+		return value;
+	}
+
 	public Iterable<Value> getFields(DustAspect aspect) throws Exception {
 		return new ValueIterator(aspect);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	Enum<? extends FieldId> getEnumForField(String typeName, String valueName) throws Exception {
+		Class c = Class.forName(typeName + "$Fields");
+		return Enum.valueOf(c, valueName);
+	}
+
 	Map<Enum<? extends FieldId>, Field.Values.FieldType> getMapFields(DustDeclId id) throws Exception {
 		Map<Enum<? extends FieldId>, Field.Values.FieldType> ret = mapIdToFields.get(id);
 
@@ -113,8 +133,7 @@ public class PersistenceValueExtractor {
 						DustIdentifier fldId = eField.getAspect(idIdentified).getField(Common.Identified.Fields.Identifier)
 							.getValueIdentifier();
 
-						Class c = Class.forName(id.getIdentifier().toString() + "$Fields");
-						Enum e = Enum.valueOf(c, fldId.toString());
+						Enum<? extends FieldId> e = getEnumForField(id.getIdentifier().toString(), fldId.toString());
 
 						DustAspect fld = vFld.getValueObject().getAspect(idField);
 						Field.Values.FieldType ft = fld.getField(TypeManagement.Field.Fields.FieldType).getValueValSet(

@@ -22,6 +22,7 @@ public class Test implements DustConstants {
 
 //		runTest(TestBootEntity.class, args);
 		runTest(TestInitTypeManagement.class, args);
+		runTest(TestDBRead.class, args);
 	}
 	
 	public static void runTest(Class<? extends TestItem> testClass, String[] args) {

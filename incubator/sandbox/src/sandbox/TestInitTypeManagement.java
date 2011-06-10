@@ -1,8 +1,6 @@
 package sandbox;
 
 import sandbox.Test.TestItem;
-import sandbox.persistence.db.DBDumper;
-import sandbox.persistence.stream.StreamDumper;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
 import dust.api.components.DustWorld;
@@ -239,10 +237,9 @@ public class TestInitTypeManagement extends TestItem {
 			}),
 		});
 
-		
+/*		
 		System.out.println(eTypeIdentified);
 		System.out.println(eTypeFieldContainer);
-
 		
 		System.out.println(eTypeFieldValue);
 		System.out.println(eTypeShared);
@@ -251,16 +248,7 @@ public class TestInitTypeManagement extends TestItem {
 		System.out.println(eTypeMessage);
 		System.out.println(eTypeModule);
 		System.out.println(eTypeType);
+*/
 		
-		StreamDumper sd = new StreamDumper();
-		
-		System.out.println("\n----------------------\n");
-		
-		sd.dump(eTypeField);
-		
-		
-		DBDumper dd = new DBDumper();
-		
-		dd.dumpEntity(eTypeField);
 	}
 }
