@@ -27,7 +27,7 @@ public class TestInitTypeManagement extends TestItem {
 		DustDeclId idMessage = world.getTypeId(TypeManagement.Message.class);
 		DustDeclId idModule = world.getTypeId(TypeManagement.Module.class);
 		
-		DustEntity fld1, fld2, fld3, fld4;
+		DustEntity fld1, fld2, fld3, fld4, fld5;
 		DustEntity shared1;
 		
 		// Common
@@ -205,16 +205,20 @@ public class TestInitTypeManagement extends TestItem {
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Identifier),
 		});
 		fld2 = DustUtils.getEntity(idField, new DustVariant[] {
+			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Type.Fields.isGlobal.name())),
+			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Boolean),
+		});
+		fld3 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Type.Fields.Messages.name())),
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.ObSet),
 			world.getVar(null, TypeManagement.Field.Fields.ObType, idMessage.getIdentifier()),
 		});
-		fld3 = DustUtils.getEntity(idField, new DustVariant[] {
+		fld4 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Type.Fields.Shared.name())),
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.ObSet),
 			world.getVar(null, TypeManagement.Field.Fields.ObType, idShared.getIdentifier()),
 		});
-		fld4 = DustUtils.getEntity(idField, new DustVariant[] {
+		fld5 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Type.Fields.Resource.name())),
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.ObSet),
 			world.getVar(null, TypeManagement.Field.Fields.ObType, idResource.getIdentifier()),
@@ -231,6 +235,7 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld2),
 				new DustUtilInitValue(fld3),
 				new DustUtilInitValue(fld4),
+				new DustUtilInitValue(fld5),
 			}),
 			world.getVar(null, TypeManagement.Type.Fields.Shared, new DustUtilInitValue[] {
 				new DustUtilInitValue(shared1),

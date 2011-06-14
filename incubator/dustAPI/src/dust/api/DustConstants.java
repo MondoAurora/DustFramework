@@ -7,7 +7,7 @@ public interface DustConstants extends DustDeclarationConstants {
 		enum VariantSetMode { set, addFirst, addLast, insert, remove, clear };
 			
 		enum EntityType { Temporal, Ghost, Persistent };
-		enum EntityState { Creating, Changing, Steady };
+		enum EntityState { Creating, Changing, Deleted, Steady };
 		
 		public interface DustDeclId {
 			DustIdentifier getIdentifier();

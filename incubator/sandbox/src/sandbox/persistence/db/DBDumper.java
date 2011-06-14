@@ -118,7 +118,7 @@ public class DBDumper {
 	}
 
 	String dumpAspect(DustEntity entity, String entityKey, DustDeclId idAspType) throws Exception {
-		DustAspect target = entity.getAspect(idAspType);
+		DustAspect target = entity.getAspect(idAspType, false);
 		
 		SQLCmd cmd = getCmd(SQLCommands.InsertAspect);
 		cmd.data[0] = entityKey;
@@ -131,6 +131,9 @@ public class DBDumper {
 			if ((null != vTargetFld) && !vTargetFld.isNull()) {
 				String value = null;
 				switch (val.getType()) {
+				case Boolean:
+					value = vTargetFld.getValueBoolean() ? "1" : "0";
+					break;
 				case Identifier:
 					value = vTargetFld.getValueIdentifier().toString();
 					break;

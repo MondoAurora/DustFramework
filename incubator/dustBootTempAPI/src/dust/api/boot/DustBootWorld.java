@@ -63,7 +63,7 @@ public class DustBootWorld extends DustWorld {
 					boolean match = true;
 
 					for (DustVariant v : knownFields) {
-						DustAspect asp = e.getAspect(v.getTypeId());
+						DustAspect asp = e.getAspect(v.getTypeId(), false);
 						if ((null == asp) || !v.equals(asp.getField(v.getId()))) {
 							match = false;
 							break;

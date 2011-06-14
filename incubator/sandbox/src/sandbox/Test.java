@@ -22,6 +22,12 @@ public class Test implements DustConstants {
 
 //		runTest(TestBootEntity.class, args);
 		runTest(TestInitTypeManagement.class, args);
+		
+		System.out.println("\nFIRST RUN - create\n");
+		runTest(TestDBWrite.class, args);
+		System.out.println("\nSECOND RUN - update\n");
+		runTest(TestDBWrite.class, args);
+		
 		runTest(TestDBRead.class, args);
 	}
 	

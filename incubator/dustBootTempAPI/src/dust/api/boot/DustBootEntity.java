@@ -41,11 +41,13 @@ public class DustBootEntity implements DustEntity {
 	}
 
 	DustDeclId primaryTypeId;
+	Object persistentId;
 
 	Map<Enum<? extends FieldId>, DustVariant> mapFields = new HashMap<Enum<? extends FieldId>, DustVariant>();
 	Map<DustDeclId, MyAspect> mapTypes = new HashMap<DustDeclId, MyAspect>();
 	
-	EntityState state;
+	EntityState eState;
+	EntityType eType;
 
 	DustBootEntity(DustDeclId typeId, DustVariant[] fields) {
 		this.primaryTypeId = typeId;
@@ -55,10 +57,11 @@ public class DustBootEntity implements DustEntity {
 			for (DustVariant v : fields) {
 				setVariant(v);
 			}
-			state = EntityState.Steady;
+			eState = EntityState.Steady;
 		} else {
-			state = EntityState.Creating;
+			eState = EntityState.Creating;
 		}
+		eType = EntityType.Temporal;
 	}
 
 	DustAspect addType(DustDeclId typeId) {
@@ -90,7 +93,7 @@ public class DustBootEntity implements DustEntity {
 
 	@Override
 	public EntityState getState() {
-		return state;
+		return eState;
 	}
 
 	@Override
@@ -99,8 +102,8 @@ public class DustBootEntity implements DustEntity {
 	}
 
 	@Override
-	public DustAspect getAspect(DustDeclId typeId) {
-		return addType(typeId);
+	public DustAspect getAspect(DustDeclId typeId, boolean createMissing) {
+		return createMissing ? addType(typeId) : mapTypes.get(typeId);
 	}
 
 	public String toString() {
@@ -112,4 +115,25 @@ public class DustBootEntity implements DustEntity {
 		}
 		return b.append("]").toString();
 	}
+
+	@Override
+	public void setPersistentId(Object id) {
+		this.persistentId = id;
+	}
+
+	@Override
+	public Object getPersistentId() {
+		return persistentId;
+	}
+
+	@Override
+	public void setState(EntityState state) {
+		eState = state;
+	}
+
+	@Override
+	public void setType(EntityType type) {
+		eType = type;
+	}
+	
 }

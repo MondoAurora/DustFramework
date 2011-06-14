@@ -49,14 +49,14 @@ public class StreamDumper {
 	}
 
 	public void dumpAspect(DustEntity entity, DustDeclId idAspType, PrintStream w) throws Exception {
-		DustAspect target = entity.getAspect(idAspType);
+		DustAspect target = entity.getAspect(idAspType, false);
 
 		newLine(w);
 		w.print("Aspect ");
 		w.print(idAspType.getIdentifier());
 		w.print(" [");
 
-		if (valReader.hasFields(target)) {
+		if ((null != target) && valReader.hasFields(target)) {
 			incIndent();
 			
 			for ( PersistenceValueExtractor.Value val : valReader.getFields(target) ) {

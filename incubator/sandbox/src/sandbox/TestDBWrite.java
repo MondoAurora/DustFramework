@@ -1,6 +1,6 @@
 package sandbox;
 
-import sandbox.persistence.db.DBDumper;
+import sandbox.persistence.db.DBPersistentStorage;
 import dust.api.DustConstants;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
@@ -27,7 +27,7 @@ public class TestDBWrite extends Test.TestItem implements DustConstants {
 //		StreamDumper sd = new StreamDumper();
 //		sd.dump(e);
 		
-		DBDumper dd = new DBDumper();
-		dd.dumpEntity(e);
+		DBPersistentStorage dd = new DBPersistentStorage();
+		dd.storeEntity(e);
 	}
 }

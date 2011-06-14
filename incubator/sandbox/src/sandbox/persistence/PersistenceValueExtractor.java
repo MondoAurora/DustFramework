@@ -121,7 +121,7 @@ public class PersistenceValueExtractor {
 		if (null == ret) {
 			DustEntity eType = DustUtils.getEntity(idType, new DustVariant[] { new DustUtilVariant(
 				Common.Identified.Fields.Identifier, new DustIdentifier(id.toString())) });
-			DustAspect aspFields = eType.getAspect(idFieldContainer);
+			DustAspect aspFields = eType.getAspect(idFieldContainer, false);
 			if (null != aspFields) {
 				DustVariant varFields = aspFields.getField(Common.FieldContainer.Fields.Fields);
 
@@ -130,12 +130,12 @@ public class PersistenceValueExtractor {
 
 					for (DustVariant vFld : varFields.getMembers()) {
 						DustEntity eField = vFld.getValueObject();
-						DustIdentifier fldId = eField.getAspect(idIdentified).getField(Common.Identified.Fields.Identifier)
+						DustIdentifier fldId = eField.getAspect(idIdentified, false).getField(Common.Identified.Fields.Identifier)
 							.getValueIdentifier();
 
 						Enum<? extends FieldId> e = getEnumForField(id.getIdentifier().toString(), fldId.toString());
 
-						DustAspect fld = vFld.getValueObject().getAspect(idField);
+						DustAspect fld = vFld.getValueObject().getAspect(idField, false);
 						Field.Values.FieldType ft = fld.getField(TypeManagement.Field.Fields.FieldType).getValueValSet(
 							Field.Values.FieldType.class);
 

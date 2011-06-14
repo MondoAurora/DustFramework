@@ -20,6 +20,6 @@ public class TestBootEntity extends Test.TestItem implements DustConstants {
 			world.getVar(null, Type.Fields.Unit, "Bambam"),
 		});
 		
-		System.out.print(e.getAspect(idType).getField(Identified.Fields.Identifier).getValueString());
+		System.out.print(e.getAspect(idType, false).getField(Identified.Fields.Identifier).getValueString());
 	}
 }

@@ -151,13 +151,13 @@ public class DBReader {
 		rs = getCmd(SQLCommands.SelectAspects).select(entityID);
 		for (boolean doRead = rs.first(); doRead; doRead = rs.next()) {
 			DustDeclId aspId = getId(rs.getString(3));
-			ret.getAspect(aspId);
+			ret.getAspect(aspId, true);
 		}
 
 		rs = getCmd(SQLCommands.SelectValues).select(entityID);
 		for (boolean doRead = rs.first(); doRead; doRead = rs.next()) {
 			DustDeclId aspId = getId(rs.getString(1));
-			DustAspect asp = ret.getAspect(aspId);
+			DustAspect asp = ret.getAspect(aspId, true);
 			val = valReader.getField(asp, rs.getString(2), val);
 
 			switch (val.getType()) {
@@ -173,7 +173,7 @@ public class DBReader {
 		rs = getCmd(SQLCommands.SelectLinks).select(entityID);
 		for (boolean doRead = rs.first(); doRead; doRead = rs.next()) {
 			DustDeclId aspId = getId(rs.getString(1));
-			DustAspect asp = ret.getAspect(aspId);
+			DustAspect asp = ret.getAspect(aspId, true);
 			val = valReader.getField(asp, rs.getString(2), val);
 
 			switch (val.getType()) {
