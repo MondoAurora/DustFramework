@@ -19,6 +19,12 @@ public interface Common extends DustDeclarationConstants {
 		};
 	}
 	
+	public interface Named extends TypeDef {
+		enum Fields implements FieldId {
+			Name
+		};
+	}
+	
 	public interface FieldContainer extends TypeDef {
 		enum Fields implements FieldId {
 			Fields

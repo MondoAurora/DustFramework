@@ -20,7 +20,7 @@ public class DustTemplateWhitespace implements DustTemplate {
 	}
 
 	public DustTemplateWhitespace(DustStream.Indent endLineIndent){
-		this(null, endLineIndent, 1);
+		this(null, endLineIndent, 0);
 	}
 
 	public DustTemplateWhitespace(DustStream.Indent endLineIndent, int elCount){

@@ -19,6 +19,7 @@ public class TestInitTypeManagement extends TestItem {
 		DustWorld world = DustUtils.getWorld();
 		
 		DustDeclId idIdentified = world.getTypeId(Common.Identified.class);		
+		DustDeclId idNamed = world.getTypeId(Common.Named.class);		
 		DustDeclId idFieldContainer = world.getTypeId(Common.FieldContainer.class);
 		
 		DustDeclId idType = world.getTypeId(TypeManagement.Type.class);
@@ -44,6 +45,19 @@ public class TestInitTypeManagement extends TestItem {
 		
 		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idIdentified.getIdentifier()),
+			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
+				new DustUtilInitValue(fld1),
+			}),
+		});
+		arrTypes.add(e);
+
+		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
+			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(Common.Named.Fields.Name.name())),
+			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.String),
+		});
+		
+		e = DustUtils.getEntity(idType, new DustVariant[] {
+			world.getVar(null, Common.Identified.Fields.Identifier, idNamed.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
 			}),
@@ -257,13 +271,18 @@ public class TestInitTypeManagement extends TestItem {
 		arrTypes.add(e);
 
 		DustEntity eUnitKernel = DustUtils.getEntity(idUnit, new DustVariant[] {
+			world.getVar(idNamed,Common.Named.Fields.Name, new DustIdentifier("TypeManagement")),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Vendor, new DustIdentifier("dust")),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Domain, new DustIdentifier("kernel")),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Version, new DustIdentifier("v0_1")),
 		});
 
 		for ( DustEntity eType : arrTypes ) {
-			eType.getAspect(idType, true).getField(TypeManagement.Type.Fields.Unit).setData(eUnitKernel, VariantSetMode.insert, null);
+			eType.getAspect(idType, true).getField(TypeManagement.Type.Fields.Unit).setData(eUnitKernel, VariantSetMode.set, null);
+			
+			String id = eType.getAspect(idIdentified, false).getField(Common.Identified.Fields.Identifier).getValueIdentifier().toString();
+			String name = id.substring(id.lastIndexOf('$')+1);
+			eType.getAspect(idNamed, true).getField(Common.Named.Fields.Name).setValueString(name);
 		}
 
 /*		

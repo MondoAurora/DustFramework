@@ -8,6 +8,11 @@ public class DustTemplateOptional extends DustTemplateBase {
 	DustTemplate content;
 	DustEvaluator eval;
 
+	public DustTemplateOptional(DustEvaluator eval, DustTemplate content) {
+		this.eval = eval;
+		this.content = content;
+	}
+
 	@Override
 	public void writeInto(DustStream stream, DustEntity currentEntity) throws Exception {
 		if ( eval.getVariant(currentEntity).getValueBoolean() ) {
