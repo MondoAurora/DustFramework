@@ -1,5 +1,7 @@
 package sandbox;
 
+import java.util.ArrayList;
+
 import sandbox.Test.TestItem;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
@@ -25,10 +27,13 @@ public class TestInitTypeManagement extends TestItem {
 		DustDeclId idShared = world.getTypeId(TypeManagement.Shared.class);
 		DustDeclId idResource = world.getTypeId(TypeManagement.Resource.class);
 		DustDeclId idMessage = world.getTypeId(TypeManagement.Message.class);
-		DustDeclId idModule = world.getTypeId(TypeManagement.Module.class);
+		DustDeclId idUnit = world.getTypeId(TypeManagement.Unit.class);
 		
 		DustEntity fld1, fld2, fld3, fld4, fld5;
 		DustEntity shared1;
+		
+		DustEntity e;
+		ArrayList<DustEntity> arrTypes = new ArrayList<DustEntity>();
 		
 		// Common
 		
@@ -37,12 +42,13 @@ public class TestInitTypeManagement extends TestItem {
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Identifier),
 		});
 		
-		DustEntity eTypeIdentified = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idIdentified.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
 			}),
 		});
+		arrTypes.add(e);
 
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(Common.FieldContainer.Fields.Fields.name())),
@@ -50,13 +56,13 @@ public class TestInitTypeManagement extends TestItem {
 			world.getVar(null, TypeManagement.Field.Fields.ObType, idField.getIdentifier()),
 		});
 		
-		DustEntity eTypeFieldContainer = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idFieldContainer.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
 			}),
 		});
-
+		arrTypes.add(e);
 				
 		
 		// TypeManagement 
@@ -65,13 +71,14 @@ public class TestInitTypeManagement extends TestItem {
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Integer),
 		});
 		
-		DustEntity eTypeFieldValue = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idFieldValue.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
 			}),
 		});
-		
+		arrTypes.add(e);
+
 		
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Shared.Fields.ObType.name())),
@@ -79,18 +86,20 @@ public class TestInitTypeManagement extends TestItem {
 			world.getVar(null, TypeManagement.Field.Fields.ObType, idType.getIdentifier()),
 		});
 		
-		DustEntity eTypeShared = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idShared.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
 			}),
 		});
+		arrTypes.add(e);
+
 		
-		
-		DustEntity eTypeResource = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idResource.getIdentifier()),
 		});
-		
+		arrTypes.add(e);
+
 		
 		
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
@@ -152,7 +161,7 @@ public class TestInitTypeManagement extends TestItem {
 		});
 
 		
-		DustEntity eTypeField = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idField.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
@@ -160,35 +169,37 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld3),
 			}),
 		});
-		
+		arrTypes.add(e);
+
 			
-		DustEntity eTypeMessage = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idMessage.getIdentifier()),
 		});
-		
+		arrTypes.add(e);
+
 		
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
-			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Module.Fields.Vendor.name())),
+			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Unit.Fields.Vendor.name())),
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Identifier),
 		});
 
 		fld2 = DustUtils.getEntity(idField, new DustVariant[] {
-			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Module.Fields.Domain.name())),
+			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Unit.Fields.Domain.name())),
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Identifier),
 		});
 
 		fld3 = DustUtils.getEntity(idField, new DustVariant[] {
-			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Module.Fields.Version.name())),
+			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Unit.Fields.Version.name())),
 			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Identifier),
 		});
 
 		shared1 = DustUtils.getEntity(idShared, new DustVariant[] {
-			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Module.Shared.Kernel.name())),
-			world.getVar(null, TypeManagement.Shared.Fields.ObType, idModule.getIdentifier()),
+			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Unit.Shared.Kernel.name())),
+			world.getVar(null, TypeManagement.Shared.Fields.ObType, idUnit.getIdentifier()),
 		});
 
-		DustEntity eTypeModule = DustUtils.getEntity(idType, new DustVariant[] {
-			world.getVar(null, Common.Identified.Fields.Identifier, idModule.getIdentifier()),
+		e = DustUtils.getEntity(idType, new DustVariant[] {
+			world.getVar(null, Common.Identified.Fields.Identifier, idUnit.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
 				new DustUtilInitValue(fld2),
@@ -198,11 +209,13 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(shared1),
 			}),
 		});
+		arrTypes.add(e);
 
 		
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Type.Fields.Unit.name())),
-			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.Identifier),
+			world.getVar(null, TypeManagement.Field.Fields.FieldType, TypeManagement.Field.Values.FieldType.ObSingle),
+			world.getVar(null, TypeManagement.Field.Fields.ObType, idUnit.getIdentifier()),
 		});
 		fld2 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(TypeManagement.Type.Fields.isGlobal.name())),
@@ -228,7 +241,7 @@ public class TestInitTypeManagement extends TestItem {
 			world.getVar(null, TypeManagement.Shared.Fields.ObType, idType.getIdentifier()),
 		});
 
-		DustEntity eTypeType = DustUtils.getEntity(idType, new DustVariant[] {
+		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idType.getIdentifier()),
 			world.getVar(null, Common.FieldContainer.Fields.Fields, new DustUtilInitValue[] {
 				new DustUtilInitValue(fld1),
@@ -241,6 +254,17 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(shared1),
 			}),
 		});
+		arrTypes.add(e);
+
+		DustEntity eUnitKernel = DustUtils.getEntity(idUnit, new DustVariant[] {
+			world.getVar(idUnit,TypeManagement.Unit.Fields.Vendor, new DustIdentifier("dust")),
+			world.getVar(idUnit,TypeManagement.Unit.Fields.Domain, new DustIdentifier("kernel")),
+			world.getVar(idUnit,TypeManagement.Unit.Fields.Version, new DustIdentifier("v0_1")),
+		});
+
+		for ( DustEntity eType : arrTypes ) {
+			eType.getAspect(idType, true).getField(TypeManagement.Type.Fields.Unit).setData(eUnitKernel, VariantSetMode.insert, null);
+		}
 
 /*		
 		System.out.println(eTypeIdentified);

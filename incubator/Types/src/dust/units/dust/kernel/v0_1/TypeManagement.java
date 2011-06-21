@@ -3,7 +3,7 @@ package dust.units.dust.kernel.v0_1;
 import dust.api.DustDeclarationConstants;
 
 public interface TypeManagement extends DustDeclarationConstants {
-	public interface Module extends TypeDef {
+	public interface Unit extends TypeDef {
 		enum Fields implements FieldId {
 			Vendor, Domain, Version
 		};

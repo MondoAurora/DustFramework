@@ -25,7 +25,7 @@ public class DustUtilVariant implements DustVariant {
 	ContentType cType = ContentType.Unknown;
 
 	Object data;
-
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static DustDeclId typeIDFromFieldId(Enum<? extends FieldId> fieldId) {
 		for (Class cc = fieldId.getDeclaringClass(); null != cc; cc = cc.getDeclaringClass()) {
@@ -85,6 +85,11 @@ public class DustUtilVariant implements DustVariant {
 	@SuppressWarnings("unchecked")
 	public <T extends Enum<T>> T getValueValSet(Class<T> enumType) {
 		return (T) getData();
+	}
+	
+	@Override
+	public String getValueValSet() {
+		return ((Enum<?>) data).name();
 	}
 
 	public DustByteBuffer getValueBuffer() {
@@ -248,4 +253,5 @@ public class DustUtilVariant implements DustVariant {
 		}
 		return super.equals(obj);
 	}
+
 }
