@@ -2,27 +2,32 @@ package sandbox;
 
 import java.util.ArrayList;
 
-import sandbox.Test.TestItem;
-import dust.api.components.DustEntity;
-import dust.api.components.DustVariant;
-import dust.api.components.DustWorld;
+import dust.api.components.*;
 import dust.api.utils.DustUtilInitValue;
 import dust.api.utils.DustUtils;
 import dust.api.wrappers.DustIdentifier;
+
 import dust.units.dust.common.v0_1.Common;
 import dust.units.dust.kernel.v0_1.TypeManagement;
 
+import sandbox.Test.TestItem;
+
 public class TestInitTypeManagement extends TestItem {
+	DustDeclId idIdentified;		
+	DustDeclId idNamed;		
+	DustDeclId idType;		
 
 	@Override
 	public void test() throws Exception {
 		DustWorld world = DustUtils.getWorld();
 		
-		DustDeclId idIdentified = world.getTypeId(Common.Identified.class);		
-		DustDeclId idNamed = world.getTypeId(Common.Named.class);		
+		idIdentified = world.getTypeId(Common.Identified.class);		
+		idNamed = world.getTypeId(Common.Named.class);
+		
+		idType = world.getTypeId(TypeManagement.Type.class);
+		
 		DustDeclId idFieldContainer = world.getTypeId(Common.FieldContainer.class);
 		
-		DustDeclId idType = world.getTypeId(TypeManagement.Type.class);
 		DustDeclId idField = world.getTypeId(TypeManagement.Field.class);
 		DustDeclId idFieldValue = world.getTypeId(TypeManagement.FieldValue.class);
 		DustDeclId idShared = world.getTypeId(TypeManagement.Shared.class);
@@ -34,7 +39,8 @@ public class TestInitTypeManagement extends TestItem {
 		DustEntity shared1;
 		
 		DustEntity e;
-		ArrayList<DustEntity> arrTypes = new ArrayList<DustEntity>();
+		ArrayList<DustEntity> arrKernelTypes = new ArrayList<DustEntity>();
+		ArrayList<DustEntity> arrCommonTypes = new ArrayList<DustEntity>();
 		
 		// Common
 		
@@ -49,7 +55,7 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld1),
 			}),
 		});
-		arrTypes.add(e);
+		arrCommonTypes.add(e);
 
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(Common.Named.Fields.Name.name())),
@@ -62,7 +68,7 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld1),
 			}),
 		});
-		arrTypes.add(e);
+		arrCommonTypes.add(e);
 
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, new DustIdentifier(Common.FieldContainer.Fields.Fields.name())),
@@ -76,7 +82,7 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld1),
 			}),
 		});
-		arrTypes.add(e);
+		arrCommonTypes.add(e);
 				
 		
 		// TypeManagement 
@@ -91,7 +97,7 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld1),
 			}),
 		});
-		arrTypes.add(e);
+		arrKernelTypes.add(e);
 
 		
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
@@ -106,13 +112,13 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld1),
 			}),
 		});
-		arrTypes.add(e);
+		arrKernelTypes.add(e);
 
 		
 		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idResource.getIdentifier()),
 		});
-		arrTypes.add(e);
+		arrKernelTypes.add(e);
 
 		
 		
@@ -183,13 +189,13 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(fld3),
 			}),
 		});
-		arrTypes.add(e);
+		arrKernelTypes.add(e);
 
 			
 		e = DustUtils.getEntity(idType, new DustVariant[] {
 			world.getVar(null, Common.Identified.Fields.Identifier, idMessage.getIdentifier()),
 		});
-		arrTypes.add(e);
+		arrKernelTypes.add(e);
 
 		
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
@@ -223,7 +229,7 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(shared1),
 			}),
 		});
-		arrTypes.add(e);
+		arrKernelTypes.add(e);
 
 		
 		fld1 = DustUtils.getEntity(idField, new DustVariant[] {
@@ -268,7 +274,7 @@ public class TestInitTypeManagement extends TestItem {
 				new DustUtilInitValue(shared1),
 			}),
 		});
-		arrTypes.add(e);
+		arrKernelTypes.add(e);
 
 		DustEntity eUnitKernel = DustUtils.getEntity(idUnit, new DustVariant[] {
 			world.getVar(idNamed,Common.Named.Fields.Name, new DustIdentifier("TypeManagement")),
@@ -277,26 +283,25 @@ public class TestInitTypeManagement extends TestItem {
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Version, new DustIdentifier("v0_1")),
 		});
 
-		for ( DustEntity eType : arrTypes ) {
-			eType.getAspect(idType, true).getField(TypeManagement.Type.Fields.Unit).setData(eUnitKernel, VariantSetMode.set, null);
+		DustEntity eUnitCommon = DustUtils.getEntity(idUnit, new DustVariant[] {
+			world.getVar(idNamed,Common.Named.Fields.Name, new DustIdentifier("Common")),
+			world.getVar(idUnit,TypeManagement.Unit.Fields.Vendor, new DustIdentifier("dust")),
+			world.getVar(idUnit,TypeManagement.Unit.Fields.Domain, new DustIdentifier("common")),
+			world.getVar(idUnit,TypeManagement.Unit.Fields.Version, new DustIdentifier("v0_1")),
+		});
+		
+		initTypes(arrKernelTypes, eUnitKernel);
+		initTypes(arrCommonTypes, eUnitCommon);
+	}
+	
+	void initTypes(Iterable<DustEntity> types, DustEntity eUnit) {
+		for ( DustEntity eType : types ) {
+			eType.getAspect(idType, true).getField(TypeManagement.Type.Fields.Unit).setData(eUnit, VariantSetMode.set, null);
 			
 			String id = eType.getAspect(idIdentified, false).getField(Common.Identified.Fields.Identifier).getValueIdentifier().toString();
 			String name = id.substring(id.lastIndexOf('$')+1);
 			eType.getAspect(idNamed, true).getField(Common.Named.Fields.Name).setValueString(name);
-		}
-
-/*		
-		System.out.println(eTypeIdentified);
-		System.out.println(eTypeFieldContainer);
-		
-		System.out.println(eTypeFieldValue);
-		System.out.println(eTypeShared);
-		System.out.println(eTypeResource);
-		System.out.println(eTypeField);
-		System.out.println(eTypeMessage);
-		System.out.println(eTypeModule);
-		System.out.println(eTypeType);
-*/
-		
+		}		
+	
 	}
 }

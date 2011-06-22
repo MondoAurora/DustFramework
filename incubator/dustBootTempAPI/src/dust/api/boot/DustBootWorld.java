@@ -53,20 +53,22 @@ public class DustBootWorld extends DustWorld {
 		irProc.searchStarted();
 
 		boolean create = createIfMissing;
-		if (null != knownFields) {
+		if (null != primaryType) {
 			Set<DustEntity> setInstances = mapEntities.get(primaryType);
 			if (null != setInstances) {
 				for (DustEntity e : setInstances) {
-					if ( EntityState.Creating == e.getState()) {
+					if (EntityState.Creating == e.getState()) {
 						continue;
 					}
 					boolean match = true;
 
-					for (DustVariant v : knownFields) {
-						DustAspect asp = e.getAspect(v.getTypeId(), false);
-						if ((null == asp) || !v.equals(asp.getField(v.getId()))) {
-							match = false;
-							break;
+					if (null != knownFields) {
+						for (DustVariant v : knownFields) {
+							DustAspect asp = e.getAspect(v.getTypeId(), false);
+							if ((null == asp) || !v.equals(asp.getField(v.getId()))) {
+								match = false;
+								break;
+							}
 						}
 					}
 

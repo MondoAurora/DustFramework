@@ -1,9 +1,10 @@
 package sandbox.template;
 
-import sandbox.evaluator.DustEvaluator;
-import sandbox.stream.DustStream;
 import dust.api.components.DustEntity;
 import dust.api.components.DustVariant;
+
+import sandbox.evaluator.DustEvaluator;
+import sandbox.stream.DustStream;
 
 public class DustTemplateRepeat extends DustTemplateBase {
 	DustEvaluator evalRepeat;
@@ -26,7 +27,9 @@ public class DustTemplateRepeat extends DustTemplateBase {
 			boolean concat = false;
 			for (DustVariant repFld : var.getMembers()) {
 				if (concat) {
-					separator.writeInto(stream, repFld.getValueObject());
+					if ( null != separator ) {
+						separator.writeInto(stream, repFld.getValueObject());
+					}
 				} else {
 					concat = true;
 				}
