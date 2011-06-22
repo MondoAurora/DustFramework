@@ -1,10 +1,11 @@
 package sandbox.template;
 
+import dust.api.components.DustEntity;
+import dust.api.components.DustVariant;
+
 import sandbox.evaluator.DustEvaluator;
 import sandbox.formatter.DustFormatter;
 import sandbox.stream.DustStream;
-import dust.api.components.DustEntity;
-import dust.api.components.DustVariant;
 
 public class DustTemplateEval extends DustTemplateBase {
 	DustEvaluator eval;

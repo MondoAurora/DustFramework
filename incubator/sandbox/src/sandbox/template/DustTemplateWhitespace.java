@@ -1,8 +1,9 @@
 package sandbox.template;
 
+import dust.api.components.DustEntity;
+
 import sandbox.stream.DustStream;
 import sandbox.stream.DustStream.Indent;
-import dust.api.components.DustEntity;
 
 public class DustTemplateWhitespace implements DustTemplate {
 	String wsToWrite;

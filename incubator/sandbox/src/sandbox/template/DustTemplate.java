@@ -1,8 +1,9 @@
 package sandbox.template;
 
-import sandbox.stream.DustStream;
 import dust.api.DustConstants;
 import dust.api.components.DustEntity;
+
+import sandbox.stream.DustStream;
 
 public interface DustTemplate extends DustConstants {
 	void writeInto(DustStream stream, DustEntity currentEntity) throws Exception;

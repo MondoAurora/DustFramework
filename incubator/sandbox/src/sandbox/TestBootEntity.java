@@ -1,10 +1,9 @@
 package sandbox;
 
 import dust.api.DustConstants;
-import dust.api.components.DustEntity;
-import dust.api.components.DustVariant;
-import dust.api.components.DustWorld;
+import dust.api.components.*;
 import dust.api.utils.DustUtils;
+
 import dust.units.dust.common.v0_1.Common.Identified;
 import dust.units.dust.kernel.v0_1.TypeManagement.Type;
 

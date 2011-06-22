@@ -1,20 +1,16 @@
 package sandbox.persistence.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.FieldPosition;
 import java.text.MessageFormat;
 
-import sandbox.persistence.PersistenceValueExtractor;
 import dust.api.DustConstants.DustDeclId;
 import dust.api.DustConstants.VariantSetMode;
-import dust.api.components.DustAspect;
-import dust.api.components.DustEntity;
-import dust.api.components.DustVariant;
+import dust.api.components.*;
 import dust.api.utils.DustUtils;
 import dust.api.wrappers.DustIdentifier;
+
+import sandbox.persistence.PersistenceValueExtractor;
 
 public class DBReader {
 	enum SQLCommands {

@@ -1,7 +1,8 @@
 package sandbox.formatter;
 
-import sandbox.stream.DustStream;
 import dust.api.components.DustVariant;
+
+import sandbox.stream.DustStream;
 
 public class DustFormatterDefault implements DustFormatter {
 

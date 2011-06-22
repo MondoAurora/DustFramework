@@ -1,7 +1,8 @@
 package sandbox.template;
 
-import sandbox.stream.DustStream;
 import dust.api.components.DustEntity;
+
+import sandbox.stream.DustStream;
 
 public class DustTemplateImport extends DustTemplateBase {
 	DustTemplate imported;

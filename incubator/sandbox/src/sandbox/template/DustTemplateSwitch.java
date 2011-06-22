@@ -3,11 +3,10 @@ package sandbox.template;
 import java.util.HashMap;
 import java.util.Map;
 
+import dust.api.components.*;
+
 import sandbox.evaluator.DustEvaluator;
 import sandbox.stream.DustStream;
-import dust.api.components.DustAspect;
-import dust.api.components.DustEntity;
-import dust.api.components.DustVariant;
 
 public class DustTemplateSwitch extends DustTemplateBase {
 	Map<String, DustTemplate> mapOptions = new HashMap<String, DustTemplate>();
