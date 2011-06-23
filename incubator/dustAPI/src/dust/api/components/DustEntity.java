@@ -10,6 +10,7 @@ public interface DustEntity extends DustConstants {
 	EntityType getType();
 
 	DustAspect getAspect(DustDeclId type, boolean createMissing);
+	void removeAspect(DustDeclId type);
 	
 	Object getPersistentId();
 	

@@ -135,5 +135,10 @@ public class DustBootEntity implements DustEntity {
 	public void setType(EntityType type) {
 		eType = type;
 	}
+
+	@Override
+	public void removeAspect(DustDeclId type) {
+		mapTypes.remove(type);
+	}
 	
 }

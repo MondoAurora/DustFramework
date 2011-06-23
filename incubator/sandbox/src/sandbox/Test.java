@@ -5,11 +5,11 @@ import dust.api.boot.DustBootWorld;
 import dust.api.components.DustWorld;
 import dust.api.utils.DustUtils;
 
+import sandbox.lab.LabFrame;
+
 public class Test implements DustConstants {
-	public static abstract class TestItem implements DustConstants {
-		public void init(String[] args) {
-			
-		}
+	public static interface TestItem extends DustConstants {
+		public void init(String[] args);
 		public abstract void test() throws Exception;
 	}
 
@@ -22,15 +22,19 @@ public class Test implements DustConstants {
 
 //		runTest(TestBootEntity.class, args);
 		runTest(TestInitTypeManagement.class, args);
-		runTest(TestStreamExport.class, args);
-/*		
-		System.out.println("\nFIRST RUN - create\n");
-		runTest(TestDBWrite.class, args);
-		System.out.println("\nSECOND RUN - update\n");
-		runTest(TestDBWrite.class, args);
 		
-		runTest(TestDBRead.class, args);
-		*/
+		runTest(LabFrame.class, args);
+		
+		
+//		runTest(TestStreamExport.class, args);
+//		
+//	
+//		System.out.println("\nFIRST RUN - create\n");
+//		runTest(TestDBWrite.class, args);
+//		System.out.println("\nSECOND RUN - update\n");
+//		runTest(TestDBWrite.class, args);
+//		
+//		runTest(TestDBRead.class, args);
 	}
 	
 	public static void runTest(Class<? extends TestItem> testClass, String[] args) {

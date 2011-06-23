@@ -1,6 +1,5 @@
 package sandbox;
 
-import dust.api.DustConstants;
 import dust.api.components.*;
 import dust.api.utils.DustUtils;
 
@@ -11,8 +10,14 @@ import dust.units.dust.kernel.v0_1.TypeManagement.Type;
 import sandbox.persistence.db.DBPersistentStorage;
 import sandbox.persistence.stream.StreamDumper;
 
-public class TestDBRead extends Test.TestItem implements DustConstants {
+public class TestDBRead implements Test.TestItem {
 	StreamDumper sd = new StreamDumper();
+
+	@Override
+	public void init(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void test() throws Exception {

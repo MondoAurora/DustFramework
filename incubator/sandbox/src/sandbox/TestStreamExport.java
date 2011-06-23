@@ -2,7 +2,6 @@ package sandbox;
 
 import java.io.*;
 
-import dust.api.DustConstants;
 import dust.api.components.DustEntity;
 import dust.api.components.DustWorld;
 import dust.api.utils.DustUtils;
@@ -18,7 +17,7 @@ import sandbox.stream.*;
 import sandbox.stream.DustStream.Indent;
 import sandbox.template.*;
 
-public class TestStreamExport extends Test.TestItem implements DustConstants {
+public class TestStreamExport implements Test.TestItem  {
 	DustWorld world;
 	
 	DustDeclId idType;
@@ -214,4 +213,11 @@ public class TestStreamExport extends Test.TestItem implements DustConstants {
 		ps.flush();
 		ps.close();
 	}
+	
+	@Override
+	public void init(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

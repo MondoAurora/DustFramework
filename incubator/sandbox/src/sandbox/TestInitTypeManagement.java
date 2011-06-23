@@ -12,7 +12,7 @@ import dust.units.dust.kernel.v0_1.TypeManagement;
 
 import sandbox.Test.TestItem;
 
-public class TestInitTypeManagement extends TestItem {
+public class TestInitTypeManagement implements TestItem {
 	DustDeclId idIdentified;		
 	DustDeclId idNamed;		
 	DustDeclId idType;		
@@ -277,14 +277,14 @@ public class TestInitTypeManagement extends TestItem {
 		arrKernelTypes.add(e);
 
 		DustEntity eUnitKernel = DustUtils.getEntity(idUnit, new DustVariant[] {
-			world.getVar(idNamed,Common.Named.Fields.Name, new DustIdentifier("TypeManagement")),
+			world.getVar(idNamed,Common.Named.Fields.Name, "TypeManagement"),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Vendor, new DustIdentifier("dust")),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Domain, new DustIdentifier("kernel")),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Version, new DustIdentifier("v0_1")),
 		});
 
 		DustEntity eUnitCommon = DustUtils.getEntity(idUnit, new DustVariant[] {
-			world.getVar(idNamed,Common.Named.Fields.Name, new DustIdentifier("Common")),
+			world.getVar(idNamed,Common.Named.Fields.Name, "Common"),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Vendor, new DustIdentifier("dust")),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Domain, new DustIdentifier("common")),
 			world.getVar(idUnit,TypeManagement.Unit.Fields.Version, new DustIdentifier("v0_1")),
@@ -304,4 +304,11 @@ public class TestInitTypeManagement extends TestItem {
 		}		
 	
 	}
+	
+	@Override
+	public void init(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

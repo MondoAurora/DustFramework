@@ -70,6 +70,8 @@ public class DustBootWorld extends DustWorld {
 								break;
 							}
 						}
+					} else if ( createIfMissing ) {
+						match = false;
 					}
 
 					if (match) {

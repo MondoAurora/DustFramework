@@ -1,6 +1,5 @@
 package sandbox;
 
-import dust.api.DustConstants;
 import dust.api.components.*;
 import dust.api.utils.DustUtils;
 
@@ -10,7 +9,7 @@ import dust.units.dust.kernel.v0_1.TypeManagement.Type;
 
 import sandbox.persistence.db.DBPersistentStorage;
 
-public class TestDBWrite extends Test.TestItem implements DustConstants {
+public class TestDBWrite implements Test.TestItem {
 	@Override
 	public void test() throws Exception {
 		DustWorld world = DustUtils.getWorld();
@@ -30,4 +29,11 @@ public class TestDBWrite extends Test.TestItem implements DustConstants {
 		DBPersistentStorage dd = new DBPersistentStorage();
 		dd.storeEntity(e);
 	}
+	
+	@Override
+	public void init(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
