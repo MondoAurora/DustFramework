@@ -38,9 +38,14 @@ public class PersistenceValueExtractor {
 		Iterator<Map.Entry<Enum<? extends FieldId>, Field.Values.FieldType>> mapIt;
 		
 		public ValueIterator(DustAspect target) throws Exception {
-			this.target = target;
+			this(target.getType());
+			this.target = target;			
+		}
+		
+		public ValueIterator(DustDeclId aspId) throws Exception {
+			target = null;
 			
-			Map<Enum<? extends FieldId>, Field.Values.FieldType> mapFields = getMapFields(target.getType());
+			Map<Enum<? extends FieldId>, Field.Values.FieldType> mapFields = getMapFields(aspId);
 			
 			mapIt = (null == mapFields) ? null : mapFields.entrySet().iterator();
 		}
@@ -61,7 +66,9 @@ public class PersistenceValueExtractor {
 			
 			v.id = e.getKey();
 			v.type = e.getValue();
-			v.value = target.getField(v.id);
+			if ( null != target ) {
+				v.value = target.getField(v.id);
+			}
 			
 			return v;
 		}
@@ -99,6 +106,10 @@ public class PersistenceValueExtractor {
 		value.value = aspect.getField(value.id);
 
 		return value;
+	}
+
+	public Iterable<Value> getFields(DustDeclId aspId) throws Exception {
+		return new ValueIterator(aspId);
 	}
 
 	public Iterable<Value> getFields(DustAspect aspect) throws Exception {

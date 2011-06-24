@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import sandbox.Test;
+import sandbox.lab.LabData.LabEntity;
 
 public class LabFrame extends JFrame implements Test.TestItem {
 	private static final long serialVersionUID = 1L;
@@ -120,7 +121,7 @@ public class LabFrame extends JFrame implements Test.TestItem {
 			this.content = content;
 			
 			addInternalFrameListener(il);
-			getContentPane().add(new JLabel(content.toString()), BorderLayout.CENTER);
+			getContentPane().add(new LabEntityPanel(((LabEntity)content).e), BorderLayout.CENTER);
 			pack();
 			show();
 		}
@@ -191,6 +192,8 @@ public class LabFrame extends JFrame implements Test.TestItem {
 
 			@Override
 			public void internalFrameClosed(InternalFrameEvent e) {
+				Object sel = ((EntityFrame)e.getInternalFrame()).content;
+				mapEntityFrames.remove(sel);
 			}
 
 			@Override
