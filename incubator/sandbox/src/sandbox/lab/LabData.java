@@ -4,68 +4,19 @@ import java.util.*;
 
 import dust.api.DustConstants.DustDeclId;
 import dust.api.DustConstants.InvokeResponseProcessor;
-import dust.api.DustDeclarationConstants.TypeDef;
 import dust.api.components.*;
 import dust.api.utils.DustUtils;
 
 import dust.units.dust.common.v0_1.Common;
 import dust.units.dust.kernel.v0_1.TypeManagement;
 
+import sandbox.persistence.PersistenceValueExtractor;
+
 public class LabData {
 
-	public class LabEntity {
-		DustEntity e;
-		String name;
-		final String typeName;
-
-		LabEntity(DustEntity e) {
-			this("?", e);
-		}
-
-		LabEntity(String typeName, DustEntity e) {
-			this.typeName = typeName;
-			this.e = e;
-			name = e.getAspect(idNamed, true).getField(Common.Named.Fields.Name).getValueString();
-		}
-
-		public String toString() {
-			return typeName + ": " + name;
-		}
-	}
-
-	public class LabUnit extends LabEntity {
-		LabUnit(DustEntity e) {
-			super("Unit", e);
-
-			DustAspect aUnit = e.getAspect(idUnit, true);
-			name = aUnit.getField(TypeManagement.Unit.Fields.Domain).getValueIdentifier().toString() + "." + name;
-		}
-	}
-
-	public class LabType extends LabEntity {
-		LabType(DustEntity e) {
-			super("Type", e);
-
-			String cName = e.getAspect(idIdentified, false).getField(Common.Identified.Fields.Identifier)
-				.getValueIdentifier().toString();
-			try {
-				typeId = world.getTypeId((Class<? extends TypeDef>) Class.forName(cName));
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			DustEntity eUnit = e.getAspect(idType, false).getField(TypeManagement.Type.Fields.Unit).getValueObject();
-			unit = mapUnits.get(eUnit);
-
-			name = unit.name + "." + name;
-		}
-
-		DustDeclId typeId;
-		LabUnit unit;
-	}
-
-	InvokeResponseProcessor irProc = new InvokeResponseProcessor() {
+	class EntitySearcher implements InvokeResponseProcessor {
+		Set<LabEntity> found = new TreeSet<LabEntity>();
+		
 		@Override
 		public void searchStarted() {
 		}
@@ -76,21 +27,7 @@ public class LabData {
 
 		@Override
 		public boolean entityFound(DustEntity entity) {
-			LabEntity le = null;
-
-			if (null != entity.getAspect(idType, false)) {
-				LabType lt = new LabType(entity);
-				mapTypes.put(entity, lt);
-				le = lt;
-			} else if (null != entity.getAspect(idUnit, false)) {
-				LabUnit lu = new LabUnit(entity);
-				le = mapUnits.put(entity, lu);
-				le = lu;
-			} else {
-				le = new LabEntity(entity);
-			}
-			alEntities.add(le);
-
+			found.add(getLabEntity(entity));
 			return true;
 		}
 	};
@@ -101,12 +38,12 @@ public class LabData {
 	DustDeclId idIdentified;
 	DustDeclId idNamed;
 
-	ArrayList<LabEntity> alEntities;
-	Map<DustEntity, LabUnit> mapUnits;
-	Map<DustEntity, LabType> mapTypes;
+	Map<DustEntity, LabEntity> mapEntities;
 
 	public String srcTypes;
 	public String srcBoot;
+
+	PersistenceValueExtractor vx = new PersistenceValueExtractor();
 
 	public LabData() {
 		world = DustUtils.getWorld();
@@ -116,64 +53,66 @@ public class LabData {
 		idType = world.getTypeId(TypeManagement.Type.class);
 		idUnit = world.getTypeId(TypeManagement.Unit.class);
 
-		alEntities = new ArrayList<LabEntity>();
-		mapUnits = new HashMap<DustEntity, LabUnit>();
-		mapTypes = new HashMap<DustEntity, LabType>();
-
-		refresh();
+		mapEntities = new HashMap<DustEntity, LabEntity>();
+	}
+	
+	public LabEntity getLabEntity(DustEntity e) {
+		LabEntity le = mapEntities.get(e);
+		
+		if ( null == le ) {
+			le = new LabEntity(e);
+			mapEntities.put(e, le);
+		}
+		
+		return le;
 	}
 
 	public void reset() {
-		alEntities.clear();
-		mapUnits.clear();
-		mapTypes.clear();
+		mapEntities.clear();
 	}
 
-	public void refresh() {
-		reset();
+	public Set<LabEntity> findEntities(DustDeclId type) {
+		return findEntities(new DustDeclId[]{type});
+	}
 
-		world.invoke(irProc, idUnit, null, false, null, null);
+	public Set<LabEntity> findRootEntities() {
+		return findEntities(new DustDeclId[]{idUnit, idType});
+	}
+
+	public Set<LabEntity> findEntities(DustDeclId[] types) {
+		EntitySearcher irProc = new EntitySearcher();
+
+		for ( DustDeclId typeId : types ) {
+			world.invoke(irProc, typeId, null, false, null, null);
+			world.invoke(irProc, idUnit, null, false, null, null);
 		world.invoke(irProc, idType, null, false, null, null);
+		}
+		
+		return irProc.found; 
 	}
 
 	public LabEntity addEntity() throws Exception {
-		LabEntity e = new LabEntity(DustUtils.getEntity(null, null));
-
-		alEntities.add(e);
-
-		return e;
+		return getLabEntity(DustUtils.getEntity(null, null));
 	}
 
-	public DustAspect addAspect(DustEntity e, LabType t) {
+	public DustAspect addAspect(DustEntity e, DustEntity type) {
 		DustAspect ret = e.getAspect(idType, false);
 
 		if (null == ret) {
-			if (t.typeId == idUnit) {
-				mapUnits.put(e, new LabUnit(e));
-			} else if (t.typeId == idType) {
-				mapTypes.put(e, new LabType(e));
-			}
 			ret = e.getAspect(idType, true);
 		}
 
 		return ret;
 	}
 
-	public void delAspect(DustEntity e, LabType t) {
-		if (null != e.getAspect(idType, false)) {
-			if (t.typeId == idUnit) {
-				mapUnits.remove(e);
-			} else if (t.typeId == idType) {
-				mapTypes.remove(e);
-			}
-			e.removeAspect(t.typeId);
-		}
+	public void delAspect(DustEntity e, DustEntity type) {
 	}
 
 	public void delEntity(DustEntity e) {
-		alEntities.remove(e);
-		mapUnits.remove(e);
-		mapTypes.remove(e);
+		mapEntities.remove(e);
 	}
 
+	public PersistenceValueExtractor getValEx() {
+		return vx;
+	}
 }

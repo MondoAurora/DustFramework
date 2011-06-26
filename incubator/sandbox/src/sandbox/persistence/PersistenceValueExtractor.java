@@ -88,6 +88,7 @@ public class PersistenceValueExtractor {
 	DustDeclId idField = world.getTypeId(TypeManagement.Field.class);
 
 	Map<DustDeclId, Map<Enum<? extends FieldId>, Field.Values.FieldType>> mapIdToFields = new HashMap<DustConstants.DustDeclId, Map<Enum<? extends FieldId>, Field.Values.FieldType>>();
+	Map<Enum<? extends FieldId>, Set<Enum<?>>> mapFieldValues = new HashMap<Enum<? extends FieldId>, Set<Enum<?>>>();
 	
 	public boolean hasFields(DustAspect aspect) throws Exception {
 		return null != getMapFields(aspect.getType());
@@ -114,6 +115,10 @@ public class PersistenceValueExtractor {
 
 	public Iterable<Value> getFields(DustAspect aspect) throws Exception {
 		return new ValueIterator(aspect);
+	}
+
+	public Iterable<Enum<?>> getValues(Enum<? extends FieldId> fieldId) throws Exception {
+		return mapFieldValues.get(fieldId);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -145,6 +150,17 @@ public class PersistenceValueExtractor {
 						DustAspect fld = vFld.getValueObject().getAspect(idField, false);
 						Field.Values.FieldType ft = fld.getField(TypeManagement.Field.Fields.FieldType).getValueValSet(
 							Field.Values.FieldType.class);
+						
+						DustVariant values = fld.getField(TypeManagement.Field.Fields.Values);
+						if ( !values.isNull() ) {
+							Set<Enum<?>> s = new HashSet<Enum<?>>();
+							mapFieldValues.put(e, s);
+							Class ec = Class.forName(id.getIdentifier().toString()+"$Values$" + fld.getField(Common.Identified.Fields.Identifier).getValueIdentifier().toString()); 
+							
+							for ( DustVariant vVal : values.getMembers() ) {
+								s.add(Enum.valueOf(ec, vVal.getValueObject().getAspect(idIdentified, false).getField(Common.Identified.Fields.Identifier).getValueIdentifier().toString()));
+							}
+						}
 
 						ret.put(e, ft);
 					}

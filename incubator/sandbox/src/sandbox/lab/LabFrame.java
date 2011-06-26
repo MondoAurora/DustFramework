@@ -3,16 +3,17 @@ package sandbox.lab;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyVetoException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
-import sandbox.Test;
-import sandbox.lab.LabData.LabEntity;
+import dust.api.components.DustEntity;
 
-public class LabFrame extends JFrame implements Test.TestItem {
+import sandbox.Test;
+import sandbox.lab.LabConstants.StatefulComponent;
+
+public class LabFrame extends JFrame implements StatefulComponent, Test.TestItem {
 	private static final long serialVersionUID = 1L;
 
 	static String title = "dustLab - sandbox version";
@@ -69,20 +70,21 @@ public class LabFrame extends JFrame implements Test.TestItem {
 	};
 
 	class EntityListModel extends AbstractListModel implements ListSelectionListener {
+		private static final long serialVersionUID = 1L;
 		@Override
 		public int getSize() {
-			return data.alEntities.size();
+			return alRootEntities.size();
 		}
 
 		@Override
 		public Object getElementAt(int index) {
-			return data.alEntities.get(index);
+			return alRootEntities.get(index);
 		}
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (!e.getValueIsAdjusting()) {
-				Object sel = lstEntities.getSelectedValue();
+				DustEntity sel = ((LabEntity)lstEntities.getSelectedValue()).entity;
 				selectEntityFrame(sel, false);
 				updateState();
 			}
@@ -100,6 +102,7 @@ public class LabFrame extends JFrame implements Test.TestItem {
 	};
 
 	class FrameAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		MenuCmds cmd;
 
 		public FrameAction(String name, MenuCmds cmd) {
@@ -114,14 +117,15 @@ public class LabFrame extends JFrame implements Test.TestItem {
 	}
 	
 	class EntityFrame extends JInternalFrame {
+		private static final long serialVersionUID = 1L;
 		Object content;
 		
-		EntityFrame(Object content) {
+		EntityFrame(DustEntity content) {
 			super(content.toString(), true, true, true, true);
 			this.content = content;
 			
 			addInternalFrameListener(il);
-			getContentPane().add(new LabEntityPanel(((LabEntity)content).e), BorderLayout.CENTER);
+			getContentPane().add(new LabEntityPanel(LabFrame.this, content), BorderLayout.CENTER);
 			pack();
 			show();
 		}
@@ -142,6 +146,8 @@ public class LabFrame extends JFrame implements Test.TestItem {
 
 	Action actDelAspect;
 	Action actNewAspect;
+	
+	ArrayList<LabEntity> alRootEntities = new ArrayList<LabEntity>();
 
 	Map<Object, EntityFrame> mapEntityFrames = new HashMap<Object, EntityFrame>();
 
@@ -150,6 +156,8 @@ public class LabFrame extends JFrame implements Test.TestItem {
 		JPanel pnl, pnl1;
 
 		data = new LabData();
+		
+		alRootEntities.addAll(data.findRootEntities());
 
 		JMenuBar mb = new JMenuBar();
 
@@ -212,18 +220,18 @@ public class LabFrame extends JFrame implements Test.TestItem {
 		updateState();
 	}
 
-	void updateState() {
+	public void updateState() {
 		actDelEntity.setEnabled(-1 != lstEntities.getSelectedIndex());
 	}
 
-	void selectEntityFrame(Object labE, boolean createIfMissing) {
-		EntityFrame iFrm = mapEntityFrames.get(labE);
+	public void selectEntityFrame(DustEntity entity, boolean createIfMissing) {
+		EntityFrame iFrm = mapEntityFrames.get(entity);
 
 		if (null == iFrm) {
 			if (createIfMissing) {
-				iFrm = new EntityFrame(labE);
+				iFrm = new EntityFrame(entity);
 
-				mapEntityFrames.put(labE, iFrm);
+				mapEntityFrames.put(entity, iFrm);
 				desktop.add(iFrm);
 			}
 		} 
@@ -242,7 +250,7 @@ public class LabFrame extends JFrame implements Test.TestItem {
 
 	void doubleClicked(JComponent src) {
 		if (src == lstEntities) {
-			Object sel = lstEntities.getSelectedValue();
+			DustEntity sel = ((LabEntity)lstEntities.getSelectedValue()).entity;
 
 			if (!mapEntityFrames.containsKey(sel)) {
 				selectEntityFrame(sel, true);
@@ -259,9 +267,16 @@ public class LabFrame extends JFrame implements Test.TestItem {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public void editEntity(DustEntity e) {
+		
+	}
 
 	@Override
 	public void test() throws Exception {
 	}
 
+	public LabData getData() {
+		return data;
+	}
 }
