@@ -65,13 +65,14 @@ public abstract class LabVariantEditor implements DataAwareComponent, DustConsta
 			return LabVarEditorValSet.class;
 		case ObSingle:
 			return LabVarEditorObSingle.class;
+		case ObSet:
+			return LabVarEditorObSet.class;
 		case ObType:
 		case Integer:
 		case Double:
 		case ImmutableDate:
 		case ObArray:
 		case ObMap:
-		case ObSet:
 		case ByteArray:
 		default:
 			return LabVarEditorDummy.class;				
