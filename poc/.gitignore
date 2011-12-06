@@ -1,0 +1,12 @@
+# Ignore Eclipse workspace - so anyone can create a local Eclipse workspace
+# inside this directory
+.metadata
+
+# Ignore compiled files
+**/bin
+
+# Ignore Eclipse crash logs
+**/hs_err*.log
+
+# Ignore Eclipse config info pushed into the project directory
+**/.settings
