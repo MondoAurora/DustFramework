@@ -13,6 +13,7 @@ typedef long Reference;	// this is a generated constant resolved by the Context 
 
 #define HANDLE_UNKNOWN -1
 #define HANDLE_THIS 0
+#define HANDLE_CHN_RESPONSE -2
 
 #define REFERENCE_UNKNOWN -1
 
@@ -30,21 +31,28 @@ typedef enum {
 } DustCollOp;
 
 typedef enum {
-	DUST_CHN_FIRST, DUST_CHN_CONTINUING, DUST_CHN_FINISHED, DUST_CHN_ABORTED
+	DUST_CHN_FIRST, DUST_CHN_CONTINUING, DUST_CHN_FINISHED, DUST_CHN_ABORTED, DUST_CHN_RESPONSE,
 } DustChnOp;
+
+typedef enum {
+	DUST_TOP_ROLLBACK, DUST_TOP_COMMIT,
+} DustTransOp;
 
 /* This is your entry point. When the source runs in cycle, you get the index of the item
  * as it has entered the channel. This is interesting when you process a linked array of entities;
  * and can be used to restore the sending order when the items may get shuffled along
  * the channel (like datagram networking). However, if the receiving channel supports
  * multiple senders, the indexes may be repeated or mixed. */
-typedef void (*dustfnMsgProc)(DustChnOp channelOp, Handle entity, int index);
+typedef void (*dustfnMsgProc)(DustChnOp channelOp, Handle entity, Handle hChn, int index);
 
 
 /* get entity instance using a generated constant reference */
 Handle dustGetReferredEntity(Reference refEntity);
 /* create an entity instance with the given primary type */
 Handle dustCreateEntity(Reference refType);
+
+/* optional release of this entity instance (if unchanged in this context) */
+DustBool dustReleaseEntity(Handle hEntity);
 
 /*
  * Probably this is also a private function inside the Entity component,
@@ -74,6 +82,7 @@ void dustWait(Handle hProcOrGroup);
 
 void dustRespond(Handle hDataEntity);
 
+void dustTransact(DustTransOp transOp);
 
 // TODO perhaps a macro would be fine to declare the channel processor function,
 // and another for the internal, implementation related channel processors?

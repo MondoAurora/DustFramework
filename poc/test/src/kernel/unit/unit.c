@@ -42,6 +42,10 @@ void dustKernelUnitManageField(Handle hUnit, Handle hEntity, Reference refField,
 
 }
 
+Handle dustKernelUnitSend(Handle hUnit, Handle hChannel, Handle hDataEntity, Handle *phGroup, Handle hNewCtx) {
+	return HANDLE_UNKNOWN;
+}
+
 int unitGetAspectSize(Unit *pUnit, Reference refType) {
 	return 30;
 }

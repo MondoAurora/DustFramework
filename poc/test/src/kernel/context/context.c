@@ -9,24 +9,15 @@
 #include <kernel.h>
 
 #include "context.h"
-#include <test.h>
+#include <boot.h>
 
 
 
 // public functions
 
 Handle dustGetReferredEntity(Reference refEntity) {
-	Context *pCtx = ctxGetCurrentContext();
-
-	Handle hEntity = dustKernelCollMapGet(pCtx->hCollRefEntities, refEntity);
-
-	if ( HANDLE_UNKNOWN == hEntity ) {
-		hEntity = dustKernelUnitGetReferredEntity(pCtx->hUnit, refEntity);
-		dustKernelCollMapPut(pCtx->hCollRefEntities, refEntity, hEntity);
-		dustKernelCollSetAdd(pCtx->hCollEntities, hEntity);
-	}
-
-	return hEntity;
+	FactoryCtxGetRefEntity ctx = { ctxGetCurrentContext(), refEntity };
+	return dustKernelCollLazyMapGet(ctx.pCtx->hCollRefEntities, refEntity, &ctx);
 }
 
 Handle dustCreateEntity(Reference refType) {
@@ -50,9 +41,9 @@ void dustManageField(Handle hEntity, Reference refField, void* source, DustAccOp
 void dustManageLink(Handle hTargetEntity, Reference refLink, DustCollOp op, Handle hLinkedEntity, int index) {
 	Context *pCtx = ctxGetCurrentContext();
 
-	ctxVerifyEntityHandle(pCtx, hEntity);
+	ctxVerifyEntityHandle(pCtx, hTargetEntity);
 
-	LinkInfo* pLinkInfo = ctxGetLinkInfo(hTargetEntity, refLink, op);
+	LinkInfo* pLinkInfo = ctxGetLinkInfo(pCtx, hTargetEntity, refLink, op);
 
 	dustKernelCollManage(pLinkInfo->hCollLinkedEntities, op, hLinkedEntity, index);
 }
@@ -67,7 +58,7 @@ Handle dustGetChannel(Handle hTargetEntity, Reference refChannel, dustfnMsgProc 
 	Handle hChannel = dustKernelCollMapGet(pCtx->hCollRefChannels, refChn);
 
 	if ( HANDLE_UNKNOWN == hChannel ) {
-		hChannel = dustKernelUnitGetReferredChannel(pCtx->hUnit, hTargetEntity, refChannel);
+		hChannel = dustKernelUnitGetReferredChannel(pCtx->hUnit, refChannel);
 		dustKernelCollMapPut(pCtx->hCollRefChannels, refChn, hChannel);
 	}
 
@@ -75,15 +66,35 @@ Handle dustGetChannel(Handle hTargetEntity, Reference refChannel, dustfnMsgProc 
 }
 
 Handle dustSend(Handle hChannel, Handle hDataEntity, Handle *phGroup) {
-	testTraceMsg("dust_send_async");
-	return -1;
+	Context *pCtx = ctxGetCurrentContext();
+
+	ctxVerifyEntityHandle(pCtx, hDataEntity);
+
+	Handle hNewCtx = ctxCreateContext(dustKernelThreadGetContextHandle(), 0);
+
+	return dustKernelUnitSend(pCtx->hUnit, hChannel, hDataEntity, phGroup, hNewCtx);
 }
 
 void dustRespond(Handle hDataEntity) {
 	Context *pCtx = ctxGetCurrentContext();
 
-	testTraceMsg("dust_respond");
+	ctxVerifyEntityHandle(pCtx, hDataEntity);
+
+	dustKernelUnitSend(pCtx->hUnit, pCtx->hCallerChn, hDataEntity, HANDLE_CHN_RESPONSE, pCtx->hCallerCtx);
 }
+
+DustBool dustReleaseEntity(Handle hEntity) {
+	bootTraceCall("dustReleaseEntity called");
+
+	return DUST_TRUE;
+}
+
+void dustTransact(DustTransOp transOp) {
+	bootTraceCall("dustTransact called");
+}
+
+
+
 
 
 /*
@@ -93,6 +104,7 @@ void dustRespond(Handle hDataEntity) {
 // local variables for context operation
 Handle hMapContexts;
 
+int defRefCount = 10;
 
 
 Context* ctxGetCurrentContext() {
@@ -107,14 +119,18 @@ void ctxVerifyEntityHandle(Context* pCtx, Handle hEntity) {
 	if ( !dustKernelCollContains(pCtx->hCollEntities,  hEntity) ) {
 		// should throw exception or whatever, no return...
 	}
+
+	bootTraceCall("ctxVerifyEntityHandle");
 }
 
-Context* cxtCreateContext(Handle hParentContext) {
+Handle ctxCreateContext(Handle hParentContext, void* otherData) {
 	Handle ret = dustKernelMemAlloc(sizeof(Context));
 
 	Context *pCtx = (Context*) dustKernelMemGetBlock(ret);
 
-	return pCtx;
+	pCtx->hCollRefEntities = dustKernelCollLazyMapCreate(defRefCount, ctxFactoryRefEntities);
+
+	return ret;
 }
 
 LinkInfo* ctxGetLinkInfo(Context* pCtx, Handle hTargetEntity, Reference refLink, DustCollOp op) {
@@ -123,4 +139,14 @@ LinkInfo* ctxGetLinkInfo(Context* pCtx, Handle hTargetEntity, Reference refLink,
 
 Reference ctxBuildChannelRef(Handle hTargetEntity, Reference refChannel) {
 	return REFERENCE_UNKNOWN;
+}
+
+
+Handle ctxFactoryRefEntities(Reference refKey, void *pCtx) {
+	FactoryCtxGetRefEntity *pFactCtx = (FactoryCtxGetRefEntity *) pCtx;
+
+	Handle hEntity = dustKernelUnitGetReferredEntity(pFactCtx->pCtx->hUnit, pFactCtx->refEntity);
+	dustKernelCollSetAdd(pFactCtx->pCtx->hCollEntities, hEntity);
+
+	return hEntity;
 }

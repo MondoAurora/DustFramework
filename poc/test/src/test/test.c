@@ -10,6 +10,7 @@
 
 #include <dust.h>
 #include <kernel.h>
+#include <boot.h>
 
 #include <test.h>
 
@@ -24,7 +25,7 @@ int main(void) {
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
 
-	testTraceMsg("starting");
+	bootTraceMsg("starting");
 
 	Handle b = dustKernelMemAlloc(100);
 
@@ -34,20 +35,20 @@ int main(void) {
 
 	dustKernelMemRelease(&b);
 
-	testTraceMsg(s);
+	bootTraceMsg(s);
 
-	dustGetReferredEntity(0);
+//	dustGetReferredEntity(0);
 
-	Handle hEntity = dustCreateEntity(0);
+//	Handle hEntity = dustCreateEntity(0);
 
-	testTraceMsg("entity created");
+	bootTraceMsg("entity created");
 
 	return EXIT_SUCCESS;
 }
 
 
-void testTraceMsg(const char* msg) {
-	printf("trace - ");
+void bootTrace(Reference refUnit, Reference refMsg, const char* msg) {
+	printf("trace - %d/%d ", (long) refUnit, (long) refMsg);
 	printf(msg);
 	printf("\n");
 

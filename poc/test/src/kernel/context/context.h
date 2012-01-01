@@ -21,6 +21,7 @@ typedef struct {
 	Handle hCollRefChannels;
 
 	Handle hCallerCtx;
+	Handle hCallerChn;
 	dustfnMsgProc pfnResponseProcessor;
 } Context;
 
@@ -31,13 +32,22 @@ typedef struct {
 	Handle hCollLinkedEntities;
 } LinkInfo;
 
+typedef struct {
+	Context *pCtx;
+	Reference refEntity;
+} FactoryCtxGetRefEntity;
+
 
 Context* ctxGetCurrentContext();
 
 Reference ctxBuildChannelRef(Handle hTargetEntity, Reference refChannel);
 
-DustBool ctxVerifyEntityHandle(Context* pCtx, Handle hEntity);
+void ctxVerifyEntityHandle(Context* pCtx, Handle hEntity);
 LinkInfo* ctxGetLinkInfo(Context* pCtx, Handle hTargetEntity, Reference refLink, DustCollOp op);
 
+Handle ctxCreateContext(Handle hParentContext, void* otherData);
+
+
+Handle ctxFactoryRefEntities(Reference refKey, void *pCtx);
 
 #endif /* CONTEXT_H_ */

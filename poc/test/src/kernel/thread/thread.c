@@ -8,11 +8,11 @@
 #include <dust.h>
 #include <kernel.h>
 
-#include <test.h>
+#include <boot.h>
 
 
 void dustWait(Handle hProcOrGroup) {
-	testTraceMsg("dust_wait");
+	bootTraceCall("dustWait");
 }
 
 

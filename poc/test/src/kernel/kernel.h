@@ -28,6 +28,10 @@ void dustKernelMemAccessBlock(Handle hBlock, int offset, int size, void* target,
  *
  **************************/
 
+typedef Handle (*dustfnLazyMapFactory)(Reference refKey, void *pCtx);
+
+Handle dustKernelCollLazyMapCreate(int initCount, dustfnLazyMapFactory pfnFactory);
+
 Handle dustKernelCollCreate(int itemSize, int initCount);
 void dustKernelCollRelease(Handle* phColl);
 
@@ -38,6 +42,7 @@ DustBool dustKernelCollContains(Handle hColl, Handle hItem);
 void dustKernelCollSetAdd(Handle hColl, Handle hItem);
 
 Handle dustKernelCollMapGet(Handle hColl, Reference refKey);
+Handle dustKernelCollLazyMapGet(Handle hColl, Reference refKey, void *pCtx);
 void dustKernelCollMapPut(Handle hColl, Reference refKey, Handle hItem);
 
 void dustKernelCollManage(Handle hColl, DustCollOp op, Handle hItem, int index);
@@ -56,6 +61,7 @@ Handle dustKernelUnitGetReferredEntity(Handle hUnit, Reference refEntity);
 Handle dustKernelUnitGetReferredChannel(Handle hUnit, Reference refChannel);
 
 void dustKernelUnitManageField(Handle hUnit, Handle hEntity, Reference refField, void* source, DustAccOp op);
+Handle dustKernelUnitSend(Handle hUnit, Handle hChannel, Handle hDataEntity, Handle *phGroup, Handle hNewCtx);
 
 
 /**************************
@@ -72,5 +78,7 @@ void dustKernelUnitManageField(Handle hUnit, Handle hEntity, Reference refField,
  **************************/
 
 Handle dustKernelThreadGetContextHandle();
+
+Handle dustKernelThreadCall(Handle newContext, dustfnMsgProc pfnMsgProc, DustChnOp channelOp, Handle hDataEntity, Handle hChn, int index);
 
 #endif /* KERNEL_H_ */

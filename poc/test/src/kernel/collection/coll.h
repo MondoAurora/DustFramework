@@ -14,9 +14,19 @@ typedef struct {
 	/** allocated size */
 	int capacity;
 
+	/** factory function for lazy maps **/
+	dustfnLazyMapFactory pfnFactory;
+
 	/** placeholder for the data */
 	char content;
 } DustColl;
 
+
+
+DustColl* collGetFromHandle(Handle hColl);
+
+Handle collCreate(int itemSize, int initCount, dustfnLazyMapFactory pfnFactory);
+void collMapPut(DustColl *pColl, Reference refKey, Handle value);
+Handle collMapGet(DustColl *pColl, Reference refKey, void *pCtx);
 
 #endif /* COLL_H_ */

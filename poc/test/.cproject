@@ -41,9 +41,8 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.888644370" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.574774712" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.627586562" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../test/DustAPI"/>
-									<listOptionValue builtIn="false" value="../test/DustKernel"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/test/src/api}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/boot}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/test/src/kernel}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/test/src/test}&quot;"/>
 								</option>
