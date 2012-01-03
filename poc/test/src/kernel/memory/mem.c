@@ -37,6 +37,10 @@ void* dustKernelMemGetBlock(Handle hBlock) {
 	return (HANDLE_UNKNOWN == hBlock) ? 0 : (void*) hBlock;
 }
 
+void dustKernelMemFill(void* target, char fillValue, int count) {
+	memset(target, fillValue, count);
+}
+
 void dustKernelMemAccessBlock(Handle hBlock, int offset, int size,
 		void* target, DustAccOp access) {
 	char* pp = dustKernelMemGetBlock(hBlock);

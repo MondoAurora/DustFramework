@@ -37,7 +37,7 @@ int main(void) {
 
 	bootTraceMsg(s);
 
-//	dustGetReferredEntity(0);
+	dustGetReferredEntity(0);
 
 //	Handle hEntity = dustCreateEntity(0);
 

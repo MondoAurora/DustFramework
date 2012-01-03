@@ -38,6 +38,15 @@ void dustManageField(Handle hEntity, Reference refField, void* source, DustAccOp
 	dustKernelUnitManageField(pCtx->hUnit, hEntity, refField, source, op);
 }
 
+void dustManageAspect(Handle hEntity, Reference *pRefTypes, int count, DustAspectOp op) {
+	Context *pCtx = ctxGetCurrentContext();
+
+	ctxVerifyEntityHandle(pCtx, hEntity);
+
+	dustKernelUnitManageAspect(pCtx->hUnit, hEntity, pRefTypes, count, op);
+}
+
+
 void dustManageLink(Handle hTargetEntity, Reference refLink, DustCollOp op, Handle hLinkedEntity, int index) {
 	Context *pCtx = ctxGetCurrentContext();
 
@@ -121,6 +130,10 @@ void ctxVerifyEntityHandle(Context* pCtx, Handle hEntity) {
 	}
 
 	bootTraceCall("ctxVerifyEntityHandle");
+}
+
+Handle dustKernelCtxLockEntity(Handle hEntity) {
+	return hEntity;
 }
 
 Handle ctxCreateContext(Handle hParentContext, void* otherData) {

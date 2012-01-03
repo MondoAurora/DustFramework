@@ -15,6 +15,10 @@ void dustWait(Handle hProcOrGroup) {
 	bootTraceCall("dustWait");
 }
 
+void dustThrow(Handle hException) {
+	bootTraceCall("dustThrow");
+}
+
 
 Handle tempCtxHandle = 0;
 

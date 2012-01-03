@@ -27,6 +27,10 @@ typedef enum {
 } DustAccOp;
 
 typedef enum {
+	DUST_ASP_ADD, DUST_ASP_REMOVE
+} DustAspectOp;
+
+typedef enum {
 	DUST_COLL_ADD, DUST_COLL_SET, DUST_COLL_INSERT, DUST_COLL_REMOVE, DUST_COLL_CLEAR
 } DustCollOp;
 
@@ -71,6 +75,8 @@ DustBool dustReleaseEntity(Handle hEntity);
  */
 // void dust_find_entity(ENTITY filter, dustfn_process_message response_processor);
 
+void dustManageAspect(Handle hEntity, Reference *pRefTypes, int count, DustAspectOp op);
+
 void dustManageField(Handle hEntity, Reference refField, void* source, DustAccOp op);
 
 void dustManageLink(Handle hTargetEntity, Reference refLink, DustCollOp op, Handle hLinkedEntity, int index);
@@ -81,6 +87,8 @@ Handle dustSend(Handle hChannel, Handle hDataEntity, Handle *phGroup);
 void dustWait(Handle hProcOrGroup);
 
 void dustRespond(Handle hDataEntity);
+
+void dustThrow(Handle hException);
 
 void dustTransact(DustTransOp transOp);
 

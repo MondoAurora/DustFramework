@@ -20,6 +20,7 @@ void dustKernelMemRelease(Handle* phBlock);
 
 void* dustKernelMemGetBlock(Handle hBlock);
 void dustKernelMemAccessBlock(Handle hBlock, int offset, int size, void* target, DustAccOp access);
+void dustKernelMemFill(void* target, char fillValue, int count);
 
 
 /**************************
@@ -60,7 +61,8 @@ Handle dustKernelUnitGetReferredEntity(Handle hUnit, Reference refEntity);
 
 Handle dustKernelUnitGetReferredChannel(Handle hUnit, Reference refChannel);
 
-void dustKernelUnitManageField(Handle hUnit, Handle hEntity, Reference refField, void* source, DustAccOp op);
+DustBool dustKernelUnitManageAspect(Handle hUnit, Handle hEntity, Reference *pRefTypes, int count, DustAspectOp op);
+DustBool dustKernelUnitManageField(Handle hUnit, Handle hEntity, Reference refField, void* source, DustAccOp op);
 Handle dustKernelUnitSend(Handle hUnit, Handle hChannel, Handle hDataEntity, Handle *phGroup, Handle hNewCtx);
 
 
@@ -70,6 +72,7 @@ Handle dustKernelUnitSend(Handle hUnit, Handle hChannel, Handle hDataEntity, Han
  *
  **************************/
 
+Handle dustKernelCtxLockEntity(Handle hEntity);
 
 /**************************
  *

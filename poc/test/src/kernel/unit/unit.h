@@ -8,10 +8,22 @@
 #ifndef UNIT_H_
 #define UNIT_H_
 
+/*****************
+ *
+ * core: the generic field type definitions, like integer, boolean, etc
+ *
+ *****************/
+
 typedef struct {
 	char *id;
 	int dataSize;
 } FieldType;
+
+/*****************
+ *
+ * Unit content (field, type, channelDef, entity reference
+ *
+ *****************/
 
 typedef struct {
 	char *id;
@@ -19,42 +31,67 @@ typedef struct {
 	int offset;
 
 	FieldType *pFieldType;
-	struct Type *pType;
+	void *pType;
 } Field;
-
-typedef struct {
-	char *id;
-
-	int fieldCount;
-	int size;
-	Field *pFields;
-} Type;
 
 typedef struct {
 	Reference refType;
 	DustBool async;
-} Channel;
+} ChannelDef;
+
+typedef struct {
+	char *id;
+
+	int size;
+
+	int fieldCount;
+	Field *pFields;
+
+	int channelCount;
+	ChannelDef *pChannels;
+} Type;
 
 typedef enum {
-	COMPTYPE_FIELD, COMPTYPE_TYPE, COMPTYPE_CHANNEL
+	EREFTYPE_INSTANCE, EREFTYPE_PATH
+} EntityRefType;
+
+typedef struct {
+	EntityRefType refType;
+	union {
+		char *id; // invocation identifier
+		Handle hEntity; // it is already created and stored in the context
+	};
+} EntityInvoker;
+
+/*****************
+ *
+ * Unit instance data
+ *
+ *****************/
+
+typedef enum {
+	COMPTYPE_FIELD, COMPTYPE_TYPE, COMPTYPE_CHANNEL, COMPTYPE_ENTITY
 } UnitComponentRefType;
 
 typedef struct {
 	int idOffset; // this is where the id can be found
 
 	UnitComponentRefType refType;
+
 	union {
 		Field *pField;
 		Type *pType;
-		Channel *pChannel;
+		ChannelDef *pChannel;
+		EntityInvoker *pEntityInvoker;
 	};
-} ElementRef;
+
+} ComponentRef;
 
 typedef struct {
 	// identification: Vendor, Domain, Unit ID
 
 	char *pIdPool;
-	int id_pool_size;
+	int idPoolSize;
 
 } UnitDefinition;
 
@@ -64,48 +101,43 @@ typedef struct {
 	int typeCount;
 	Type *pTypes;
 
-	int fieldCount;
-	Field *pFields;
+	int entityCount;
+	EntityInvoker *pEntityInvokers;
 
-	int extTypeCount;
-	Type **ppExtTypes;
+	int compRefCount;
+	ComponentRef *pCompRefs;
 
-	int extFieldCount;
-	Field **ppExtFields;
-
-	Handle hUnitEntity;
+	int unitRefCount;
+	UnitDefinition *pUDefRefs;
 } UnitDeclaration;
 
-typedef struct {
-	char *p_id_pool;
-	int id_pool_size;
-
-	int typeCount;
-	Type *pTypes;
-
-	int fieldCount;
-	Field *pFields;
-
-	int extTypeCount;
-	Type **ppExtTypes;
-
-	int extFieldCount;
-	Field **ppExtFields;
-
-	Handle hUnitEntity;
-} Unit;
+/*****************
+ *
+ * Dynamic content: Aspect, entity, channel instances
+ *
+ *****************/
 
 typedef struct {
-	Reference refType;
-	struct Aspect *pNextAspect;
+	Type *pType;
+	Handle hNextAspect;
 } Aspect;
 
 typedef struct {
+	ChannelDef *pDef;
+// other work data
+} Channel;
+
+typedef struct {
 	Handle id;
-	Handle hAspect;
+	Handle hAspectChain;
 } Entity;
 
 
-int unitGetAspectSize(Unit *pUnit, Reference refType);
+UnitDeclaration* unitGetUnitDecl(Handle hUnit);
+
+ComponentRef* unitGetRef(UnitDeclaration *pUnitDecl, Reference refType, UnitComponentRefType assertType);
+
+Aspect* unitAddAspect(Type* pType, Handle *pHandle);
+Handle unitRemoveAspect(Aspect *pPrevAsp, Handle hAspect, Handle hNextAspect);
 
 #endif /* UNIT_H_ */
