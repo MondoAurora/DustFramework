@@ -79,7 +79,9 @@ Handle dustSend(Handle hChannel, Handle hDataEntity, Handle *phGroup) {
 
 	ctxVerifyEntityHandle(pCtx, hDataEntity);
 
-	Handle hNewCtx = ctxCreateContext(dustKernelThreadGetContextHandle(), 0);
+	Handle targetUnit = HANDLE_UNKNOWN; // by now
+
+	Handle hNewCtx = ctxCreateContext(dustKernelThreadGetContextHandle(), targetUnit, 0);
 
 	return dustKernelUnitSend(pCtx->hUnit, hChannel, hDataEntity, phGroup, hNewCtx);
 }
@@ -104,6 +106,10 @@ void dustTransact(DustTransOp transOp) {
 
 
 
+
+Handle dustBootContextInit(Handle hBootUnit) {
+	return ctxCreateContext(HANDLE_UNKNOWN, hBootUnit, 0);
+}
 
 
 /*
@@ -136,12 +142,13 @@ Handle dustKernelCtxLockEntity(Handle hEntity) {
 	return hEntity;
 }
 
-Handle ctxCreateContext(Handle hParentContext, void* otherData) {
+Handle ctxCreateContext(Handle hParentContext, Handle hUnit, void* otherData) {
 	Handle ret = dustKernelMemAlloc(sizeof(Context));
 
 	Context *pCtx = (Context*) dustKernelMemGetBlock(ret);
 
 	pCtx->hCollRefEntities = dustKernelCollLazyMapCreate(defRefCount, ctxFactoryRefEntities);
+	pCtx->hUnit = hUnit;
 
 	return ret;
 }

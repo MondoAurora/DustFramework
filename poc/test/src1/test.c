@@ -8,51 +8,45 @@
  ============================================================================
  */
 
-#include <dust.h>
-#include <kernel.h>
-#include <boot.h>
-
-#include <test.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "dust.h"
+#include "kernel.h"
+
+#include "test.h"
 #include <string.h>
 
 char* MSG = "This is my hello world message";
 
-int testUnitInit() {
-	bootTraceMsg("testUnitInit start");
-
+int main(void) {
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
+
+	testTraceMsg("starting");
 
 	Handle b = dustKernelMemAlloc(100);
 
 	char s[100];
-	dustKernelMemAccessBlock(b, 0, testStrlen(MSG) + 1, MSG, DUST_ACC_SET);
-	dustKernelMemAccessBlock(b, 0, testStrlen(MSG) + 1, s, DUST_ACC_GET);
+	dustKernelMemAccessBlock(b, 0, testStrlen(MSG) + 1, MSG, ACCESS_SET);
+	dustKernelMemAccessBlock(b, 0, testStrlen(MSG) + 1, s, ACCESS_GET);
 
 	dustKernelMemRelease(&b);
 
-	bootTraceMsg(s);
+	testTraceMsg(s);
 
-//	dustGetReferredEntity(0);
+	dustGetReferredEntity(0);
 
-//	Handle hEntity = dustCreateEntity(0);
+	Handle hEntity = dustCreateEntity(0);
 
-	printf("sizeof int %d \n", sizeof (int) );
-	printf("sizeof long %d \n", sizeof (long long) );
-
-
-	bootTraceMsg("testUnitInit end");
+	testTraceMsg("entity created");
 
 	return EXIT_SUCCESS;
 }
 
 
-void bootTrace(Reference refUnit, Reference refMsg, const char* msg) {
-	printf("trace - %d/%d ", (long) refUnit, (long) refMsg);
+void testTraceMsg(const char* msg) {
+	printf("trace - ");
 	printf(msg);
 	printf("\n");
 

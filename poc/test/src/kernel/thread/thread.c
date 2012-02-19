@@ -20,11 +20,13 @@ void dustThrow(Handle hException) {
 }
 
 
-Handle tempCtxHandle = 0;
+Handle rootCtx = 0;
 
 Handle dustKernelThreadGetContextHandle() {
-	return tempCtxHandle;
+	return rootCtx;
 }
 
-void dustBootThreadInit() {
+void dustBootThreadInit(Handle initCtx) {
+	rootCtx = initCtx;
 }
+

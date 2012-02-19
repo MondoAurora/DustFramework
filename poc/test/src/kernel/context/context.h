@@ -45,8 +45,7 @@ Reference ctxBuildChannelRef(Handle hTargetEntity, Reference refChannel);
 void ctxVerifyEntityHandle(Context* pCtx, Handle hEntity);
 LinkInfo* ctxGetLinkInfo(Context* pCtx, Handle hTargetEntity, Reference refLink, DustCollOp op);
 
-Handle ctxCreateContext(Handle hParentContext, void* otherData);
-
+Handle ctxCreateContext(Handle hParentContext, Handle hUnit, void* otherData);
 
 Handle ctxFactoryRefEntities(Reference refKey, void *pCtx);
 
