@@ -3,7 +3,7 @@ package org.mondoaurora.frame.kernel;
 public interface MAFKernelConsts {
 	
 	enum FieldType {
-		IDENTIFIER, BOOLEAN, VALUESET, INTEGER, DOUBLE, STRING, DATE, CONNECTOR, SET, ARRAY
+		IDENTIFIER, BOOLEAN, VALUESET, INTEGER, DOUBLE, STRING, DATE, REFERENCE, SET, ARRAY
 	};
 
 	char SEP_PATH_SEP = '.';

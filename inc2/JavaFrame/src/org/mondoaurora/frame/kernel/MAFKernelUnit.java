@@ -1,6 +1,8 @@
 package org.mondoaurora.frame.kernel;
 
 import org.mondoaurora.frame.shared.MAFConnector;
+import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.MAFVariant.VariantSetMode;
 
 
 public class MAFKernelUnit extends MAFKernelLogic {
@@ -22,11 +24,13 @@ public class MAFKernelUnit extends MAFKernelLogic {
 	MAFKernelConnector export(MAFKernelEnvironment env) {
 		MAFKernelConnector target = env.registerEntity(TYPE, new MAFKernelIdentifier(strTypeId, FRAME_PATH, ID_UNIT_KERNEL), null, FIELDS);
 		
-		target.addMember(0, MAFKernelVendor.TYPE.export(env));
-		target.addMember(0, MAFKernelDomain.TYPE.export(env));
-		target.addMember(0, TYPE.export(env));
-		target.addMember(0, MAFKernelType.TYPE.export(env));
-		target.addMember(0, MAFKernelField.TYPE.export(env));
+		MAFVariant v = target.getValue(0);
+
+		v.setData(MAFKernelVendor.TYPE.export(env), VariantSetMode.insert, null);
+		v.setData(MAFKernelDomain.TYPE.export(env), VariantSetMode.insert, null);
+		v.setData(TYPE.export(env), VariantSetMode.insert, null);
+		v.setData(MAFKernelType.TYPE.export(env), VariantSetMode.insert, null);
+		v.setData(MAFKernelField.TYPE.export(env), VariantSetMode.insert, null);
 
 		return target;	
 	}

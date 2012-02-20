@@ -2,8 +2,6 @@ package org.mondoaurora.frame.kernel;
 
 import java.util.EnumSet;
 
-import org.mondoaurora.frame.kernel.MAFKernelDumper.Indent;
-import org.mondoaurora.frame.shared.MAFConnector;
 import org.mondoaurora.frame.shared.MAFDate;
 import org.mondoaurora.frame.shared.MAFUtils;
 
@@ -98,47 +96,20 @@ public class MAFKernelField extends MAFKernelLogic {
 	MAFKernelConnector export(MAFKernelEnvironment env) {
 		MAFKernelConnector conn = env.registerEntity(TYPE, null, name, this, FIELDS);
 
-		conn.setString(0, name);
-		conn.setString(1, type.name());
-		conn.setInt(2, length);
-		conn.setString(3, obType);
-		conn.setString(4, (null == valsetValues) ? null : MAFUtils.arr2str(valsetValues, SEP_VALSET));
+		conn.setData(0, name);
+		conn.setData(1, type.name());
+		conn.setData(2, length);
+		conn.setData(3, obType);
+		conn.setData(4, (null == valsetValues) ? null : MAFUtils.arr2str(valsetValues, SEP_VALSET));
 
 		return conn;
 	}
 
-	void dump(MAFKernelDumper target, Object o) {
+	void dump(MAFKernelDumper target, MAFKernelVariant o) {
 		target.put("\"");
 		target.put(name);
 		target.put("\" : ");
-		switch (type) {
-		case ARRAY:
-		case SET:
-			Iterable<? extends MAFConnector> val = (Iterable<? extends MAFConnector>) o;
-			target.put("[");
-			target.endLine(Indent.inc);
-			
-			boolean add = false;
-			
-			for (MAFConnector conn : val) {
-				if ( add ) {
-					target.put(",");
-					target.endLine(Indent.keep);
-				} else {
-					add = true;
-				}
-				((MAFKernelConnector) conn).dump(target);
-			}
-			target.endLine(Indent.dec);
-			target.put("]");
-			break;
-		default:
-			target.put("\"");
-			target.put(o.toString());
-			target.put("\"");
-		}
-
-		target.endLine(Indent.keep);
+		o.dump(target);
 	}
 
 }

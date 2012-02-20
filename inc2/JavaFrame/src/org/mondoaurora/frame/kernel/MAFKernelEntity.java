@@ -46,7 +46,6 @@ public class MAFKernelEntity {
 		} 
 		
 		target.put("}");
-		target.endLine(Indent.keep);
 	}
 
 	void dump(MAFKernelDumper target) {

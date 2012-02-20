@@ -58,8 +58,8 @@ public class MAFKernelEnvironment extends MAFEnvironment implements MAFKernelHel
 		MAFKernelConnector connFrame = domainFrame.export(this);
 		MAFKernelConnector connRoot = vendorRoot.export(this);
 
-		connRoot.addMember(0, connFrame);
-		connFrame.addMember(0, connKernel);
+		connRoot.setData(0, connFrame);
+		connFrame.setData(0, connKernel);
 		
 //		dump();
 	}

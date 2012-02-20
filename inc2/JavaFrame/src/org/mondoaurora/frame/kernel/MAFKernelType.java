@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.MAFVariant.VariantSetMode;
+
 public class MAFKernelType extends MAFKernelLogic {
 	static String strTypeId = MAFKernelIdentifier.buildPath(KERNEL_PATH, ID_TYPENAME_TYPE);
 
@@ -60,10 +63,12 @@ public class MAFKernelType extends MAFKernelLogic {
 	MAFKernelConnector export(MAFKernelEnvironment env) {
 		MAFKernelConnector c = env.registerEntity(TYPE, id, this, FIELDS);
 		
-		c.setBool(0, referrable);
+		c.setData(0, referrable);
+		
+		MAFVariant v = c.getValue(1);
 
 		for (MAFKernelField f : arrFields) {
-			c.addMember(1, f.export(env));
+			v.setData(f.export(env), VariantSetMode.insert, null);
 		}
 
 		return c;
