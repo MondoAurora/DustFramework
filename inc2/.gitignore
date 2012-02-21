@@ -10,3 +10,6 @@
 
 # Ignore Eclipse config info pushed into the project directory
 **/.settings
+
+# Ignore temp folders
+**/temp

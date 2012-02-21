@@ -1,16 +1,15 @@
 package org.mondoaurora.frame.kernel;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
-import org.mondoaurora.frame.shared.MAFIdentifier;
 import org.mondoaurora.frame.shared.MAFStream;
 
 public class MAFKernelEntity {
 	MAFKernelIdentifier id;
 	MAFKernelAspect primaryAspect;
 
-	Map<MAFIdentifier, MAFKernelAspect> mapAspects = new HashMap<MAFIdentifier, MAFKernelAspect>();
+	Map<MAFKernelIdentifier, MAFKernelAspect> mapAspects = new TreeMap<MAFKernelIdentifier, MAFKernelAspect>();
 
 	protected MAFKernelEntity() {
 		
@@ -30,6 +29,14 @@ public class MAFKernelEntity {
 	public MAFKernelAspect getAspect(MAFKernelIdentifier id) {
 		return mapAspects.get(id);
 	}
+	
+	public Iterable<Map.Entry<MAFKernelIdentifier, MAFKernelAspect>> getAspects() {
+		return mapAspects.entrySet();
+	}
+	
+	public String getRef() {
+		return id.asReference();
+	}
 
 	@Override
 	public String toString() {
@@ -44,7 +51,7 @@ public class MAFKernelEntity {
 		if (!refOnly) {
 			target.put(",");
 			target.endLine(MAFStream.Indent.inc);
-			for ( Map.Entry<MAFIdentifier, MAFKernelAspect> e : mapAspects.entrySet() ) {
+			for ( Map.Entry<MAFKernelIdentifier, MAFKernelAspect> e : mapAspects.entrySet() ) {
 				target.put("\"");
 				target.put(e.getKey().asReference());
 				target.put("\" : ");

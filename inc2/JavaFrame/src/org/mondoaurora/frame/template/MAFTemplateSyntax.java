@@ -3,9 +3,7 @@ package org.mondoaurora.frame.template;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
-import org.mondoaurora.frame.shared.MAFRuntimeException;
-import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.*;
 
 public class MAFTemplateSyntax implements MAFTemplateConsts {
 	
@@ -47,7 +45,7 @@ public class MAFTemplateSyntax implements MAFTemplateConsts {
 	}
 	
 	
-	public void write(MAFKernelEntity e, MAFStream.Out stream) {
-		startRule.writeInto(stream, e);
+	public void write(MAFVariant var, MAFStream.Out stream) {
+		startRule.writeInto(stream, var);
 	}
 }

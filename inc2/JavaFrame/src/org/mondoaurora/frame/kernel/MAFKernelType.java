@@ -1,8 +1,6 @@
 package org.mondoaurora.frame.kernel;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.mondoaurora.frame.shared.MAFVariant;
 import org.mondoaurora.frame.shared.MAFVariant.VariantSetMode;

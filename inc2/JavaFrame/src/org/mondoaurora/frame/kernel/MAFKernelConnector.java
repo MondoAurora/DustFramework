@@ -1,8 +1,6 @@
 package org.mondoaurora.frame.kernel;
 
-import org.mondoaurora.frame.shared.MAFConnector;
-import org.mondoaurora.frame.shared.MAFIdentifier;
-import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.shared.MAFVariant.VariantSetMode;
 
 public class MAFKernelConnector implements MAFConnector, MAFKernelConsts {

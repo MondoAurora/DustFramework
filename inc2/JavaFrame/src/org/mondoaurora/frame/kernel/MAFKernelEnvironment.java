@@ -1,13 +1,8 @@
 package org.mondoaurora.frame.kernel;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.mondoaurora.frame.shared.MAFConnector;
-import org.mondoaurora.frame.shared.MAFEnvironment;
-import org.mondoaurora.frame.shared.MAFIdentifier;
+import org.mondoaurora.frame.shared.*;
 
 public class MAFKernelEnvironment extends MAFEnvironment implements MAFKernelHelpers {
 

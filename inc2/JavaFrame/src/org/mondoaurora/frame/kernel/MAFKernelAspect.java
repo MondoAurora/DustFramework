@@ -17,7 +17,7 @@ public class MAFKernelAspect {
 		content = new MAFKernelVariant[type.getFieldCount()];
 		
 		for (MAFKernelField fld : type.arrFields) {
-			content[fld.idx] = new MAFKernelVariant(fld.type);
+			content[fld.idx] = new MAFKernelVariant.Aspect(fld);
 		}
 	}
 
@@ -53,4 +53,15 @@ public class MAFKernelAspect {
 		target.put("}");
 	}
 
+	public int getVarCount() {
+		return content.length;
+	}
+
+	public MAFKernelVariant getVar(int idx) {
+		return content[idx];
+	}
+	
+	public MAFKernelField getField(int idx) {
+		return type.arrFields.get(idx);
+	}
 }

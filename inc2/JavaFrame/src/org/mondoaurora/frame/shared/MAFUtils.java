@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MAFUtils {
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static final int safeCmp(Comparable c, Object o) {
 		return (null == c) ? (null == o) ? 0 : -1 : (null == o) ? 1 : c.compareTo(o);
@@ -11,6 +12,10 @@ public class MAFUtils {
 
 	public static final boolean isEmpty(String s) {
 		return ((null == s) || (0 == s.length()));
+	}
+
+	public static final boolean isNull(MAFVariant var) {
+		return ((null == var) || var.isNull());
 	}
 
 	/**

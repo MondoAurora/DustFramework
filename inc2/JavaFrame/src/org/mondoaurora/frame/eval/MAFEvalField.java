@@ -1,21 +1,14 @@
 package org.mondoaurora.frame.eval;
 
-import org.mondoaurora.frame.kernel.MAFKernelAspect;
-import org.mondoaurora.frame.kernel.MAFKernelConnector;
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
-import org.mondoaurora.frame.kernel.MAFKernelIdentifier;
-import org.mondoaurora.frame.kernel.MAFKernelVariant;
-import org.mondoaurora.frame.shared.MAFRuntimeException;
-import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.kernel.*;
+import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.shared.MAFStream.Out;
+import org.mondoaurora.frame.tools.MAFToolsVariantWrapper;
 
 public class MAFEvalField implements MAFEval {
 	public enum AccessMode {
 		value, existence, childExistence
 	};
-
-	MAFKernelVariant varTrue = new MAFKernelVariant(FieldType.BOOLEAN, true);
-	MAFKernelVariant varFalse = new MAFKernelVariant(FieldType.BOOLEAN, false);
 
 	MAFEval parent;
 	MAFEval child;
@@ -48,36 +41,35 @@ public class MAFEvalField implements MAFEval {
 	}
 
 	@Override
-	public MAFKernelVariant getVariant(MAFKernelEntity currentEntity) {
+	public MAFVariant getVariant(MAFVariant var) {
 		/*
 		 * if (null != parent) { currentEntity =
 		 * parent.getVariant(currentEntity).getValueObject(); }
 		 */
 
-		MAFKernelAspect asp = currentEntity.getAspect(typeId);
-
-		if (null == asp) {
-			return (AccessMode.existence == mode) ? varFalse : null;
+//		MAFKernelAspect asp = var.getAspect(typeId);
+		if (MAFUtils.isNull(var)) {
+			return (AccessMode.existence == mode) ? MAFToolsVariantWrapper.False : null;
 		} else {
 			if (null == conn) {
-				conn = new MAFKernelConnector(asp, new String[] { fieldId });
+				conn = (MAFKernelConnector) var.getReference( new String[] { fieldId });
 			} else {
-				conn.setData(asp);
+				var.getReference(conn);
 			}
 			
 			switch (mode) {
 			case value:
 				return (MAFKernelVariant) conn.getValue(0);
 			case existence:
-				return conn.isNull(0) ? varFalse : varTrue;
+				return conn.isNull(0) ? MAFToolsVariantWrapper.False : MAFToolsVariantWrapper.True;
 			case childExistence:
-				MAFVariant var = conn.getValue(0);
+				MAFVariant varChild = conn.getValue(0);
 				for (MAFVariant v1 : var.getMembers()) {
 //					if (child.getVariant(v1.getValueObject()).getValueBoolean()) {
 //						return varTrue;
 //					}
 				}
-				return varFalse;
+				return MAFToolsVariantWrapper.False;
 			default:
 				throw new MAFRuntimeException("Eval", "AccessMode unset");
 			}
@@ -85,7 +77,7 @@ public class MAFEvalField implements MAFEval {
 	}
 	
 	@Override
-	public void writeContent(Out target, MAFKernelEntity currentEntity) {
-		target.put(getVariant(currentEntity).toString());
+	public void writeContent(Out target, MAFVariant var) {
+		target.put(getVariant(var).toString());
 	}
 }

@@ -1,8 +1,8 @@
 package org.mondoaurora.frame.template;
 
 import org.mondoaurora.frame.eval.MAFEval;
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.MAFVariant;
 
 public class MAFTemplateOptional extends MAFTemplateBase {
 	MAFTemplate content;
@@ -19,9 +19,9 @@ public class MAFTemplateOptional extends MAFTemplateBase {
 	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
-		if ( eval.getVariant(currentEntity).getBool(false) ) {
-			content.writeInto(stream, currentEntity);
+	public void writeInto(MAFStream.Out stream, MAFVariant var) {
+		if ( eval.getVariant(var).getBool(false) ) {
+			content.writeInto(stream, var);
 		}
 	}
 

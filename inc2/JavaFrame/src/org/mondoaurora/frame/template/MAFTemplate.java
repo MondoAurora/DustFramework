@@ -1,10 +1,10 @@
 package org.mondoaurora.frame.template;
 
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.MAFVariant;
 
 public interface MAFTemplate {
-	void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity);
+	void writeInto(MAFStream.Out stream, MAFVariant var);
 	
 	void init(MAFTemplateSyntax syntax);
 

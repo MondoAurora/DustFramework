@@ -4,6 +4,7 @@ package org.mondoaurora.frame.shared;
 public interface MAFVariant {
 	enum VariantSetMode { set, addFirst, addLast, insert, remove, clear };
 
+	String getKey();
 	boolean isNull();
 	
 	String getString();
@@ -24,6 +25,7 @@ public interface MAFVariant {
 	void setCodeStr(String val);
 	
 	MAFConnector getReference(String[] fields);
+	void getReference(MAFConnector conn);
 	Iterable<? extends MAFVariant> getMembers();
 
 	void setData(MAFVariant from);

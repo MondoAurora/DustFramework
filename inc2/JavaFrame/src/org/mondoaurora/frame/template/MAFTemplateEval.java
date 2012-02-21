@@ -1,8 +1,8 @@
 package org.mondoaurora.frame.template;
 
 import org.mondoaurora.frame.eval.MAFEval;
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.MAFVariant;
 
 public class MAFTemplateEval extends MAFTemplateBase {
 	MAFEval eval;
@@ -12,8 +12,8 @@ public class MAFTemplateEval extends MAFTemplateBase {
 	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
-		eval.writeContent(stream, currentEntity);
+	public void writeInto(MAFStream.Out stream, MAFVariant var) {
+		eval.writeContent(stream, var);
 	}
 /*
 	@Override

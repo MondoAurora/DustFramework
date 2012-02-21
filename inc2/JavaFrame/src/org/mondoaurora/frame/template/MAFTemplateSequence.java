@@ -2,8 +2,8 @@ package org.mondoaurora.frame.template;
 
 import java.util.ArrayList;
 
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.MAFVariant;
 
 public class MAFTemplateSequence extends MAFTemplateBase {
 	ArrayList<MAFTemplate> content;
@@ -24,9 +24,9 @@ public class MAFTemplateSequence extends MAFTemplateBase {
 	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
+	public void writeInto(MAFStream.Out stream, MAFVariant var) {
 		for ( MAFTemplate t : content ) {
-			t.writeInto(stream, currentEntity);
+			t.writeInto(stream, var);
 		}
 	}
 /*

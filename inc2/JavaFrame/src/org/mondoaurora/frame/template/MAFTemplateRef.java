@@ -1,8 +1,6 @@
 package org.mondoaurora.frame.template;
 
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
-import org.mondoaurora.frame.shared.MAFRuntimeException;
-import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.*;
 
 public class MAFTemplateRef extends MAFTemplateBase {
 	String target;
@@ -24,8 +22,8 @@ public class MAFTemplateRef extends MAFTemplateBase {
 	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
-		imported.writeInto(stream, currentEntity);
+	public void writeInto(MAFStream.Out stream, MAFVariant var) {
+		imported.writeInto(stream, var);
 	}
 
 	/*

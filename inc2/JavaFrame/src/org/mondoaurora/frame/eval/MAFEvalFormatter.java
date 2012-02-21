@@ -1,18 +1,17 @@
 package org.mondoaurora.frame.eval;
 
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
-import org.mondoaurora.frame.kernel.MAFKernelVariant;
 import org.mondoaurora.frame.shared.MAFStream.Out;
+import org.mondoaurora.frame.shared.MAFVariant;
 
 public class MAFEvalFormatter implements MAFEval {
 
 	@Override
-	public MAFKernelVariant getVariant(MAFKernelEntity currentEntity) {
+	public MAFVariant getVariant(MAFVariant var) {
 		return null;
 	}
 
 	@Override
-	public void writeContent(Out target, MAFKernelEntity currentEntity) {
+	public void writeContent(Out target, MAFVariant var) {
 		// TODO Auto-generated method stub
 
 	}

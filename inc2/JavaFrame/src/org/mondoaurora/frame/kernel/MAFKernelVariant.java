@@ -1,41 +1,65 @@
 package org.mondoaurora.frame.kernel;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import org.mondoaurora.frame.shared.MAFConnector;
-import org.mondoaurora.frame.shared.MAFDate;
-import org.mondoaurora.frame.shared.MAFIdentifier;
-import org.mondoaurora.frame.shared.MAFRuntimeException;
-import org.mondoaurora.frame.shared.MAFStream;
-import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.*;
 
-public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
-	FieldType type;
+public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
+	
+	public static class Aspect extends MAFKernelVariant {
+		MAFKernelField fld;
 
-	Object data;
-
-	protected MAFKernelVariant(FieldType type) {
-		this.type = type;
-	}
-
-	public MAFKernelVariant(FieldType type, Object value) {
-		this(type);
-
-		if (null != value) {
-			setData(value, VariantSetMode.set, null);
+		public Aspect(MAFKernelField fld) {
+			this.fld = fld;
+		}
+		
+		@Override
+		public String getKey() {
+			return fld.name;
+		}
+		
+		@Override
+		public FieldType getType() {
+			return fld.type;
 		}
 	}
+	
+	public static class External extends MAFKernelVariant {
+		FieldType type;
+		String key;
 
-	public FieldType getType() {
-		return type;
+		protected External(FieldType type) {
+			this.type = type;
+		}
+
+		public External(FieldType type, Object value) {
+			this(type);
+
+			if (null != value) {
+				setData(value, VariantSetMode.set, null);
+			}
+		}
+
+		public FieldType getType() {
+			return type;
+		}
+
+		@Override
+		public String getKey() {
+			return key;
+		};
+
 	}
+	
+	
+	Object data;
+
+
+	public abstract FieldType getType();
 
 	Object getDataAssertType(FieldType reqType) {
-		if (type != reqType) {
-			throw new MAFRuntimeException.InvalidFieldType("required " + reqType + ", actual " + type);
+		if (getType() != reqType) {
+			throw new MAFRuntimeException.InvalidFieldType("required " + reqType + ", actual " + getType());
 		}
 		return data;
 	}
@@ -45,7 +69,7 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 		if (null == data) {
 			return true;
 		} else {
-			switch (type) {
+			switch (getType()) {
 			case ARRAY:
 			case SET:
 				return ((Collection<?>) data).isEmpty();
@@ -53,6 +77,11 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 				return false;
 			}
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return (null == data) ? "" : data.toString();
 	}
 
 	@Override
@@ -93,6 +122,12 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 		Object val = getDataAssertType(FieldType.REFERENCE);
 		return (null == val) ? null : new MAFKernelConnector((MAFKernelAspect) val, fields);
 	}
+	
+	@Override
+	public void getReference(MAFConnector conn) {
+		MAFKernelAspect asp = (MAFKernelAspect) getDataAssertType(FieldType.REFERENCE);
+		((MAFKernelConnector)conn).data = asp;
+	}
 
 	@Override
 	public String getCodeStr() {
@@ -102,7 +137,7 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Iterable<? extends MAFVariant> getMembers() {
-		switch (type) {
+		switch (getType()) {
 		case SET:
 		case ARRAY:
 			return ((Iterable<? extends MAFVariant>) data);
@@ -168,19 +203,21 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setData(Object value, VariantSetMode mode, String key) {
+		FieldType type = getType();
+		
 		switch (type) {
 		case SET:
 			if (null == data) {
 				data = new HashSet<MAFKernelVariant>();
 			}
-			((Set<MAFKernelVariant>) data).add(new MAFKernelVariant(FieldType.REFERENCE, value));
+			((Set<MAFKernelVariant>) data).add(new MAFKernelVariant.External(FieldType.REFERENCE, value));
 
 			break;
 		case ARRAY:
 			if (null == data) {
 				data = new ArrayList<MAFKernelVariant>();
 			}
-			((ArrayList<MAFKernelVariant>) data).add(new MAFKernelVariant(FieldType.REFERENCE, value));
+			((ArrayList<MAFKernelVariant>) data).add(new MAFKernelVariant.External(FieldType.REFERENCE, value));
 
 			break;
 		case REFERENCE:
@@ -192,7 +229,7 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 	}
 	
 	void dump(MAFKernelDumper target) {
-		switch (type) {
+		switch (getType()) {
 		case REFERENCE:
 			target.dumpEntity(((MAFKernelAspect)data).entity);
 			break;

@@ -17,11 +17,14 @@ public class MAFKernelMain {
 		
 		MAFKernelConnector conn = (MAFKernelConnector) MAFEnvironment.getInstance(id, MAFKernelVendor.FIELDS);
 		
-//		new MAFKernelDumper().dumpConnector(conn);
+//		MAFKernelDumper d = new MAFKernelDumper();
+//		d.dumpConnector(conn);
+//		d.dumpConnector(conn);
 		
 		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
 		MAFToolsStreamOut stream = new MAFToolsStreamOut();
 		
+		jr.write(stream, conn);
 		jr.write(stream, conn);
 	}
 

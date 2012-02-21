@@ -1,7 +1,7 @@
 package org.mondoaurora.frame.template;
 
-import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.MAFVariant;
 
 public class MAFTemplateConstant extends MAFTemplateBase {
 	String constValue;
@@ -13,7 +13,7 @@ public class MAFTemplateConstant extends MAFTemplateBase {
 	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
+	public void writeInto(MAFStream.Out stream, MAFVariant var) {
 		stream.put(constValue);
 	}
 
