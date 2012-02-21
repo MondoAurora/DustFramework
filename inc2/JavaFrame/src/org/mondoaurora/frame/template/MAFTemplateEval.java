@@ -12,7 +12,7 @@ public class MAFTemplateEval extends MAFTemplateBase {
 	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) throws Exception {
+	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
 		eval.writeContent(stream, currentEntity);
 	}
 /*

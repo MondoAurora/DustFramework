@@ -15,9 +15,16 @@ public class MAFTemplateSequence extends MAFTemplateBase {
 			content.add(t);
 		}
 	}
+	
+	@Override
+	public void init(MAFTemplateSyntax syntax) {
+		for ( MAFTemplate t : content ) {
+			t.init(syntax);
+		}
+	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) throws Exception {
+	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
 		for ( MAFTemplate t : content ) {
 			t.writeInto(stream, currentEntity);
 		}

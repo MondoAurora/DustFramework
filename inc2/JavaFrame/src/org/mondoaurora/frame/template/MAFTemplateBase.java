@@ -3,6 +3,12 @@ package org.mondoaurora.frame.template;
 
 
 public abstract class MAFTemplateBase implements MAFTemplate {
+	
+	@Override
+	public void init(MAFTemplateSyntax syntax) {
+		// nothing
+	}
+
 	/*
 	public final boolean parseFrom(DustStream stream, DustEntity currentEntity) throws Exception {
 		int pos = stream.getPosition();

@@ -7,6 +7,10 @@ public class MAFRuntimeException extends RuntimeException {
 		super("MAF Exception at " + component + ": " + message, source);
 	}
 
+	public MAFRuntimeException(String component, String message) {
+		this(component, message, null);
+	}
+
 	public static class InvalidFieldType extends MAFRuntimeException {
 		private static final long serialVersionUID = 1L;
 

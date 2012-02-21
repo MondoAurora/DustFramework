@@ -4,7 +4,9 @@ import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.shared.MAFStream;
 
 public interface MAFTemplate {
-	void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) throws Exception;
+	void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity);
+	
+	void init(MAFTemplateSyntax syntax);
 
 	// boolean parseFrom(DustStream stream, DustEntity currentEntity) throws Exception;
 

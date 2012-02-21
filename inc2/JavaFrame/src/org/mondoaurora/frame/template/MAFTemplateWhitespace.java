@@ -3,7 +3,7 @@ package org.mondoaurora.frame.template;
 import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.shared.MAFStream;
 
-public class MAFTemplateWhitespace implements MAFTemplate {
+public class MAFTemplateWhitespace extends MAFTemplateBase {
 	String wsToWrite;
 	MAFStream.Out.Indent endLineIndent;
 	int blankLines;
@@ -18,16 +18,16 @@ public class MAFTemplateWhitespace implements MAFTemplate {
 		this(" ", null, 0);
 	}
 
-	public MAFTemplateWhitespace(MAFStream.Out.Indent endLineIndent){
+	public MAFTemplateWhitespace(MAFStream.Indent endLineIndent){
 		this(null, endLineIndent, 0);
 	}
 
-	public MAFTemplateWhitespace(MAFStream.Out.Indent endLineIndent, int elCount){
+	public MAFTemplateWhitespace(MAFStream.Indent endLineIndent, int elCount){
 		this(null, endLineIndent, elCount);
 	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) throws Exception {
+	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
 		if ( null != wsToWrite ) {
 			stream.put(wsToWrite);
 		}

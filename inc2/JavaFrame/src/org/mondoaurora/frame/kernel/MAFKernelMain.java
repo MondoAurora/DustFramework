@@ -2,6 +2,8 @@ package org.mondoaurora.frame.kernel;
 
 import org.mondoaurora.frame.shared.MAFEnvironment;
 import org.mondoaurora.frame.shared.MAFIdentifier;
+import org.mondoaurora.frame.tools.MAFToolsJsonRelay;
+import org.mondoaurora.frame.tools.MAFToolsStreamOut;
 
 public class MAFKernelMain {
 
@@ -15,10 +17,12 @@ public class MAFKernelMain {
 		
 		MAFKernelConnector conn = (MAFKernelConnector) MAFEnvironment.getInstance(id, MAFKernelVendor.FIELDS);
 		
-		MAFKernelDumper d = new MAFKernelDumper();
-
-		d.dumpConnector(conn);
-//		MAFConnector c1 = conn.getMembers(0).iterator().next();
+//		new MAFKernelDumper().dumpConnector(conn);
+		
+		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
+		MAFToolsStreamOut stream = new MAFToolsStreamOut();
+		
+		jr.write(stream, conn);
 	}
 
 }

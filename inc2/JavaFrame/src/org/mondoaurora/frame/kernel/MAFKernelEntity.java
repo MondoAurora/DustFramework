@@ -12,6 +12,10 @@ public class MAFKernelEntity {
 
 	Map<MAFIdentifier, MAFKernelAspect> mapAspects = new HashMap<MAFIdentifier, MAFKernelAspect>();
 
+	protected MAFKernelEntity() {
+		
+	}
+	
 	public MAFKernelEntity(MAFKernelIdentifier id, MAFKernelAspect primaryAspect) {
 		this.id = id;
 		this.primaryAspect = primaryAspect;

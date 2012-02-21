@@ -6,6 +6,6 @@ import org.mondoaurora.frame.kernel.MAFKernelVariant;
 import org.mondoaurora.frame.shared.MAFStream;
 
 public interface MAFEval extends MAFKernelConsts {	
-	MAFKernelVariant getVariant(MAFKernelEntity currentEntity) throws Exception;
-	void writeContent(MAFStream.Out target, MAFKernelEntity currentEntity) throws Exception;
+	MAFKernelVariant getVariant(MAFKernelEntity currentEntity);
+	void writeContent(MAFStream.Out target, MAFKernelEntity currentEntity);
 }

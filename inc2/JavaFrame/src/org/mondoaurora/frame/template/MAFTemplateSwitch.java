@@ -4,22 +4,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.mondoaurora.frame.eval.MAFEval;
-import org.mondoaurora.frame.eval.MAFEvalField;
 import org.mondoaurora.frame.kernel.MAFKernelEntity;
-import org.mondoaurora.frame.kernel.MAFKernelIdentifier;
 import org.mondoaurora.frame.kernel.MAFKernelVariant;
 import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.template.MAFTemplateConsts.Initer;
 
 public class MAFTemplateSwitch extends MAFTemplateBase {
 	Map<String, MAFTemplate> mapOptions = new HashMap<String, MAFTemplate>();
 	MAFEval eval;
 		
-	public MAFTemplateSwitch(MAFKernelIdentifier typeId, String field) {
-		eval = new MAFEvalField(typeId, field);
+	public MAFTemplateSwitch() {
+	}
+	
+	public MAFTemplateSwitch(MAFEval eval, Initer[] rules) {
+		this.eval = eval;
+		
+		for ( Initer rule : rules ) {
+			mapOptions.put(rule.id, rule.template);
+		}
+	}
+
+	@Override
+	public void init(MAFTemplateSyntax syntax) {
+		for ( MAFTemplate t : mapOptions.values() ) {
+			t.init(syntax);
+		}
 	}
 	
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) throws Exception {
+	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
 		
 		MAFKernelVariant v = eval.getVariant(currentEntity);
 		String key = v.isNull() ? null : v.getString();

@@ -5,6 +5,7 @@ import org.mondoaurora.frame.kernel.MAFKernelConnector;
 import org.mondoaurora.frame.kernel.MAFKernelEntity;
 import org.mondoaurora.frame.kernel.MAFKernelIdentifier;
 import org.mondoaurora.frame.kernel.MAFKernelVariant;
+import org.mondoaurora.frame.shared.MAFRuntimeException;
 import org.mondoaurora.frame.shared.MAFVariant;
 import org.mondoaurora.frame.shared.MAFStream.Out;
 
@@ -47,7 +48,7 @@ public class MAFEvalField implements MAFEval {
 	}
 
 	@Override
-	public MAFKernelVariant getVariant(MAFKernelEntity currentEntity) throws Exception {
+	public MAFKernelVariant getVariant(MAFKernelEntity currentEntity) {
 		/*
 		 * if (null != parent) { currentEntity =
 		 * parent.getVariant(currentEntity).getValueObject(); }
@@ -78,13 +79,13 @@ public class MAFEvalField implements MAFEval {
 				}
 				return varFalse;
 			default:
-				throw new Exception("DustEvaluatorField AccessMode unset???");
+				throw new MAFRuntimeException("Eval", "AccessMode unset");
 			}
 		}
 	}
 	
 	@Override
-	public void writeContent(Out target, MAFKernelEntity currentEntity) throws Exception {
+	public void writeContent(Out target, MAFKernelEntity currentEntity) {
 		target.put(getVariant(currentEntity).toString());
 	}
 }

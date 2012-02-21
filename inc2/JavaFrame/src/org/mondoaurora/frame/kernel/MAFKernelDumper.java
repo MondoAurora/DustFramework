@@ -4,27 +4,17 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.tools.MAFToolsStreamOut;
 
-public class MAFKernelDumper implements MAFStream.Out {
-	
-	PrintStream targetStream;
-
-	StringBuilder sbIndent = new StringBuilder();
-	String indent;
-	boolean newLine;
-	boolean putting;
-	
+public class MAFKernelDumper extends MAFToolsStreamOut {
 	Set<MAFKernelEntity> setEntities = new HashSet<MAFKernelEntity>();
-	
+
 	public MAFKernelDumper() {
-		this(System.out, "\t");
+		super();
 	}
 
 	public MAFKernelDumper(PrintStream targetStream, String indent) {
-		this.targetStream = targetStream;
-		this.indent = indent;
-		putting = false;
+		super(targetStream, indent);
 	}
 	
 	public void dumpConnector(MAFKernelConnector conn) {
@@ -39,43 +29,4 @@ public class MAFKernelDumper implements MAFStream.Out {
 			e.dump(this);
 		}
 	}
-	
-	public void put(String str) {
-		putting();
-		targetStream.print(str);
-	}
-	
-	public void endLine(Indent indent) {
-		endingLine(indent);
-		targetStream.println();
-	}
-	
-	public void putting() {
-		if (!putting) {
-			try {
-				putting = true;
-				if (newLine) {
-					if (0 < sbIndent.length()) {
-						targetStream.print(sbIndent.toString());
-						newLine = false;
-					}
-				}
-			} finally {
-				putting = false;
-			}
-		}
-	}
-
-	public void endingLine(Indent i) {
-		newLine = true;
-		switch (i) {
-		case inc:
-			sbIndent.append(indent);
-			break;
-		case dec:
-			sbIndent.delete(0, indent.length());
-			break;
-		}
-	}
-
 }

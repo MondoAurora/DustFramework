@@ -17,9 +17,15 @@ public class MAFTemplateRepeat extends MAFTemplateBase {
 		this.content = content;
 		this.separator = separator;
 	}
+	
+	@Override
+	public void init(MAFTemplateSyntax syntax) {
+		separator.init(syntax);
+		content.init(syntax);
+	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) throws Exception {
+	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
 		MAFKernelVariant var = evalRepeat.getVariant(currentEntity);
 
 		if (!var.isNull()) {

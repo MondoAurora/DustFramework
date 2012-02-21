@@ -12,9 +12,14 @@ public class MAFTemplateOptional extends MAFTemplateBase {
 		this.eval = eval;
 		this.content = content;
 	}
+	
+	@Override
+	public void init(MAFTemplateSyntax syntax) {
+		content.init(syntax);
+	}
 
 	@Override
-	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) throws Exception {
+	public void writeInto(MAFStream.Out stream, MAFKernelEntity currentEntity) {
 		if ( eval.getVariant(currentEntity).getBool(false) ) {
 			content.writeInto(stream, currentEntity);
 		}

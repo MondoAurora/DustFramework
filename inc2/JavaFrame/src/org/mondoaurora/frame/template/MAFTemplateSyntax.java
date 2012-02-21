@@ -36,19 +36,8 @@ public class MAFTemplateSyntax implements MAFTemplateConsts {
 		if ( !initialized ) {
 			initialized = true;
 			
-			MAFTemplate target;
-			
 			for ( MAFTemplate t : mapRules.values() ) {
-				if (t instanceof MAFTemplateRef) {
-					MAFTemplateRef ti = (MAFTemplateRef) t;
-					target = mapRules.get(ti.target);
-					if ( null == target ) {
-						throw new MAFRuntimeException("TemplateSyntax", "Missing rule " + ti.target, null);
-					} else if ( ti == target ) {
-						throw new MAFRuntimeException("TemplateSyntax", "Self importing rule " + ti.target, null);
-					}
-					ti.imported = target;
-				}
+				t.init(this);
 			}
 		}
 	}
@@ -58,7 +47,7 @@ public class MAFTemplateSyntax implements MAFTemplateConsts {
 	}
 	
 	
-	public void write(MAFKernelEntity e, MAFStream.Out stream) throws Exception {
+	public void write(MAFKernelEntity e, MAFStream.Out stream) {
 		startRule.writeInto(stream, e);
 	}
 }
