@@ -4,8 +4,9 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MAFKernelDumper {
-	public static enum Indent { inc, keep, dec };
+import org.mondoaurora.frame.shared.MAFStream;
+
+public class MAFKernelDumper implements MAFStream.Out {
 	
 	PrintStream targetStream;
 
@@ -39,12 +40,12 @@ public class MAFKernelDumper {
 		}
 	}
 	
-	void put(String str) {
+	public void put(String str) {
 		putting();
 		targetStream.print(str);
 	}
 	
-	void endLine(Indent indent) {
+	public void endLine(Indent indent) {
 		endingLine(indent);
 		targetStream.println();
 	}

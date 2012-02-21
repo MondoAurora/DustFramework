@@ -12,7 +12,7 @@ public class MAFKernelConnector implements MAFConnector, MAFKernelConsts {
 	int[] idxs;
 	MAFKernelField[] fields;
 
-	MAFKernelConnector(MAFKernelType t, String[] fieldNames) {
+	public MAFKernelConnector(MAFKernelType t, String[] fieldNames) {
 		idxs = new int[fieldNames.length];
 		fields = new MAFKernelField[fieldNames.length];
 
@@ -29,7 +29,7 @@ public class MAFKernelConnector implements MAFConnector, MAFKernelConsts {
 		}
 	}
 
-	MAFKernelConnector(MAFKernelType t) {
+	public MAFKernelConnector(MAFKernelType t) {
 		type = t;
 
 		int l = type.getFieldCount();
@@ -43,9 +43,17 @@ public class MAFKernelConnector implements MAFConnector, MAFKernelConsts {
 		}
 	}
 
-	MAFKernelConnector(MAFKernelAspect data, String[] fieldNames) {
+	public MAFKernelConnector(MAFKernelAspect data, String[] fieldNames) {
 		this(data.type, fieldNames);
 		this.data = data;
+	}
+
+	public void setData(MAFKernelAspect data) {
+		this.data = data;
+	}
+
+	public MAFKernelEntity getEntity() {
+		return data.entity;
 	}
 
 	@Override

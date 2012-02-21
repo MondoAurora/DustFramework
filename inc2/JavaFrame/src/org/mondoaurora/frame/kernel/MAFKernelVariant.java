@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mondoaurora.frame.kernel.MAFKernelDumper.Indent;
 import org.mondoaurora.frame.shared.MAFConnector;
 import org.mondoaurora.frame.shared.MAFDate;
 import org.mondoaurora.frame.shared.MAFIdentifier;
 import org.mondoaurora.frame.shared.MAFRuntimeException;
+import org.mondoaurora.frame.shared.MAFStream;
 import org.mondoaurora.frame.shared.MAFVariant;
 
 public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
@@ -35,7 +35,7 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 
 	Object getDataAssertType(FieldType reqType) {
 		if (type != reqType) {
-			throw new MAFRuntimeException.InvalidFieldType();
+			throw new MAFRuntimeException.InvalidFieldType("required " + reqType + ", actual " + type);
 		}
 		return data;
 	}
@@ -200,20 +200,20 @@ public class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 		case SET:
 			Iterable<? extends MAFVariant> val = getMembers();
 			target.put("[");
-			target.endLine(Indent.inc);
+			target.endLine(MAFStream.Indent.inc);
 			
 			boolean add = false;
 			
 			for (MAFVariant var : val) {
 				if ( add ) {
 					target.put(",");
-					target.endLine(Indent.keep);
+					target.endLine(MAFStream.Indent.keep);
 				} else {
 					add = true;
 				}
 				((MAFKernelVariant) var).dump(target);
 			}
-			target.endLine(Indent.dec);
+			target.endLine(MAFStream.Indent.dec);
 			target.put("]");
 			break;
 		default:

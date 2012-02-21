@@ -1,7 +1,7 @@
 package org.mondoaurora.frame.kernel;
 
-import org.mondoaurora.frame.kernel.MAFKernelDumper.Indent;
 import org.mondoaurora.frame.shared.MAFLogic;
+import org.mondoaurora.frame.shared.MAFStream;
 
 public class MAFKernelAspect {
 	MAFKernelEntity entity;
@@ -30,7 +30,7 @@ public class MAFKernelAspect {
 	void dump(MAFKernelDumper target) {
 		target.put("{");
 
-		target.endLine(Indent.inc);
+		target.endLine(MAFStream.Indent.inc);
 		
 		boolean add = false;
 
@@ -40,7 +40,7 @@ public class MAFKernelAspect {
 			if ((null != o) && !o.isNull()) {
 				if ( add ) {
 					target.put(",");
-					target.endLine(Indent.keep);
+					target.endLine(MAFStream.Indent.keep);
 				} else {
 					add = true;
 				}
@@ -48,7 +48,7 @@ public class MAFKernelAspect {
 			}
 		}
 
-		target.endLine(Indent.dec);
+		target.endLine(MAFStream.Indent.dec);
 
 		target.put("}");
 	}

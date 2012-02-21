@@ -46,3 +46,8 @@ assignment: sequence ( const("\""), eval(name), const("\""), const(":"), ref("va
 array: sequence( const("["), ref("elements"), const("]") )
 elements: repeat( ref("value"), ",")
 value: switch( ref("object"), ref("array"), eval(value))
+
+
+
+EXCEPTIONS - I don't really want to handle any. Exceptions should be thrown as, or wrapped into MAFRuntimeExceptions,
+and handled by anyone in the above level. This is still better than add 'throws Exception' to any operations.

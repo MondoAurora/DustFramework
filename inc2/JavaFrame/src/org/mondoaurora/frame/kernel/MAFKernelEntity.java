@@ -3,8 +3,8 @@ package org.mondoaurora.frame.kernel;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mondoaurora.frame.kernel.MAFKernelDumper.Indent;
 import org.mondoaurora.frame.shared.MAFIdentifier;
+import org.mondoaurora.frame.shared.MAFStream;
 
 public class MAFKernelEntity {
 	MAFKernelIdentifier id;
@@ -23,6 +23,10 @@ public class MAFKernelEntity {
 		aspect.entity = this;
 	}
 
+	public MAFKernelAspect getAspect(MAFKernelIdentifier id) {
+		return mapAspects.get(id);
+	}
+
 	@Override
 	public String toString() {
 		return "Entity " + id.toString();
@@ -35,14 +39,14 @@ public class MAFKernelEntity {
 
 		if (!refOnly) {
 			target.put(",");
-			target.endLine(Indent.inc);
+			target.endLine(MAFStream.Indent.inc);
 			for ( Map.Entry<MAFIdentifier, MAFKernelAspect> e : mapAspects.entrySet() ) {
 				target.put("\"");
 				target.put(e.getKey().asReference());
 				target.put("\" : ");
 				e.getValue().dump(target);
 			}
-			target.endLine(Indent.dec);
+			target.endLine(MAFStream.Indent.dec);
 		} 
 		
 		target.put("}");
