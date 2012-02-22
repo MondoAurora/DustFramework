@@ -7,13 +7,18 @@ import org.mondoaurora.frame.tools.MAFToolsJsonRelay;
 import org.mondoaurora.frame.tools.MAFToolsStreamOut;
 
 public class MAFTest {
-
+	
 	/**
 	 * @param args
 	 */
 	public static void test(String[] args) {
-		// testDump();
-		// testJSONExport();
+		testDump();
+		
+		System.out.println("\n------------");
+		
+		testJSONExport();
+
+		System.out.println("\n------------");
 		
 		testJSONImport();
 	}
@@ -42,6 +47,13 @@ public class MAFTest {
 	}
 
 	static void testJSONImport() {
+		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.txt");
+		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
+		
+		jr.read(src);
+	}
+
+	static void testImport() {
 		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.txt");
 		MAFProcess proc = new MAFTestProcessor();
 		

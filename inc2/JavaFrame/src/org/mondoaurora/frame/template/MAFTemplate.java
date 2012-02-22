@@ -1,9 +1,10 @@
 package org.mondoaurora.frame.template;
 
+import org.mondoaurora.frame.process.MAFProcess;
 import org.mondoaurora.frame.shared.MAFStream;
 import org.mondoaurora.frame.shared.MAFVariant;
 
-public interface MAFTemplate {
+public interface MAFTemplate extends MAFProcess {
 	void writeInto(MAFStream.Out stream, MAFVariant var);
 	
 	void init(MAFTemplateSyntax syntax);

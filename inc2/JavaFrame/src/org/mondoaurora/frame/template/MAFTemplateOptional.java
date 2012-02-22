@@ -25,6 +25,26 @@ public class MAFTemplateOptional extends MAFTemplateBase {
 		}
 	}
 
+	class Ctx {
+		Return ret = null;
+	}
+
+	@Override
+	public Object createContextObject(Object msg) {
+		return new Ctx();
+	}
+
+	@Override
+	protected Return processChar(char c, Object ctx) {
+		Return r = ((Ctx) ctx).ret;		
+		return (null == r) ? new Return(ReturnType.Relay, content, false) : r.isEventProcessed() ? SUCCESS : SUCCESS_RETRY;
+	}
+	
+	@Override
+	public void processRelayReturn(Return ob, Object ctx) {
+		((Ctx)ctx).ret = ob;
+	}
+
 	/*
 	@Override
 	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {

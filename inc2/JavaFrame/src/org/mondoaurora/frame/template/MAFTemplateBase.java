@@ -15,10 +15,29 @@ public abstract class MAFTemplateBase implements MAFTemplate {
 		
 	}
 	
-	protected MAFTemplateSyntax getSyntax() {
+	protected final MAFTemplateSyntax getSyntax() {
 		return syntax;
 	}
 
+	@Override
+	public final Return processEvent(Object event, Object ctx) {
+		return processChar((Character)event, ctx);
+	}
+	
+	@Override
+	public Object createContextObject(Object msg) {
+		return null;
+	}
+	
+	@Override
+	public void processRelayReturn(Return ob, Object ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	protected abstract Return processChar(char c, Object ctx);
+
+	
 	/*
 	public final boolean parseFrom(DustStream stream, DustEntity currentEntity) throws Exception {
 		int pos = stream.getPosition();

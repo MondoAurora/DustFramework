@@ -25,7 +25,28 @@ public class MAFTemplateRef extends MAFTemplateBase {
 	public void writeInto(MAFStream.Out stream, MAFVariant var) {
 		imported.writeInto(stream, var);
 	}
+	
+	class Ctx {
+		Return ret = null;
+	}
 
+	@Override
+	public Object createContextObject(Object msg) {
+		return new Ctx();
+	}
+
+	@Override
+	protected Return processChar(char c, Object ctx) {
+		Ctx context = (Ctx) ctx;
+		
+		return (null == context.ret) ? new Return(ReturnType.Relay, imported, false) : context.ret;
+	}
+	
+	@Override
+	public void processRelayReturn(Return ob, Object ctx) {
+		((Ctx)ctx).ret = ob;
+	}
+	
 	/*
 	@Override
 	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {

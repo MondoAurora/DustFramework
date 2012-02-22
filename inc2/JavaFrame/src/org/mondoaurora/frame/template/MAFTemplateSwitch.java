@@ -1,7 +1,6 @@
 package org.mondoaurora.frame.template;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.mondoaurora.frame.eval.MAFEval;
 import org.mondoaurora.frame.shared.MAFStream;
@@ -45,6 +44,45 @@ public class MAFTemplateSwitch extends MAFTemplateBase {
 		
 		content.writeInto(stream, v);
 	}
+	
+	
+	class Ctx {
+		Iterator<Map.Entry<String, MAFTemplate>> it = mapOptions.entrySet().iterator(); 
+		Map.Entry<String, MAFTemplate> next = it.next();
+		boolean go = true;
+		Return ret = null;
+		
+		void next() {
+			next = it.hasNext() ? it.next() : null;
+		}
+	}
+
+	@Override
+	public Object createContextObject(Object msg) {
+		return new Ctx();
+	}
+
+	@Override
+	protected Return processChar(char c, Object ctx) {
+		Ctx context = (Ctx) ctx;
+		
+		return (null != context.next) ? new Return(ReturnType.Relay, context.next.getValue(), false) : context.go ? FAILURE : context.ret;
+	}
+	
+	@Override
+	public void processRelayReturn(Return ob, Object ctx) {
+		Ctx context = (Ctx) ctx;
+		context.ret = ob;
+		
+		if ( ReturnType.Success == ob.getType() ) {
+			context.go = false;
+			// register the type found
+		}
+		
+		context.next();
+	}
+
+
 	
 /*
 	@Override

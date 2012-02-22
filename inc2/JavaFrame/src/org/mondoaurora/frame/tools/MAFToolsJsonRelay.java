@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.mondoaurora.frame.eval.MAFEval;
+import org.mondoaurora.frame.eval.MAFEvalBase;
 import org.mondoaurora.frame.kernel.*;
+import org.mondoaurora.frame.process.MAFProcessEventSource;
+import org.mondoaurora.frame.process.MAFProcessManager;
 import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.shared.MAFStream.Out;
 import org.mondoaurora.frame.template.*;
@@ -34,10 +37,13 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 	private static final MAFVariant VAR_STR_VALUE = new MAFToolsVariantWrapper.ConstString(RULE_VALUE);
 
 	MAFTemplateSyntax syntax;
-	
-	Set<MAFKernelEntity> setEntities = new HashSet<>();
 
-	private class RelayEval implements MAFEval {
+	Set<MAFKernelEntity> setEntities = new HashSet<>();
+	
+	private static String ESC_KEYS = "/bfnrt";
+	private static String ESC_VALUES = "/\b\f\n\r\t";
+
+	private abstract class RelayEval extends MAFEvalBase {
 
 		@Override
 		public MAFVariant getVariant(MAFVariant var) {
@@ -50,12 +56,83 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 			// TODO Auto-generated method stub
 
 		}
+
+		class Ctx {
+			StringBuilder content = new StringBuilder();
+			boolean esc = false;
+			int unicodeCountdown;
+			int unicodeValue;
+			
+			boolean appendChar(char c) {
+				switch (c) {
+				case '\\':
+					if (!esc) {
+						esc = true;
+						return true;
+					}
+					break;
+				case '\"':
+					if ( !esc ) {
+						return false;
+					}
+				}
+				
+				if ( esc ) {
+					if ( 0 < unicodeCountdown ) {
+						unicodeValue = 16*unicodeValue + Integer.parseInt(String.valueOf(c), 16);
+						if ( 0 == --unicodeCountdown ) {
+							content.appendCodePoint(unicodeValue);
+							esc = false;
+						}
+						
+					}
+					if ( 'u' == c ) {
+						unicodeCountdown = 4;
+						return true;
+					} else {
+						int ek = ESC_KEYS.indexOf(c);
+						if ( -1 == ek ) {
+							throw new MAFRuntimeException("JSONRelay", "Invalid escape char: \'" + c + "\'");
+						} else {
+							content.append(ESC_VALUES.charAt(ek));
+						}
+					}
+					esc = false;
+				}
+				
+				content.append(c);
+				return true;
+			}
+		}
+
+		@Override
+		public Object createContextObject(Object msg) {
+			return new Ctx();
+		}
+
+		@Override
+		protected Return processChar(char c, Object ctx) {
+			Ctx context = (Ctx) ctx;
+			
+			return context.appendChar(c) ? CONTINUE : new Return(ReturnType.Success, context.content.toString(), false);
+		}
 	}
 
 	private class EvalName extends RelayEval {
 		@Override
 		public void writeContent(Out target, MAFVariant var) {
 			target.put(var.getKey());
+		}
+		
+		@Override
+		protected Return processChar(char c, Object ctx) {
+			Return ret = super.processChar(c, ctx);
+			
+			if ( ReturnType.Continue != ret.getType() ) {
+				System.out.println("Name: " + ret.getOb());
+			}
+			
+			return ret;
 		}
 	}
 
@@ -86,17 +163,30 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 			if (var instanceof MAFKernelVariant) {
 				switch (((MAFKernelVariant) var).getType()) {
 				case REFERENCE:
-					MAFKernelEntity e = ((MAFKernelConnector)var.getReference(MAFUtils.EMPTYARR)).getEntity();
+					MAFKernelEntity e = ((MAFKernelConnector) var.getReference(MAFUtils.EMPTYARR)).getEntity();
 					return wrapEntity(e);
 				}
 			}
-			
+
 			return var;
 		}
+
 		@Override
 		public void writeContent(Out target, MAFVariant var) {
 			target.put(var.toString());
 		}
+		
+		@Override
+		protected Return processChar(char c, Object ctx) {
+			Return ret = super.processChar(c, ctx);
+			
+			if ( ReturnType.Continue != ret.getType() ) {
+				System.out.println("Value: " + ret.getOb());
+			}
+			
+			return ret;
+		}
+
 	}
 
 	public MAFToolsJsonRelay() {
@@ -107,7 +197,7 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 
 		MAFTemplate tConstComma = new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant(","), tLineFeed });
 		MAFTemplate tConstQuot = new MAFTemplateConstant("\"");
-		
+
 		MAFEval evalValue = new EvalValue();
 
 		new MAFTemplateConstant(",");
@@ -131,13 +221,13 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 						new Initer(RULE_OBJECT, new MAFTemplateRef(RULE_OBJECT)),
 						new Initer(RULE_ARRAY, new MAFTemplateRef(RULE_ARRAY)),
 						new Initer(RULE_VALUE, new MAFTemplateRef(RULE_VAR)), })),
-						
-				new Initer(RULE_VAR, new MAFTemplateSequence(new MAFTemplate[] { tConstQuot,
-						new MAFTemplateEval(evalValue), tConstQuot })),
+
+				new Initer(RULE_VAR, new MAFTemplateSequence(new MAFTemplate[] { tConstQuot, new MAFTemplateEval(evalValue),
+						tConstQuot })),
 
 		});
 	}
-	
+
 	MAFVariant wrapEntity(MAFKernelEntity e) {
 		return new MAFToolsVariantWrapper.Entity(e, KEY_REF, !setEntities.add(e));
 	}
@@ -145,5 +235,11 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 	public void write(MAFStream.Out stream, MAFConnector conn) {
 		MAFKernelEntity e = ((MAFKernelConnector) conn).getEntity();
 		syntax.write(wrapEntity(e), stream);
+	}
+	
+	public void read(MAFProcessEventSource src) {
+		MAFProcessManager mgr = new MAFProcessManager();
+		
+		mgr.process(syntax.getStartRule(), src);
 	}
 }

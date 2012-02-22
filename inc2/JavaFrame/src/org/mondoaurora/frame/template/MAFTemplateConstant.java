@@ -16,6 +16,28 @@ public class MAFTemplateConstant extends MAFTemplateBase {
 	public void writeInto(MAFStream.Out stream, MAFVariant var) {
 		stream.put(constValue);
 	}
+	
+	class Ctx {
+		int curr = 0;
+	}
+	
+	@Override
+	public Object createContextObject(Object msg) {
+		return new Ctx();
+	}
+	
+	@Override
+	protected Return processChar(char c, Object ctx) {
+		Ctx context = (Ctx) ctx;
+		
+		Return ret = (c == parseVal[context.curr++]) ? (parseVal.length == context.curr) ? SUCCESS : CONTINUE : FAILURE;
+		
+		if ( ReturnType.Success == ret.getType() ) {
+			System.out.println("Const: \"" + constValue + "\"");
+		}
+		
+		return ret;
+	}
 
 	/*
 	@Override

@@ -42,6 +42,11 @@ public class MAFTemplateWhitespace extends MAFTemplateBase {
 			}
 		}
 	}
+	
+	@Override
+	protected Return processChar(char c, Object ctx) {
+		return Character.isWhitespace(c) ? CONTINUE : SUCCESS_RETRY;
+	}
 
 	/*
 	@Override

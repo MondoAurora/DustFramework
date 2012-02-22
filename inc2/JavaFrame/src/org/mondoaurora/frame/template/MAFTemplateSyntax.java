@@ -44,6 +44,9 @@ public class MAFTemplateSyntax implements MAFTemplateConsts {
 		return mapRules.get(ruleId);
 	}
 	
+	public MAFTemplate getStartRule() {
+		return startRule;
+	}
 	
 	public void write(MAFVariant var, MAFStream.Out stream) {
 		startRule.writeInto(stream, var);

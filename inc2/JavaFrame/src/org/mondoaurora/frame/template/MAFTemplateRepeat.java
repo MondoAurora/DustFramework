@@ -42,6 +42,37 @@ public class MAFTemplateRepeat extends MAFTemplateBase {
 		}
 	}
 
+	class Ctx {
+		Return ret = null;
+
+		boolean go = true;
+		boolean readContent = true;
+	}
+
+	@Override
+	public Object createContextObject(Object msg) {
+		return new Ctx();
+	}
+
+	@Override
+	protected Return processChar(char c, Object ctx) {
+		Ctx context = (Ctx) ctx;
+
+		return context.go ? new Return(ReturnType.Relay, context.readContent ? content : separator, false) : 
+			context.ret.isEventProcessed() ? SUCCESS : SUCCESS_RETRY;
+	}
+
+	@Override
+	public void processRelayReturn(Return ob, Object ctx) {
+		Ctx context = (Ctx) ctx;
+
+		context.ret = ob;
+		context.go = ReturnType.Failure != ob.getType();
+		if (null != separator) {
+			context.readContent = !context.readContent;
+		}
+	}
+
 	/*
 	 * @Override protected boolean parseFromInt(DustStream stream, DustEntity
 	 * currentEntity) throws Exception { DustAspect asp =

@@ -5,7 +5,7 @@ import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.shared.MAFStream.Out;
 import org.mondoaurora.frame.tools.MAFToolsVariantWrapper;
 
-public class MAFEvalField implements MAFEval {
+public class MAFEvalField extends MAFEvalBase {
 	public enum AccessMode {
 		value, existence, childExistence
 	};
@@ -63,12 +63,12 @@ public class MAFEvalField implements MAFEval {
 			case existence:
 				return conn.isNull(0) ? MAFToolsVariantWrapper.False : MAFToolsVariantWrapper.True;
 			case childExistence:
-				MAFVariant varChild = conn.getValue(0);
-				for (MAFVariant v1 : var.getMembers()) {
+//				MAFVariant varChild = conn.getValue(0);
+//				for (MAFVariant v1 : var.getMembers()) {
 //					if (child.getVariant(v1.getValueObject()).getValueBoolean()) {
 //						return varTrue;
 //					}
-				}
+//				}
 				return MAFToolsVariantWrapper.False;
 			default:
 				throw new MAFRuntimeException("Eval", "AccessMode unset");
@@ -80,4 +80,10 @@ public class MAFEvalField implements MAFEval {
 	public void writeContent(Out target, MAFVariant var) {
 		target.put(getVariant(var).toString());
 	}
+	
+	@Override
+	protected Return processChar(char c, Object ctx) {
+		return SUCCESS;
+	}
+	
 }
