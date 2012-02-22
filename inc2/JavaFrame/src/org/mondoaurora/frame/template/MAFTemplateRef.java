@@ -11,7 +11,7 @@ public class MAFTemplateRef extends MAFTemplateBase {
 	}
 	
 	@Override
-	public void init(MAFTemplateSyntax syntax) {
+	public void initInt(MAFTemplateSyntax syntax) {
 		MAFTemplate t = syntax.getRule(target);
 		if ( null == target ) {
 			throw new MAFRuntimeException("TemplateSyntax", "Missing rule " + target, null);

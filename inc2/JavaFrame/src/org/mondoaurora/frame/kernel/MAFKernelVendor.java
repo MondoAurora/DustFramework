@@ -2,7 +2,7 @@ package org.mondoaurora.frame.kernel;
 
 
 public class MAFKernelVendor extends MAFKernelLogic {
-	static final String[] FIELDS = new String[] {FIELD_DOMAINS};
+	public static final String[] FIELDS = new String[] {FIELD_DOMAINS};
 	
 	static final  String strTypeId = MAFKernelIdentifier.buildPath(KERNEL_PATH, ID_TYPENAME_VENDOR);
 	

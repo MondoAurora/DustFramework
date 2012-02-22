@@ -27,7 +27,7 @@ public class MAFTemplateSwitch extends MAFTemplateBase {
 	}
 
 	@Override
-	public void init(MAFTemplateSyntax syntax) {
+	public void initInt(MAFTemplateSyntax syntax) {
 		for ( MAFTemplate t : mapOptions.values() ) {
 			t.init(syntax);
 		}

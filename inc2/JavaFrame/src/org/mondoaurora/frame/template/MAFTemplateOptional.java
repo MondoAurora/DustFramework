@@ -14,7 +14,7 @@ public class MAFTemplateOptional extends MAFTemplateBase {
 	}
 	
 	@Override
-	public void init(MAFTemplateSyntax syntax) {
+	public void initInt(MAFTemplateSyntax syntax) {
 		content.init(syntax);
 	}
 

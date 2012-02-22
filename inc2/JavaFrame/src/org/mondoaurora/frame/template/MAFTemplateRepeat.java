@@ -16,7 +16,7 @@ public class MAFTemplateRepeat extends MAFTemplateBase {
 	}
 
 	@Override
-	public void init(MAFTemplateSyntax syntax) {
+	public void initInt(MAFTemplateSyntax syntax) {
 		separator.init(syntax);
 		content.init(syntax);
 	}

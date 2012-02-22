@@ -3,10 +3,20 @@ package org.mondoaurora.frame.template;
 
 
 public abstract class MAFTemplateBase implements MAFTemplate {
+	private MAFTemplateSyntax syntax;
 	
 	@Override
-	public void init(MAFTemplateSyntax syntax) {
-		// nothing
+	public final void init(MAFTemplateSyntax syntax) {
+		this.syntax = syntax;
+		initInt(syntax);
+	}
+
+	public void initInt(MAFTemplateSyntax syntax) {
+		
+	}
+	
+	protected MAFTemplateSyntax getSyntax() {
+		return syntax;
 	}
 
 	/*

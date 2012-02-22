@@ -2,8 +2,6 @@ The logic description will contain what types i knows, and what fields it uses i
 Perhaps I will generate a source with that information.
 
 
-Returned to Entity/Aspect solution, found no better yet
-
 Identifiable should be a separate aspect - in this way there is no special handling of
 persistent entities: they simply have an Identifiable aspect. Then i should call it Persistent...
 
@@ -11,43 +9,10 @@ MAFKernelIdentifier: I can either use a Comparable id with TreeMaps OR a POJO wi
 The POJO seems to be better because then there is only one lookup at the creation, and existence
 verification - later I have simple lookups in the HashMaps, on object unique instance ID I suppose 
 
-vendor, domain, unit levels should also exist for the type management
 
 
-
-json_bnf = """
-object 
-    { members } 
-    {} 
-members 
-    string : value 
-    members , string : value 
-array 
-    [ elements ]
-    [] 
-elements 
-    value 
-    elements , value 
-value 
-    string
-    number
-    object
-    array
-    true
-    false
-    null
-"""
-
-
-
-object : sequence( const("{"), ref("members"), const("}") )
-members: repeat( ref("assignment"), ",")
-assignment: sequence ( const("\""), eval(name), const("\""), const(":"), ref("value") )
-array: sequence( const("["), ref("elements"), const("]") )
-elements: repeat( ref("value"), ",")
-value: switch( ref("object"), ref("array"), eval(value))
-
-
-
-EXCEPTIONS - I don't really want to handle any. Exceptions should be thrown as, or wrapped into MAFRuntimeExceptions,
-and handled by anyone in the above level. This is still better than add 'throws Exception' to any operations.
+process package: later to be transformed to the runtime environment of entities,
+now temporal environment for template based import. The aim is to create a callback-based
+parsing process, later to be reused for any on-the-fly text parsing (syntax highlight, auto complete).
+This way objects can't call each other, the call stack local variables must be replaced with
+call context objects managed by this package. (the same applies later for the logic communication)
