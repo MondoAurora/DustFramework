@@ -1,8 +1,11 @@
 package org.mondoaurora.frame.process;
 
 import org.mondoaurora.frame.process.MAFProcess.Return;
+import org.mondoaurora.frame.process.MAFProcess.ReturnType;
 
 public class MAFProcessManager {
+	private static final Object NOCONTEXT = new Object();
+	
 	class StackItem {
 		Object context;
 		MAFProcess process;
@@ -12,66 +15,85 @@ public class MAFProcessManager {
 
 		StackItem previous;
 
-		public StackItem(MAFProcess process, MAFProcessEventSource src, Object event) {
+		private StackItem(MAFProcess process, MAFProcessEventSource src) {
 			this.process = process;
-			context = process.createContextObject(event);
+			context = NOCONTEXT;
 			this.src = src;
 			mark = src.mark();
-
-			previous = callStack;
-			callStack = this;
 		}
 
-		void processRelayReturn(Return ret, Object event) {
-			process.processRelayReturn(ret, context);
-		}
-
-		void process(Object event) {
-			Return r = process.processEvent(event, context);
-
-			switch (r.type) {
-			case Success:
+		void end(Return r, Object event) {
+			if (ReturnType.Success == r.type) {
 				src.releaseMark(mark);
-				callStack = previous;
-				if (null != callStack ) {
-					callStack.processRelayReturn(r, event);
-				}
-				if ( !r.eventProcessed ) {
-					callStack.process(event);
-				}
-				break;
-			case Failure:
+			} else {
 				src.rollback(mark);
-				
-				callStack = previous;
-				if (null != callStack ) {
-					callStack.processRelayReturn(r, event);
-				}
-				break;
-			case Relay:
-				StackItem si = new StackItem((MAFProcess) r.ob, src, event);
-				if ( !r.eventProcessed ) {
-					si.process(event);
-				}
-				break;
 			}
+		}
 
+		Return processRelayReturn(Return ret, Object event) {
+			return process.processRelayReturn(ret, context);
+		}
+		
+		Return process(Object event) {
+			if ( NOCONTEXT == context ) {
+				context = process.createContextObject(event);
+			}
+			return process.processEvent(event, context);
 		}
 	};
 
-	MAFProcess root;
 	StackItem callStack;
 
 	public void processEvent(MAFProcessEventSource src, Object event) {
-		if (null == callStack) {
-			new StackItem(root, src, event);
+		Return r = callStack.process(event);
+
+		switch (r.type) {
+		case Failure:
+			end(r, event);
+			return; //RETURN, NOT BREAK!
+		case Success:
+			end(r, event);
+			break;
+		case Relay:
+			begin((MAFProcess) r.ob, src);
+			break;
 		}
 
-		callStack.process(event);
+		if ( !r.eventProcessed ) {
+			processEvent(src, event);
+		}
 	}
 
 	public void process(MAFProcess root, MAFProcessEventSource src) {
-		this.root = root;
+		begin(root, src);
+		
 		src.start(this);
 	}
+	
+	void begin(MAFProcess process, MAFProcessEventSource src) {
+//		System.out.println("ProcMan starting " + process);
+		
+		StackItem si = new StackItem(process, src);
+		si.previous = callStack;
+		callStack = si;			
+	}
+
+	void end(Return r, Object event) {
+//		System.out.println("ProcMan releasing " + callStack.process);
+		
+		callStack.end(r, event);
+		
+		callStack = callStack.previous;
+		
+		if (null != callStack ) {
+			r = callStack.processRelayReturn(r, event);
+			switch (r.type) {
+			case Failure:
+			case Success:
+				end(r, event);
+				break;
+			}
+		}
+	}
+
 }

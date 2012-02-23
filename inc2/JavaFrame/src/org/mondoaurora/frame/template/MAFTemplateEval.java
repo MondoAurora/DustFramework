@@ -16,25 +16,19 @@ public class MAFTemplateEval extends MAFTemplateBase {
 		eval.writeContent(stream, var);
 	}
 	
-	class Ctx {
-		Return ret = null;
-	}
-
-	@Override
-	public Object createContextObject(Object msg) {
-		return new Ctx();
-	}
-
 	@Override
 	protected Return processChar(char c, Object ctx) {
-		Ctx context = (Ctx) ctx;
-		
-		return (null == context.ret) ? new Return(ReturnType.Relay, eval, false) : context.ret;
+		return new Return(ReturnType.Relay, eval, false);
 	}
 	
 	@Override
-	public void processRelayReturn(Return ob, Object ctx) {
-		((Ctx)ctx).ret = ob;
+	public Return processRelayReturn(Return ob, Object ctx) {
+		return ob;
+	}
+
+	@Override
+	public String toString() {
+		return "TemplEval: " ;
 	}
 
 /*

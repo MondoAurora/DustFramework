@@ -85,6 +85,27 @@ public class MAFUtils {
 		}
 	}
 
+	public static final String iter2str(Iterable<?> content) {
+		return iter2str(content, ", ");
+	}
+
+	public static final String iter2str(Iterable<?> content, String sep) {
+		if (null == content) {
+			return "{ }";
+		} else {
+			StringBuilder sb = null;
+			for (Object o : content) {
+				if (null == sb) {
+					sb = new StringBuilder();
+				} else {
+					sb.append(sep);
+				}
+				sb.append(o);
+			}
+			return sb.toString();
+		}
+	}
+
 	public static final StringBuilder setSB(StringBuilder buf, String value) {
 		if (null == buf) {
 			buf = new StringBuilder(value);

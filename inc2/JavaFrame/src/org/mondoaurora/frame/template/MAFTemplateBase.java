@@ -1,5 +1,7 @@
 package org.mondoaurora.frame.template;
 
+import org.mondoaurora.frame.shared.MAFRuntimeException;
+
 
 
 public abstract class MAFTemplateBase implements MAFTemplate {
@@ -30,9 +32,8 @@ public abstract class MAFTemplateBase implements MAFTemplate {
 	}
 	
 	@Override
-	public void processRelayReturn(Return ob, Object ctx) {
-		// TODO Auto-generated method stub
-		
+	public Return processRelayReturn(Return ob, Object ctx) {
+		throw new MAFRuntimeException("MAFTemplateBase", "processRelayReturn should NEVER be called for this object");
 	}
 	
 	protected abstract Return processChar(char c, Object ctx);

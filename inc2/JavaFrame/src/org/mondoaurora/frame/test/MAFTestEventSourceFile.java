@@ -32,7 +32,11 @@ public class MAFTestEventSourceFile extends MAFProcessEventSource {
 	@Override
 	public void start() {
 		for ( pos = 0; pos < content.length(); ++pos ) {
-			sendEvent(content.charAt(pos));
+			char c = content.charAt(pos);
+			if (',' == c) {
+				c = ',';
+			}
+			sendEvent(c);
 		}
 	}
 
@@ -43,11 +47,23 @@ public class MAFTestEventSourceFile extends MAFProcessEventSource {
 
 	@Override
 	public void rollback(Object mark) {
-		pos = (Integer) mark;
+		pos = ((Integer) mark) - 1; // the for cycle will step one forward
+/*		
+		int p1 = pos+30;
+		if ( p1 >= content.length() ) {
+			p1 = content.length()-1;
+		}
+		System.out.println("Stream rolled back to " + pos + ": " + content.substring(pos, p1));
+*/
 	}
 
 	@Override
 	public void releaseMark(Object mark) {
 		
+	}
+	
+	@Override
+	public String toString() {
+		return content.substring(pos);
 	}
 }

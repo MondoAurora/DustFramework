@@ -33,10 +33,15 @@ public class MAFTemplateConstant extends MAFTemplateBase {
 		Return ret = (c == parseVal[context.curr++]) ? (parseVal.length == context.curr) ? SUCCESS : CONTINUE : FAILURE;
 		
 		if ( ReturnType.Success == ret.getType() ) {
-			System.out.println("Const: \"" + constValue + "\"");
+//			System.out.println("Const: \"" + constValue + "\"");
 		}
 		
 		return ret;
+	}
+	
+	@Override
+	public String toString() {
+		return "\"" + constValue + "\"";
 	}
 
 	/*

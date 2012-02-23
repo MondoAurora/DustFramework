@@ -116,6 +116,12 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 			
 			return context.appendChar(c) ? CONTINUE : new Return(ReturnType.Success, context.content.toString(), false);
 		}
+		
+		@Override
+		public String toString() {
+			return "MAFToolsJsonRelay.RelayEval" ;
+		}
+
 	}
 
 	private class EvalName extends RelayEval {
@@ -186,6 +192,12 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 			
 			return ret;
 		}
+
+		@Override
+		public String toString() {
+			return "MAFToolsJsonRelay.EvalValue";
+		}
+
 
 	}
 

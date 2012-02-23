@@ -3,8 +3,7 @@ package org.mondoaurora.frame.template;
 import java.util.*;
 
 import org.mondoaurora.frame.eval.MAFEval;
-import org.mondoaurora.frame.shared.MAFStream;
-import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.template.MAFTemplateConsts.Initer;
 
 public class MAFTemplateSwitch extends MAFTemplateBase {
@@ -48,13 +47,6 @@ public class MAFTemplateSwitch extends MAFTemplateBase {
 	
 	class Ctx {
 		Iterator<Map.Entry<String, MAFTemplate>> it = mapOptions.entrySet().iterator(); 
-		Map.Entry<String, MAFTemplate> next = it.next();
-		boolean go = true;
-		Return ret = null;
-		
-		void next() {
-			next = it.hasNext() ? it.next() : null;
-		}
 	}
 
 	@Override
@@ -64,24 +56,20 @@ public class MAFTemplateSwitch extends MAFTemplateBase {
 
 	@Override
 	protected Return processChar(char c, Object ctx) {
-		Ctx context = (Ctx) ctx;
-		
-		return (null != context.next) ? new Return(ReturnType.Relay, context.next.getValue(), false) : context.go ? FAILURE : context.ret;
+		Ctx context = (Ctx) ctx;	
+		return new Return(ReturnType.Relay, context.it.next().getValue(), false);
 	}
 	
 	@Override
-	public void processRelayReturn(Return ob, Object ctx) {
+	public Return processRelayReturn(Return ob, Object ctx) {
 		Ctx context = (Ctx) ctx;
-		context.ret = ob;
-		
-		if ( ReturnType.Success == ob.getType() ) {
-			context.go = false;
-			// register the type found
-		}
-		
-		context.next();
+		return ( ReturnType.Success == ob.getType() ) ? ob : context.it.hasNext() ? CONTINUE : FAILURE;
 	}
 
+	@Override
+	public String toString() {
+		return "[" + MAFUtils.iter2str(mapOptions.entrySet(), "|") + "]";
+	}
 
 	
 /*

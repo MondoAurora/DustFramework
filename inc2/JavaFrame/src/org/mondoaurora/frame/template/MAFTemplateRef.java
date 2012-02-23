@@ -26,27 +26,21 @@ public class MAFTemplateRef extends MAFTemplateBase {
 		imported.writeInto(stream, var);
 	}
 	
-	class Ctx {
-		Return ret = null;
-	}
-
-	@Override
-	public Object createContextObject(Object msg) {
-		return new Ctx();
-	}
-
 	@Override
 	protected Return processChar(char c, Object ctx) {
-		Ctx context = (Ctx) ctx;
-		
-		return (null == context.ret) ? new Return(ReturnType.Relay, imported, false) : context.ret;
+		return new Return(ReturnType.Relay, imported, false);
 	}
 	
 	@Override
-	public void processRelayReturn(Return ob, Object ctx) {
-		((Ctx)ctx).ret = ob;
+	public Return processRelayReturn(Return ob, Object ctx) {
+		return ob;
 	}
 	
+	@Override
+	public String toString() {
+		return "<" + target + ">";
+	}
+
 	/*
 	@Override
 	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {

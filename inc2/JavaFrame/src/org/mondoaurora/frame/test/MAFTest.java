@@ -12,15 +12,17 @@ public class MAFTest {
 	 * @param args
 	 */
 	public static void test(String[] args) {
-		testDump();
+//		testDump();
 		
-		System.out.println("\n------------");
+//		System.out.println("\n------------");
 		
-		testJSONExport();
+//		testJSONExport();
 
-		System.out.println("\n------------");
+//		System.out.println("\n------------");
 		
 		testJSONImport();
+		
+//		testImport();
 	}
 
 	static MAFKernelConnector getAnObject() {

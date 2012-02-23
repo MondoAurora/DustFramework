@@ -1,5 +1,6 @@
 package org.mondoaurora.frame.process;
 
+
 public interface MAFProcess {
 	enum ReturnType {	Continue, Success, Relay, Failure	} ;
 	
@@ -25,6 +26,11 @@ public interface MAFProcess {
 		public Object getOb() {
 			return ob;
 		}
+		
+		@Override
+		public String toString() {
+			return type.toString() + " " + (eventProcessed ? "processed " : "retry ") + ob;
+		}
 	}
 	
 	public static final Return CONTINUE = new Return(ReturnType.Continue, null, true);
@@ -37,5 +43,5 @@ public interface MAFProcess {
 	Object createContextObject(Object msg);
 	
 	Return processEvent(Object event, Object ctx);
-	void processRelayReturn(Return ob, Object ctx);
+	Return processRelayReturn(Return ob, Object ctx);
 }

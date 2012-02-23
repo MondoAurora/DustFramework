@@ -1,7 +1,6 @@
 package org.mondoaurora.frame.template;
 
-import org.mondoaurora.frame.shared.MAFStream;
-import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.*;
 
 public class MAFTemplateWhitespace extends MAFTemplateBase {
 	String wsToWrite;
@@ -47,6 +46,12 @@ public class MAFTemplateWhitespace extends MAFTemplateBase {
 	protected Return processChar(char c, Object ctx) {
 		return Character.isWhitespace(c) ? CONTINUE : SUCCESS_RETRY;
 	}
+
+	@Override
+	public String toString() {
+		return "ws";
+	}
+
 
 	/*
 	@Override

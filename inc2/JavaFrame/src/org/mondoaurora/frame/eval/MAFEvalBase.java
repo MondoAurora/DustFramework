@@ -20,9 +20,8 @@ public abstract class MAFEvalBase implements MAFEval {
 
 
 	@Override
-	public void processRelayReturn(Return ob, Object ctx) {
-		// TODO Auto-generated method stub
-		
+	public Return processRelayReturn(Return ob, Object ctx) {
+		return FAILURE;
 	}
 
 	@Override

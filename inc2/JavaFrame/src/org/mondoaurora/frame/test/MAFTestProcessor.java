@@ -35,8 +35,8 @@ public class MAFTestProcessor implements MAFProcess {
 	}
 
 	@Override
-	public void processRelayReturn(Return ob, Object ctx) {
-
+	public Return processRelayReturn(Return ob, Object ctx) {
+		return CONTINUE;
 	}
 
 }
