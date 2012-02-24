@@ -22,20 +22,7 @@ public class MAFTemplateEval extends MAFTemplateBase {
 	}
 	
 	@Override
-	public Return processRelayReturn(Return ob, Object ctx) {
-		return ob;
-	}
-
-	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "TemplEval: " ;
 	}
-
-/*
-	@Override
-	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {
-		DustVariant var = eval.getVariant(currentEntity);
-		return fmt.parseFrom(stream, var);
-	}
-*/
 }

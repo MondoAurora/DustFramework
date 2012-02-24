@@ -32,19 +32,7 @@ public class MAFTemplateRef extends MAFTemplateBase {
 	}
 	
 	@Override
-	public Return processRelayReturn(Return ob, Object ctx) {
-		return ob;
-	}
-	
-	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "<" + target + ">";
 	}
-
-	/*
-	@Override
-	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {
-		return imported.parseFrom(stream, currentEntity);
-	}
-	*/
 }

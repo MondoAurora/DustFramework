@@ -1,9 +1,10 @@
 package org.mondoaurora.frame.kernel;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.mondoaurora.frame.shared.MAFStream;
+import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.tools.MAFToolsVariantWrapper;
 
 public class MAFKernelEntity {
 	MAFKernelIdentifier id;
@@ -70,4 +71,42 @@ public class MAFKernelEntity {
 	void dump() {
 		new MAFKernelDumper().dumpEntity(this);
 	}
+	
+	public static class Variant extends MAFToolsVariantWrapper {
+		MAFKernelEntity entity;
+		MAFVariant varRef;
+		boolean refOnly;
+
+		public Variant(MAFKernelEntity entity, String refKey, boolean refOnly) {
+			this.entity = entity;
+			this.refOnly = refOnly;
+
+			if (null != refKey) {
+				varRef = new MAFToolsVariantWrapper.ConstString(refKey, entity.getRef());
+			}
+		}
+
+		public Variant(MAFKernelEntity entity) {
+			this.entity = entity;
+		}
+
+		@Override
+		public Iterable<? extends MAFVariant> getMembers() {
+			ArrayList<MAFVariant> alContent = new ArrayList<MAFVariant>();
+
+			if (null != varRef) {
+				alContent.add(varRef);
+			}
+
+			if (!refOnly) {
+				for (Map.Entry<MAFKernelIdentifier, MAFKernelAspect> e : entity.getAspects()) {
+					alContent.add(new MAFKernelAspect.Variant(e.getKey().asReference(), e.getValue()));
+				}
+			}
+
+			return alContent;
+		}
+	}
+
 }
+

@@ -17,8 +17,9 @@ public class MAFTemplateSequence extends MAFTemplateBase {
 
 	@Override
 	public void initInt(MAFTemplateSyntax syntax) {
+		int i = 0;
 		for (MAFTemplate t : content) {
-			t.init(syntax);
+			t.init(syntax, this, String.valueOf(++i));
 		}
 	}
 
@@ -34,7 +35,7 @@ public class MAFTemplateSequence extends MAFTemplateBase {
 	}
 
 	@Override
-	public Object createContextObject(Object msg) {
+	protected Object createContextObjectInt(Object msg) {
 		return new Ctx();
 	}
 
@@ -45,7 +46,7 @@ public class MAFTemplateSequence extends MAFTemplateBase {
 	}
 
 	@Override
-	public Return processRelayReturn(Return ob, Object ctx) {
+	protected Return processRelayReturnInt(Return ob, Object ctx) {
 		Ctx context = (Ctx) ctx;
 
 		return (ReturnType.Success == ob.getType()) ? (++context.curr == content.size()) ? SUCCESS : CONTINUE : ob;
@@ -53,15 +54,8 @@ public class MAFTemplateSequence extends MAFTemplateBase {
 	}
 
 	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "{ " + MAFUtils.iter2str(content) + " }";
 	}
 
-	/*
-	 * @Override protected boolean parseFromInt(DustStream stream, DustEntity
-	 * currentEntity) throws Exception { for ( MAFTemplate t : content ) { if ( !
-	 * t.parseFrom(stream, currentEntity) ) { return false; } }
-	 * 
-	 * return true; }
-	 */
 }

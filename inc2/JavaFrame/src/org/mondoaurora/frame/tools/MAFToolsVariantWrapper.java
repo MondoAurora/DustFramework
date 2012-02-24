@@ -25,11 +25,11 @@ public class MAFToolsVariantWrapper implements MAFVariant {
 		String key;
 		String str;
 
-		ConstString(String str) {
+		public ConstString(String str) {
 			this.str = str;
 		}
 
-		ConstString(String key, String str) {
+		public ConstString(String key, String str) {
 			this.key = key;
 			this.str = str;
 		}
@@ -52,87 +52,6 @@ public class MAFToolsVariantWrapper implements MAFVariant {
 		@Override
 		public String toString() {
 			return str;
-		}
-	}
-
-	public static class Entity extends MAFToolsVariantWrapper {
-		MAFKernelEntity entity;
-		MAFVariant varRef;
-		boolean refOnly;
-
-		Entity(MAFKernelEntity entity, String refKey, boolean refOnly) {
-			this.entity = entity;
-			this.refOnly = refOnly;
-
-			if (null != refKey) {
-				varRef = new ConstString(refKey, entity.getRef());
-			}
-		}
-
-		Entity(MAFKernelEntity entity) {
-			this.entity = entity;
-		}
-
-		@Override
-		public Iterable<? extends MAFVariant> getMembers() {
-			ArrayList<MAFVariant> alContent = new ArrayList<MAFVariant>();
-
-			if (null != varRef) {
-				alContent.add(varRef);
-			}
-
-			if (!refOnly) {
-				for (Map.Entry<MAFKernelIdentifier, MAFKernelAspect> e : entity.getAspects()) {
-					alContent.add(new Aspect(e.getKey().asReference(), e.getValue()));
-				}
-			}
-
-			return alContent;
-		}
-	}
-
-	public static class Aspect extends MAFToolsVariantWrapper implements Iterable<MAFVariant>, Iterator<MAFVariant> {
-		String key;
-		MAFKernelAspect aspect;
-		int currItem;
-		int count;
-
-		Aspect(String key, MAFKernelAspect aspect) {
-			this.key = key;
-			this.aspect = aspect;
-			count = aspect.getVarCount();
-
-			currItem = 0;
-		}
-
-		@Override
-		public String getKey() {
-			return key;
-		}
-
-		@Override
-		public Iterable<? extends MAFVariant> getMembers() {
-			return this;
-		}
-
-		@Override
-		public Iterator<MAFVariant> iterator() {
-			return this;
-		}
-
-		@Override
-		public boolean hasNext() {
-			return currItem < count;
-		}
-
-		@Override
-		public MAFVariant next() {
-			return aspect.getVar(currItem++);
-		}
-
-		@Override
-		public void remove() {
-			throw new MAFRuntimeException("MAFToolsVariantWrapper.Aspect", "remove() not supported!");
 		}
 	}
 

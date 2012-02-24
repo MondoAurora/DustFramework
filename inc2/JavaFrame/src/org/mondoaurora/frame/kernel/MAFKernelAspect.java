@@ -1,9 +1,57 @@
 package org.mondoaurora.frame.kernel;
 
-import org.mondoaurora.frame.shared.MAFLogic;
-import org.mondoaurora.frame.shared.MAFStream;
+import java.util.Iterator;
+
+import org.mondoaurora.frame.shared.*;
+import org.mondoaurora.frame.tools.MAFToolsVariantWrapper;
 
 public class MAFKernelAspect {
+	
+	public static class Variant extends MAFToolsVariantWrapper implements Iterable<MAFVariant>, Iterator<MAFVariant> {
+		String key;
+		MAFKernelAspect aspect;
+		int currItem;
+		int count;
+	
+		public Variant(String key, MAFKernelAspect aspect) {
+			this.key = key;
+			this.aspect = aspect;
+			count = aspect.getVarCount();
+	
+			currItem = 0;
+		}
+	
+		@Override
+		public String getKey() {
+			return key;
+		}
+	
+		@Override
+		public Iterable<? extends MAFVariant> getMembers() {
+			return this;
+		}
+	
+		@Override
+		public Iterator<MAFVariant> iterator() {
+			return this;
+		}
+	
+		@Override
+		public boolean hasNext() {
+			return currItem < count;
+		}
+	
+		@Override
+		public MAFVariant next() {
+			return aspect.getVar(currItem++);
+		}
+	
+		@Override
+		public void remove() {
+			throw new MAFRuntimeException("MAFToolsVariantWrapper.Aspect", "remove() not supported!");
+		}
+	}
+
 	MAFKernelEntity entity;
 
 	MAFKernelType type;

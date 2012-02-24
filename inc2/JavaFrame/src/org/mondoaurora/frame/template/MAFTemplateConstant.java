@@ -22,7 +22,7 @@ public class MAFTemplateConstant extends MAFTemplateBase {
 	}
 	
 	@Override
-	public Object createContextObject(Object msg) {
+	protected Object createContextObjectInt(Object msg) {
 		return new Ctx();
 	}
 	
@@ -40,20 +40,7 @@ public class MAFTemplateConstant extends MAFTemplateBase {
 	}
 	
 	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "\"" + constValue + "\"";
 	}
-
-	/*
-	@Override
-	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {
-		for ( char c : parseVal ) {
-			if ( stream.get() != c ) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-*/
 }

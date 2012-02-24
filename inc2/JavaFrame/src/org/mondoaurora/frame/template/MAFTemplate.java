@@ -7,24 +7,12 @@ import org.mondoaurora.frame.shared.MAFVariant;
 public interface MAFTemplate extends MAFProcess {
 	void writeInto(MAFStream.Out stream, MAFVariant var);
 	
-	void init(MAFTemplateSyntax syntax);
+	void init(MAFTemplateSyntax syntax, MAFTemplate parent, String id);
 
-	// boolean parseFrom(DustStream stream, DustEntity currentEntity) throws Exception;
-
-	// "EBNF defined in itself" {
-	// syntax = [ title ] "{" { production } "}" [ comment ].
-	// production = identifier "=" expression ( "." | ";" ) .
-	// expression = term { "|" term } .
-	// term = factor { factor } .
-	// factor = identifier
-	// | literal
-	// | "[" expression "]"
-	// | "(" expression ")"
-	// | "{" expression "}" .
-	// identifier = character { character } .
-	// title = literal .
-	// comment = literal .
-	// literal = "'" character { character } "'"
-	// | '"' character { character } '"' .
-	// }
+	String getId();
+	
+	public interface Connector {
+		void templateBegin(MAFTemplate template, Object context);
+		void templateEnd(MAFTemplate template, Object context, Return ret);
+	}
 }

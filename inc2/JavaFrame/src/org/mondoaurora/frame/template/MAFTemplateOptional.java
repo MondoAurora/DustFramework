@@ -15,7 +15,7 @@ public class MAFTemplateOptional extends MAFTemplateBase {
 	
 	@Override
 	public void initInt(MAFTemplateSyntax syntax) {
-		content.init(syntax);
+		content.init(syntax, this, MEMBER_OPT_CONT);
 	}
 
 	@Override
@@ -31,20 +31,12 @@ public class MAFTemplateOptional extends MAFTemplateBase {
 	}
 	
 	@Override
-	public Return processRelayReturn(Return ob, Object ctx) {
+	protected Return processRelayReturnInt(Return ob, Object ctx) {
 		return (ReturnType.Success == ob.getType()) ? ob : SUCCESS_RETRY;
 	}
 
 	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "TemplOptional: " + content;
 	}
-	/*
-	@Override
-	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {
-		eval.getVariant(currentEntity).setValueBoolean( content.parseFrom(stream, currentEntity));
-		
-		return true;
-	}
-*/
 }

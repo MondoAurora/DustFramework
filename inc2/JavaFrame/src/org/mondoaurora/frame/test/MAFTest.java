@@ -16,9 +16,9 @@ public class MAFTest {
 		
 //		System.out.println("\n------------");
 		
-//		testJSONExport();
+		testJSONExport();
 
-//		System.out.println("\n------------");
+		System.out.println("\n------------");
 		
 		testJSONImport();
 		
@@ -44,7 +44,9 @@ public class MAFTest {
 		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
 		MAFToolsStreamOut stream = new MAFToolsStreamOut();
 
+		System.out.println("First:");
 		jr.write(stream, conn);
+		System.out.println("\nSecond (\"already exported\"):");
 		jr.write(stream, conn);
 	}
 

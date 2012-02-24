@@ -1,16 +1,22 @@
 package org.mondoaurora.frame.template;
 
-import org.mondoaurora.frame.shared.MAFRuntimeException;
 
 
 
-public abstract class MAFTemplateBase implements MAFTemplate {
+public abstract class MAFTemplateBase implements MAFTemplate, MAFTemplateConsts {
 	private MAFTemplateSyntax syntax;
+	private String id;
 	
 	@Override
-	public final void init(MAFTemplateSyntax syntax) {
+	public final void init(MAFTemplateSyntax syntax, MAFTemplate parent, String id) {
 		this.syntax = syntax;
+		this.id = (null == parent) ? id : (parent.getId()+"."+id);
 		initInt(syntax);
+	}
+	
+	@Override
+	public final String getId() {
+		return id;
 	}
 
 	public void initInt(MAFTemplateSyntax syntax) {
@@ -23,34 +29,56 @@ public abstract class MAFTemplateBase implements MAFTemplate {
 
 	@Override
 	public final Return processEvent(Object event, Object ctx) {
-		return processChar((Character)event, ctx);
+		Return ret = processChar((Character)event, ctx);
+		
+		switch ( ret.getType() ) {
+		case Failure:
+		case Success:
+			syntax.getListener().templateEnd(this, ctx, ret);
+			break;
+		}
+		
+		return ret;
 	}
 	
 	@Override
-	public Object createContextObject(Object msg) {
+	public final Object createContextObject(Object msg) {
+		Object ctx = createContextObjectInt(msg);
+		
+		syntax.getListener().templateBegin(this, ctx);
+		
+		return ctx;
+	}
+	
+	protected Object createContextObjectInt(Object msg) {
 		return null;
 	}
 	
 	@Override
-	public Return processRelayReturn(Return ob, Object ctx) {
-		throw new MAFRuntimeException("MAFTemplateBase", "processRelayReturn should NEVER be called for this object");
+	public final Return processRelayReturn(Return ob, Object ctx) {
+		Return ret = processRelayReturnInt(ob, ctx);
+		
+		switch ( ret.getType() ) {
+		case Failure:
+		case Success:
+			syntax.getListener().templateEnd(this, ctx, ret);
+			break;
+		}
+		
+		return ret;
+	}
+	
+	protected Return processRelayReturnInt(Return ob, Object ctx) {
+		return ob;
 	}
 	
 	protected abstract Return processChar(char c, Object ctx);
-
 	
-	/*
-	public final boolean parseFrom(DustStream stream, DustEntity currentEntity) throws Exception {
-		int pos = stream.getPosition();
-		
-		if ( parseFromInt(stream, currentEntity) ) {
-			return true;
-		} else {
-			stream.setPosition(pos);
-			return false;
-		}
+	@Override
+	public final String toString() {
+		return id + "(" + toStringInt() + ")";
 	}
 	
-	protected abstract boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception;
-	*/
+	protected abstract String toStringInt() ;
+
 }

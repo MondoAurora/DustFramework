@@ -48,27 +48,7 @@ public class MAFTemplateWhitespace extends MAFTemplateBase {
 	}
 
 	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "ws";
 	}
-
-
-	/*
-	@Override
-	public boolean parseFrom(DustStream stream, DustEntity currentEntity) throws Exception {
-		char c;
-		boolean wsFound = false;
-		boolean ws;
-		
-		do { 
-			c = stream.get();
-			ws = Character.isWhitespace(c);
-			wsFound |= ws;
-		} while ( ws );
-		
-		stream.unget(c);
-		
-		return wsFound;
-	}
-*/
 }

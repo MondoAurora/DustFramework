@@ -11,5 +11,9 @@ public interface MAFTemplateConsts {
 			this.template = template;
 		}
 	}
-
+	
+	String MEMBER_OPT_CONT = "optContent";
+	String MEMBER_REP_CONT = "repContent";
+	String MEMBER_REP_SEP = "repSeparator";
+	String MEMBER_OPT = "optional";
 }

@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.mondoaurora.frame.eval.MAFEval;
 import org.mondoaurora.frame.shared.*;
-import org.mondoaurora.frame.template.MAFTemplateConsts.Initer;
 
 public class MAFTemplateSwitch extends MAFTemplateBase {
 	Map<String, MAFTemplate> mapOptions = new HashMap<String, MAFTemplate>();
@@ -26,8 +25,8 @@ public class MAFTemplateSwitch extends MAFTemplateBase {
 
 	@Override
 	public void initInt(MAFTemplateSyntax syntax) {
-		for ( MAFTemplate t : mapOptions.values() ) {
-			t.init(syntax);
+		for ( Map.Entry<String, MAFTemplate> e : mapOptions.entrySet() ) {
+			e.getValue().init(syntax, this, e.getKey());
 		}
 	}
 	
@@ -50,7 +49,7 @@ public class MAFTemplateSwitch extends MAFTemplateBase {
 	}
 
 	@Override
-	public Object createContextObject(Object msg) {
+	protected Object createContextObjectInt(Object msg) {
 		return new Ctx();
 	}
 
@@ -61,28 +60,13 @@ public class MAFTemplateSwitch extends MAFTemplateBase {
 	}
 	
 	@Override
-	public Return processRelayReturn(Return ob, Object ctx) {
+	protected Return processRelayReturnInt(Return ob, Object ctx) {
 		Ctx context = (Ctx) ctx;
 		return ( ReturnType.Success == ob.getType() ) ? ob : context.it.hasNext() ? CONTINUE : FAILURE;
 	}
 
 	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "[" + MAFUtils.iter2str(mapOptions.entrySet(), "|") + "]";
 	}
-
-	
-/*
-	@Override
-	protected boolean parseFromInt(DustStream stream, DustEntity currentEntity) throws Exception {
-		for ( Map.Entry<String, MAFTemplate> entry : mapOptions.entrySet() ) {
-			if ( entry.getValue().parseFrom(stream, currentEntity) ) {
-				eval.getVariant(currentEntity).setValueValSet(entry.getKey());
-				return true;
-			}
-		}
-
-		return false;
-	}
-*/
 }

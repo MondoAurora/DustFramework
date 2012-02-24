@@ -6,13 +6,14 @@ import java.util.Set;
 import org.mondoaurora.frame.eval.MAFEval;
 import org.mondoaurora.frame.eval.MAFEvalBase;
 import org.mondoaurora.frame.kernel.*;
-import org.mondoaurora.frame.process.MAFProcessEventSource;
-import org.mondoaurora.frame.process.MAFProcessManager;
+import org.mondoaurora.frame.process.MAFProcess.Return;
+import org.mondoaurora.frame.process.MAFProcess.ReturnType;
+import org.mondoaurora.frame.process.*;
 import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.shared.MAFStream.Out;
 import org.mondoaurora.frame.template.*;
 
-public class MAFToolsJsonRelay implements MAFTemplateConsts {
+public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateConsts {
 	public static final String RULE_OBJECT = "object";
 	public static final String RULE_MEMBERS = "members";
 	public static final String RULE_ASSIGNMENT = "assignment";
@@ -135,7 +136,7 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 			Return ret = super.processChar(c, ctx);
 			
 			if ( ReturnType.Continue != ret.getType() ) {
-				System.out.println("Name: " + ret.getOb());
+//				System.out.println("Name: " + ret.getOb());
 			}
 			
 			return ret;
@@ -145,7 +146,7 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 	private class EvalValueSwitch extends RelayEval {
 		@Override
 		public MAFVariant getVariant(MAFVariant var) {
-			if (var instanceof MAFToolsVariantWrapper.Aspect) {
+			if (var instanceof MAFKernelAspect.Variant) {
 				return VAR_STR_OBJECT;
 			} else if (var instanceof MAFKernelVariant) {
 				switch (((MAFKernelVariant) var).getType()) {
@@ -187,7 +188,7 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 			Return ret = super.processChar(c, ctx);
 			
 			if ( ReturnType.Continue != ret.getType() ) {
-				System.out.println("Value: " + ret.getOb());
+//				System.out.println("Value: " + ret.getOb());
 			}
 			
 			return ret;
@@ -237,11 +238,11 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 				new Initer(RULE_VAR, new MAFTemplateSequence(new MAFTemplate[] { tConstQuot, new MAFTemplateEval(evalValue),
 						tConstQuot })),
 
-		});
+		}, this);
 	}
 
 	MAFVariant wrapEntity(MAFKernelEntity e) {
-		return new MAFToolsVariantWrapper.Entity(e, KEY_REF, !setEntities.add(e));
+		return new MAFKernelEntity.Variant(e, KEY_REF, !setEntities.add(e));
 	}
 
 	public void write(MAFStream.Out stream, MAFConnector conn) {
@@ -250,8 +251,29 @@ public class MAFToolsJsonRelay implements MAFTemplateConsts {
 	}
 	
 	public void read(MAFProcessEventSource src) {
-		MAFProcessManager mgr = new MAFProcessManager();
+		syntax.read(src);
+	}
+	
+	private static final String[] RULE_WATCH = new String[]{RULE_OBJECT, RULE_ARRAY, RULE_ASSIGNMENT};
+	
+	@Override
+	public void templateBegin(MAFTemplate template, Object context) {
+		String tName = template.getId();
 		
-		mgr.process(syntax.getStartRule(), src);
+		if ( -1 != MAFUtils.indexOf(RULE_WATCH, tName) ) {
+			System.out.println("Start   " + template);
+		}
+	}
+	
+	@Override
+	public void templateEnd(MAFTemplate template, Object context, Return ret) {
+		String tName = template.getId();
+		String s = ((ret.getType() == ReturnType.Success) ? "Success " : "Failure ") + template;
+		
+		if ( -1 != MAFUtils.indexOf(RULE_WATCH, tName) ) {
+			System.out.println(s);
+		} else if ( template instanceof MAFTemplateEval ) {
+			System.out.println("Value: " + ret.getOb());
+		}
 	}
 }

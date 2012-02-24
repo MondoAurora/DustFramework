@@ -16,3 +16,32 @@ now temporal environment for template based import. The aim is to create a callb
 parsing process, later to be reused for any on-the-fly text parsing (syntax highlight, auto complete).
 This way objects can't call each other, the call stack local variables must be replaced with
 call context objects managed by this package. (the same applies later for the logic communication)
+
+
+
+TemplateEvaluator - get callback when a template starts and ends
+keep the rule name in template base, delegate names with identifier paths downwards
+hopefully only template nodes will be required, no evals inside
+the JSONRelay accepts the callbacks and builds the structure
+
+The source mark/rollback is wrong in the ProcessManager? Perhaps not: the EventSource is a more general
+level than the processing template components
+
+
+
+	// "EBNF defined in itself" {
+	// syntax = [ title ] "{" { production } "}" [ comment ].
+	// production = identifier "=" expression ( "." | ";" ) .
+	// expression = term { "|" term } .
+	// term = factor { factor } .
+	// factor = identifier
+	// | literal
+	// | "[" expression "]"
+	// | "(" expression ")"
+	// | "{" expression "}" .
+	// identifier = character { character } .
+	// title = literal .
+	// comment = literal .
+	// literal = "'" character { character } "'"
+	// | '"' character { character } '"' .
+	// }

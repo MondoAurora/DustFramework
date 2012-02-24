@@ -17,8 +17,8 @@ public class MAFTemplateRepeat extends MAFTemplateBase {
 
 	@Override
 	public void initInt(MAFTemplateSyntax syntax) {
-		separator.init(syntax);
-		content.init(syntax);
+		separator.init(syntax, this, MEMBER_REP_SEP);
+		content.init(syntax, this, MEMBER_REP_CONT);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class MAFTemplateRepeat extends MAFTemplateBase {
 	}
 
 	@Override
-	public Object createContextObject(Object msg) {
+	protected Object createContextObjectInt(Object msg) {
 		return new Ctx();
 	}
 
@@ -59,7 +59,7 @@ public class MAFTemplateRepeat extends MAFTemplateBase {
 	}
 
 	@Override
-	public Return processRelayReturn(Return ob, Object ctx) {
+	protected Return processRelayReturnInt(Return ob, Object ctx) {
 		Ctx context = (Ctx) ctx;
 
 		if (null != separator) {
@@ -70,22 +70,7 @@ public class MAFTemplateRepeat extends MAFTemplateBase {
 	}
 	
 	@Override
-	public String toString() {
+	protected String toStringInt() {
 		return "(" + content + " | " + separator + ")*";
 	}
-
-
-	/*
-	 * @Override protected boolean parseFromInt(DustStream stream, DustEntity
-	 * currentEntity) throws Exception { DustAspect asp =
-	 * currentEntity.getAspect(typeId, false);
-	 * 
-	 * DustVariant var = createVar(); DustEntity e = var.getValueObject();
-	 * 
-	 * while (content.parseFrom(stream, e)) { asp.getField(field).setData(e,
-	 * 
-	 * VariantSetMode.insert, null); var = createVar(); }
-	 * 
-	 * return true; }
-	 */
 }
