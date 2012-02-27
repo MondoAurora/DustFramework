@@ -41,6 +41,11 @@ public class MAFKernelConnector implements MAFConnector, MAFKernelConsts {
 		}
 	}
 
+	public MAFKernelConnector(MAFKernelAspect data) {
+		this(data.type);
+		this.data = data;
+	}
+
 	public MAFKernelConnector(MAFKernelAspect data, String[] fieldNames) {
 		this(data.type, fieldNames);
 		this.data = data;

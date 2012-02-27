@@ -1,8 +1,5 @@
 package org.mondoaurora.frame.tools;
 
-import java.util.*;
-
-import org.mondoaurora.frame.kernel.*;
 import org.mondoaurora.frame.shared.*;
 
 public class MAFToolsVariantWrapper implements MAFVariant {

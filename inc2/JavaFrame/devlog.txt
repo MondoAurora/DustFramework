@@ -1,3 +1,8 @@
+JSON RELAY
+TemplateEvaluator - get callback when a template starts and ends
+keep the rule name in template base, delegate names with identifier paths downwards
+hopefully only template nodes will be required, no evals inside
+the JSONRelay accepts the callbacks and builds the structure
 
 
 EXCEPTIONS 
@@ -35,6 +40,12 @@ assignment: sequence ( const("\""), eval(name), const("\""), const(":"), ref("va
 array: sequence( const("["), ref("elements"), const("]") )
 elements: repeat( ref("value"), ",")
 value: switch( ref("object"), ref("array"), eval(value))
+
+
+IDENTIFIER
+MAFKernelIdentifier: I can either use a Comparable id with TreeMaps OR a POJO wit instance management
+The POJO seems to be better because then there is only one lookup at the creation, and existence
+verification - later I have simple lookups in the HashMaps, on object unique instance ID I suppose 
 
 
 TYPE STRUCTURE

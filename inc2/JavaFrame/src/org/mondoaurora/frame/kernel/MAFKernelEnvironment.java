@@ -31,7 +31,7 @@ public class MAFKernelEnvironment extends MAFEnvironment implements MAFKernelHel
 		MAFKernelConnector ret = null;
 		
 		if ( null != a ) {
-			ret = new MAFKernelConnector(a.type, names);
+			ret = (null == names) ? new MAFKernelConnector(a.type) : new MAFKernelConnector(a.type, names);
 			ret.data = a;
 		}
 		

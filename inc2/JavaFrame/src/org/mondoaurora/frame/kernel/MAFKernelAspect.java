@@ -6,46 +6,101 @@ import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.tools.MAFToolsVariantWrapper;
 
 public class MAFKernelAspect {
-	
+
 	public static class Variant extends MAFToolsVariantWrapper implements Iterable<MAFVariant>, Iterator<MAFVariant> {
 		String key;
 		MAFKernelAspect aspect;
 		int currItem;
 		int count;
-	
+
 		public Variant(String key, MAFKernelAspect aspect) {
 			this.key = key;
+			currItem = 0;
+
 			this.aspect = aspect;
 			count = aspect.getVarCount();
-	
-			currItem = 0;
 		}
+
+		Variant(String ref) {
+			this(ref, new MAFKernelAspect(MAFKernelType.getType(ref)));
+//			this(ref, new MAFKernelAspect(MAFKernelType.getType(MAFKernelIdentifier.fromString(ref).getType())));
+		}
+		
+		public int select(String fieldName) {
+			MAFKernelField fld = aspect.type.getField(fieldName);
+			if ( null == fld ) {
+				throw new MAFRuntimeException("MAFKernelAspect", "Unknown field '" + fieldName + "' referred in type '" + aspect.type.id);
+			}
+			
+			System.out.println("Select field " + fieldName);
 	
+			currItem = fld.idx;
+			
+			return currItem;
+		}
+		
+		public void setFromString(String value) {
+			System.out.println("Setting value " + aspect.getField(currItem).getName() + " = " + value);
+
+			MAFKernelField fld = aspect.getField(currItem);
+			MAFVariant var = aspect.getVar(currItem);
+			
+			switch (fld.getType()) {
+			case IDENTIFIER:
+				var.setIdentifier(MAFKernelIdentifier.fromString(value));
+				break;
+			case BOOLEAN:
+				var.setBool(Boolean.parseBoolean(value));
+				break;
+			case VALUESET:
+				var.setCodeStr(value);
+				break;
+			case INTEGER:
+				var.setInt(Integer.parseInt(value));
+				break;
+			case DOUBLE:
+				var.setDouble(Double.parseDouble(value));
+				break;
+			case STRING:
+				var.setString(value);
+				break;
+//			case DATE:
+//				var.setBool(Boolean.parseBoolean(value));
+//				break;
+				default:
+					throw new MAFRuntimeException("setFromString", "Field '" + fld.getName() + "' of type '" + fld.getType() + " cannot be set from string '" + value + "'");
+			}			
+		}
+		
+		public void setFromVariant(MAFKernelEntity.Variant ev) {
+			aspect.getVar(currItem).setData(new MAFKernelConnector(ev.entity.primaryAspect), VariantSetMode.addLast, null);
+		}		
+
 		@Override
 		public String getKey() {
 			return key;
 		}
-	
+
 		@Override
 		public Iterable<? extends MAFVariant> getMembers() {
 			return this;
 		}
-	
+
 		@Override
 		public Iterator<MAFVariant> iterator() {
 			return this;
 		}
-	
+
 		@Override
 		public boolean hasNext() {
 			return currItem < count;
 		}
-	
+
 		@Override
 		public MAFVariant next() {
 			return aspect.getVar(currItem++);
 		}
-	
+
 		@Override
 		public void remove() {
 			throw new MAFRuntimeException("MAFToolsVariantWrapper.Aspect", "remove() not supported!");
@@ -63,7 +118,7 @@ public class MAFKernelAspect {
 		this.type = type;
 
 		content = new MAFKernelVariant[type.getFieldCount()];
-		
+
 		for (MAFKernelField fld : type.arrFields) {
 			content[fld.idx] = new MAFKernelVariant.Aspect(fld);
 		}
@@ -79,14 +134,14 @@ public class MAFKernelAspect {
 		target.put("{");
 
 		target.endLine(MAFStream.Indent.inc);
-		
+
 		boolean add = false;
 
 		for (MAFKernelField fld : type.arrFields) {
 			MAFKernelVariant o = content[fld.idx];
 
 			if ((null != o) && !o.isNull()) {
-				if ( add ) {
+				if (add) {
 					target.put(",");
 					target.endLine(MAFStream.Indent.keep);
 				} else {
@@ -108,7 +163,7 @@ public class MAFKernelAspect {
 	public MAFKernelVariant getVar(int idx) {
 		return content[idx];
 	}
-	
+
 	public MAFKernelField getField(int idx) {
 		return type.arrFields.get(idx);
 	}

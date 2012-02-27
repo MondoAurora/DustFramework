@@ -7,22 +7,22 @@ import org.mondoaurora.frame.tools.MAFToolsJsonRelay;
 import org.mondoaurora.frame.tools.MAFToolsStreamOut;
 
 public class MAFTest {
-	
+
 	/**
 	 * @param args
 	 */
 	public static void test(String[] args) {
-//		testDump();
-		
-//		System.out.println("\n------------");
-		
-		testJSONExport();
+		// testDump();
 
-		System.out.println("\n------------");
-		
+		// System.out.println("\n------------");
+
+		// testJSONExport();
+
+		// System.out.println("\n------------");
+
 		testJSONImport();
-		
-//		testImport();
+
+		// testImport();
 	}
 
 	static MAFKernelConnector getAnObject() {
@@ -39,8 +39,10 @@ public class MAFTest {
 	}
 
 	static void testJSONExport() {
-		MAFConnector conn = getAnObject();
+		testJSONExport(getAnObject());
+	}
 
+	static void testJSONExport(MAFConnector conn) {
 		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
 		MAFToolsStreamOut stream = new MAFToolsStreamOut();
 
@@ -53,19 +55,20 @@ public class MAFTest {
 	static void testJSONImport() {
 		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.txt");
 		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
-		
-		jr.read(src);
+
+		MAFConnector conn = jr.read(src).getConnector();
+
+		testJSONExport(conn);
 	}
 
 	static void testImport() {
 		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.txt");
 		MAFProcess proc = new MAFTestProcessor();
-		
+
 		MAFProcessManager mgr = new MAFProcessManager();
-		
+
 		mgr.process(proc, src);
-		
+
 	}
 
-	
 }

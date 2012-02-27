@@ -11,6 +11,23 @@ public class MAFKernelIdentifier implements MAFIdentifier, Comparable<MAFKernelI
 	String path;
 	String ref;
 	
+	public static MAFKernelIdentifier fromString(String str) {
+		int idx = str.indexOf(SEP_TYPE_START);
+		str = str.substring(idx + 1);
+		
+		idx = str.indexOf(SEP_TYPE_END);
+		
+		String type = str.substring(0, idx);
+		str = str.substring(idx + 1);
+		
+		idx = str.indexOf(SEP_LOCAL_SEP);
+		
+		String oId = str.substring(0, idx);
+		str = str.substring(idx + 1);
+
+		return new MAFKernelIdentifier(type, MAFUtils.isEmpty(oId) ? null : oId, str);
+	}
+	
 	public static String buildRef(String typeId, String ownerId, String localId) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -58,6 +75,10 @@ public class MAFKernelIdentifier implements MAFIdentifier, Comparable<MAFKernelI
 	void update() {
 		path = buildPath(ownerId, localId);
 		ref = buildRef(typeId, ownerId, localId);
+	}
+	
+	String getType() {
+		return typeId;
 	}
 	
 	@Override

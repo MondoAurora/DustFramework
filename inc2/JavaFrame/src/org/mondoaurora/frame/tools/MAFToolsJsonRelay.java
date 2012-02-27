@@ -1,7 +1,6 @@
 package org.mondoaurora.frame.tools;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.mondoaurora.frame.eval.MAFEval;
 import org.mondoaurora.frame.eval.MAFEvalBase;
@@ -40,7 +39,7 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 	MAFTemplateSyntax syntax;
 
 	Set<MAFKernelEntity> setEntities = new HashSet<>();
-	
+
 	private static String ESC_KEYS = "/bfnrt";
 	private static String ESC_VALUES = "/\b\f\n\r\t";
 
@@ -63,7 +62,7 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 			boolean esc = false;
 			int unicodeCountdown;
 			int unicodeValue;
-			
+
 			boolean appendChar(char c) {
 				switch (c) {
 				case '\\':
@@ -73,26 +72,26 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 					}
 					break;
 				case '\"':
-					if ( !esc ) {
+					if (!esc) {
 						return false;
 					}
 				}
-				
-				if ( esc ) {
-					if ( 0 < unicodeCountdown ) {
-						unicodeValue = 16*unicodeValue + Integer.parseInt(String.valueOf(c), 16);
-						if ( 0 == --unicodeCountdown ) {
+
+				if (esc) {
+					if (0 < unicodeCountdown) {
+						unicodeValue = 16 * unicodeValue + Integer.parseInt(String.valueOf(c), 16);
+						if (0 == --unicodeCountdown) {
 							content.appendCodePoint(unicodeValue);
 							esc = false;
 						}
-						
+
 					}
-					if ( 'u' == c ) {
+					if ('u' == c) {
 						unicodeCountdown = 4;
 						return true;
 					} else {
 						int ek = ESC_KEYS.indexOf(c);
-						if ( -1 == ek ) {
+						if (-1 == ek) {
 							throw new MAFRuntimeException("JSONRelay", "Invalid escape char: \'" + c + "\'");
 						} else {
 							content.append(ESC_VALUES.charAt(ek));
@@ -100,7 +99,7 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 					}
 					esc = false;
 				}
-				
+
 				content.append(c);
 				return true;
 			}
@@ -114,13 +113,13 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 		@Override
 		protected Return processChar(char c, Object ctx) {
 			Ctx context = (Ctx) ctx;
-			
+
 			return context.appendChar(c) ? CONTINUE : new Return(ReturnType.Success, context.content.toString(), false);
 		}
-		
+
 		@Override
 		public String toString() {
-			return "MAFToolsJsonRelay.RelayEval" ;
+			return "MAFToolsJsonRelay.RelayEval";
 		}
 
 	}
@@ -130,15 +129,15 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 		public void writeContent(Out target, MAFVariant var) {
 			target.put(var.getKey());
 		}
-		
+
 		@Override
 		protected Return processChar(char c, Object ctx) {
 			Return ret = super.processChar(c, ctx);
-			
-			if ( ReturnType.Continue != ret.getType() ) {
-//				System.out.println("Name: " + ret.getOb());
+
+			if (ReturnType.Continue != ret.getType()) {
+				// System.out.println("Name: " + ret.getOb());
 			}
-			
+
 			return ret;
 		}
 	}
@@ -182,15 +181,15 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 		public void writeContent(Out target, MAFVariant var) {
 			target.put(var.toString());
 		}
-		
+
 		@Override
 		protected Return processChar(char c, Object ctx) {
 			Return ret = super.processChar(c, ctx);
-			
-			if ( ReturnType.Continue != ret.getType() ) {
-//				System.out.println("Value: " + ret.getOb());
+
+			if (ReturnType.Continue != ret.getType()) {
+				// System.out.println("Value: " + ret.getOb());
 			}
-			
+
 			return ret;
 		}
 
@@ -198,9 +197,10 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 		public String toString() {
 			return "MAFToolsJsonRelay.EvalValue";
 		}
-
-
 	}
+
+	MAFEval evalName = new EvalName();
+	MAFEval evalValue = new EvalValue();
 
 	public MAFToolsJsonRelay() {
 		MAFTemplate tSpace = new MAFTemplateWhitespace();
@@ -211,8 +211,6 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 		MAFTemplate tConstComma = new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant(","), tLineFeed });
 		MAFTemplate tConstQuot = new MAFTemplateConstant("\"");
 
-		MAFEval evalValue = new EvalValue();
-
 		new MAFTemplateConstant(",");
 
 		syntax = new MAFTemplateSyntax(RULE_OBJECT, new Initer[] {
@@ -222,7 +220,7 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 				new Initer(RULE_MEMBERS, new MAFTemplateRepeat(null, new MAFTemplateRef(RULE_ASSIGNMENT), tConstComma)),
 
 				new Initer(RULE_ASSIGNMENT, new MAFTemplateSequence(new MAFTemplate[] { tConstQuot,
-						new MAFTemplateEval(new EvalName()), tConstQuot, tSpace, new MAFTemplateConstant(":"), tSpace,
+						new MAFTemplateEval(evalName), tConstQuot, tSpace, new MAFTemplateConstant(":"), tSpace,
 						new MAFTemplateRef(RULE_VALUE), })),
 
 				new Initer(RULE_ARRAY, new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant("["), tIndentInc,
@@ -249,31 +247,103 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 		MAFKernelEntity e = ((MAFKernelConnector) conn).getEntity();
 		syntax.write(wrapEntity(e), stream);
 	}
+
+	private static final String[] RULE_WATCH = new String[] { RULE_OBJECT };
+
+	LinkedList<MAFKernelEntity.Variant> readStack = new LinkedList<>();
+	String readingKeyName;
+	MAFKernelEntity.Variant read;
 	
-	public void read(MAFProcessEventSource src) {
+	public MAFKernelEntity.Variant read(MAFProcessEventSource src) {
 		syntax.read(src);
+		return read;
 	}
-	
-	private static final String[] RULE_WATCH = new String[]{RULE_OBJECT, RULE_ARRAY, RULE_ASSIGNMENT};
-	
+
 	@Override
 	public void templateBegin(MAFTemplate template, Object context) {
 		String tName = template.getId();
-		
-		if ( -1 != MAFUtils.indexOf(RULE_WATCH, tName) ) {
-			System.out.println("Start   " + template);
+
+		switch (MAFUtils.indexOf(RULE_WATCH, tName)) {
+		case 0:
+			if (readStack.isEmpty()) {
+				readStack.addFirst(new MAFKernelEntity.Variant());
+			} else {
+				MAFKernelEntity.Variant ve = readStack.getFirst();
+				MAFKernelAspect.Variant va = ve.getCurrAspect();
+
+				if ((null == va)) {
+					ve.startAspect(readingKeyName);
+				} else {
+					readStack.addFirst(new MAFKernelEntity.Variant());
+				}
+			}
+			break;
+		case -1:
+			return;
 		}
+
+		// System.out.println("Start   " + template);
 	}
-	
+
 	@Override
 	public void templateEnd(MAFTemplate template, Object context, Return ret) {
 		String tName = template.getId();
 		String s = ((ret.getType() == ReturnType.Success) ? "Success " : "Failure ") + template;
-		
-		if ( -1 != MAFUtils.indexOf(RULE_WATCH, tName) ) {
-			System.out.println(s);
-		} else if ( template instanceof MAFTemplateEval ) {
-			System.out.println("Value: " + ret.getOb());
+
+		if (-1 != MAFUtils.indexOf(RULE_WATCH, tName)) {
+			MAFKernelEntity.Variant ve = readStack.getFirst();
+
+			if (null == ve) {
+				throw new MAFRuntimeException("MAFToolsJsonRelay", "templateEnd called with no opened Object");
+			} else {
+				if (ret.getType() == ReturnType.Success) {
+					if ((null == ve.getCurrAspect())) {
+						readStack.removeFirst();
+						if ( readStack.isEmpty() ) {
+							read = ve;
+						} else {
+							readStack.getFirst().getCurrAspect().setFromVariant(ve);
+						}
+					} else {
+						ve.endCurrentAspect();
+					}
+				} else {
+					readStack.removeFirst();
+					System.out.println(s);
+				}
+			}
+
+			// System.out.println(s);
+		} else if (template instanceof MAFTemplateEval) {
+			if (template.getId().startsWith(RULE_ASSIGNMENT)) {
+				readingKeyName = (String) ret.getOb();
+
+				if (!KEY_REF.equals(readingKeyName)) {
+					MAFKernelEntity.Variant ve = readStack.getFirst();
+					if (null != ve) {
+						MAFKernelAspect.Variant va = ve.getCurrAspect();
+						if (null != va) {
+							va.select(readingKeyName);
+						}
+					}
+				}
+			} else {
+				String value = (String) ret.getOb();
+
+				MAFKernelEntity.Variant ve = readStack.getFirst();
+				if (KEY_REF.equals(readingKeyName)) {
+					ve.setRef(value);
+				} else {
+					MAFKernelAspect.Variant va = ve.getCurrAspect();
+
+					if ((null == va)) {
+						throw new MAFRuntimeException("MAFToolsJsonRelay", "Value set without current aspect");
+					} else {
+						va.setFromString(value);
+					}
+				}
+				// System.out.println("Read " + readingKeyName + " = " + ret.getOb());
+			}
 		}
 	}
 }

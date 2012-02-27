@@ -2,7 +2,7 @@ package org.mondoaurora.frame.kernel;
 
 import java.util.*;
 
-import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.shared.MAFVariant.VariantSetMode;
 
 public class MAFKernelType extends MAFKernelLogic {
@@ -37,6 +37,17 @@ public class MAFKernelType extends MAFKernelLogic {
 		for (MAFKernelField f : fields) {
 			addField(f);
 		}
+	}
+	
+	public static MAFKernelType getType(String id) {
+		MAFIdentifier typeId = MAFEnvironment.getId(id);
+		MAFKernelConnector kc = (MAFKernelConnector)MAFEnvironment.getInstance(typeId, null);
+		
+		if ( null == kc ) {
+			throw new MAFRuntimeException("MAFKernelType", "Unknown type referred: " + typeId);
+		}
+		
+		return (MAFKernelType) kc.data.logic;
 	}
 
 	public int getFieldCount() {

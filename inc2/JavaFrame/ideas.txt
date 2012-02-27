@@ -5,11 +5,6 @@ Perhaps I will generate a source with that information.
 Identifiable should be a separate aspect - in this way there is no special handling of
 persistent entities: they simply have an Identifiable aspect. Then i should call it Persistent...
 
-MAFKernelIdentifier: I can either use a Comparable id with TreeMaps OR a POJO wit instance management
-The POJO seems to be better because then there is only one lookup at the creation, and existence
-verification - later I have simple lookups in the HashMaps, on object unique instance ID I suppose 
-
-
 
 process package: later to be transformed to the runtime environment of entities,
 now temporal environment for template based import. The aim is to create a callback-based
@@ -18,11 +13,6 @@ This way objects can't call each other, the call stack local variables must be r
 call context objects managed by this package. (the same applies later for the logic communication)
 
 
-
-TemplateEvaluator - get callback when a template starts and ends
-keep the rule name in template base, delegate names with identifier paths downwards
-hopefully only template nodes will be required, no evals inside
-the JSONRelay accepts the callbacks and builds the structure
 
 The source mark/rollback is wrong in the ProcessManager? Perhaps not: the EventSource is a more general
 level than the processing template components
@@ -45,3 +35,21 @@ level than the processing template components
 	// literal = "'" character { character } "'"
 	// | '"' character { character } '"' .
 	// }
+	
+	
+	
+	
+The next aim is to manage transaction: create temporal environment for the process, read current entity instances 
+into the env and load over them; on success push the whole set back into the parent environment.
+Write type etc. loader code in the init() functions; this will allow me to add new types.
+Then I should transfer the DB connector from previous projects (both EAV and direct table).
+Perhaps use templates for generating table scripts? Just for fun...
+
+
+TODO: the Variant toString-fromString stuff: I must change the current method and create a proper,
+configurable type-level and default formatting by field type.
+
+
+LATE TODO: make the template/eval nodes to aspects, then remove the current, function-based communication
+and create a correct, message-oriented solution; upgrade the process package to manage the real, aspect/logic
+communication. I don't know enough yet to do this.

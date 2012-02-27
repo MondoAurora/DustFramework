@@ -2,8 +2,7 @@ package org.mondoaurora.frame.kernel;
 
 import java.util.*;
 
-import org.mondoaurora.frame.shared.MAFStream;
-import org.mondoaurora.frame.shared.MAFVariant;
+import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.tools.MAFToolsVariantWrapper;
 
 public class MAFKernelEntity {
@@ -76,6 +75,8 @@ public class MAFKernelEntity {
 		MAFKernelEntity entity;
 		MAFVariant varRef;
 		boolean refOnly;
+		
+		MAFKernelAspect.Variant currAspect;
 
 		public Variant(MAFKernelEntity entity, String refKey, boolean refOnly) {
 			this.entity = entity;
@@ -88,6 +89,44 @@ public class MAFKernelEntity {
 
 		public Variant(MAFKernelEntity entity) {
 			this.entity = entity;
+		}
+		
+		public Variant() {
+			System.out.println("Starting entity");
+			// creates with NO entity
+		}
+		
+		public MAFConnector getConnector() {
+			return new MAFKernelConnector(entity.primaryAspect);
+		}
+		
+		public void setRef(String ref) {
+			// here I can get the referred entity or create one if missing. Now just create it
+			entity = new MAFKernelEntity();
+			entity.id = MAFKernelIdentifier.fromString(ref);
+			
+			System.out.println("Setting entity ref to: " + ref);
+
+		}
+		
+		public MAFKernelAspect.Variant getCurrAspect() {
+			return currAspect;
+		}
+		
+		public void startAspect(String aspRef) {
+			System.out.println("Starting aspect " + aspRef);
+
+			currAspect = new MAFKernelAspect.Variant(aspRef);
+		}
+		
+		public void endCurrentAspect() {
+			System.out.println("Ending aspect " + currAspect.aspect.type.id);
+			entity.addAspect(currAspect.aspect);
+			
+			if (entity.id.getType().equals(currAspect.aspect.type.id.asPath())) {
+				entity.primaryAspect = currAspect.aspect;
+			}
+			currAspect = null;
 		}
 
 		@Override
