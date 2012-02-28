@@ -2,6 +2,10 @@ package org.mondoaurora.frame.kernel;
 
 public interface MAFKernelConsts {
 	
+	enum EntityState {
+		NEW, NORMAL, DIRTY
+	};
+	
 	enum FieldType {
 		IDENTIFIER, BOOLEAN, VALUESET, INTEGER, DOUBLE, STRING, DATE, REFERENCE, SET, ARRAY
 	};
@@ -38,6 +42,7 @@ public interface MAFKernelConsts {
 	String FIELD_OBTYPE = "obType";
 	String FIELD_TYPEID = "typeId";
 	String FIELD_VALUES = "values";
+	String FIELD_DEFAULT = "default";
 
 	String FIELD_REFERRABLE = "referrable";
 	String FIELD_FIELDS = "fields";

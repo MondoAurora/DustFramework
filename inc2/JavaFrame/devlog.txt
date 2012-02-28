@@ -1,4 +1,8 @@
 JSON RELAY
+load over: the actual entity instances are loaded into the Entity.Variant on setRef 
+
+
+JSON RELAY
 TemplateEvaluator - get callback when a template starts and ends
 keep the rule name in template base, delegate names with identifier paths downwards
 hopefully only template nodes will be required, no evals inside

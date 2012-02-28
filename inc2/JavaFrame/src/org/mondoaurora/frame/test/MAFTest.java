@@ -53,12 +53,13 @@ public class MAFTest {
 	}
 
 	static void testJSONImport() {
-		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.txt");
+		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.ext.txt");
 		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
 
 		MAFConnector conn = jr.read(src).getConnector();
 
-		testJSONExport(conn);
+//		testJSONExport(conn);
+		testJSONExport();
 	}
 
 	static void testImport() {

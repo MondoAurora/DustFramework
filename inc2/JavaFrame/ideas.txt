@@ -39,8 +39,9 @@ level than the processing template components
 	
 	
 	
-The next aim is to manage transaction: create temporal environment for the process, read current entity instances 
+Manage transaction: create temporal environment for the process, read current entity instances 
 into the env and load over them; on success push the whole set back into the parent environment.
+
 Write type etc. loader code in the init() functions; this will allow me to add new types.
 Then I should transfer the DB connector from previous projects (both EAV and direct table).
 Perhaps use templates for generating table scripts? Just for fun...
@@ -53,3 +54,5 @@ configurable type-level and default formatting by field type.
 LATE TODO: make the template/eval nodes to aspects, then remove the current, function-based communication
 and create a correct, message-oriented solution; upgrade the process package to manage the real, aspect/logic
 communication. I don't know enough yet to do this.
+
+

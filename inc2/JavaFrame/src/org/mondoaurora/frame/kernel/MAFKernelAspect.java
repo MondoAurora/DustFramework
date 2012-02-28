@@ -2,6 +2,7 @@ package org.mondoaurora.frame.kernel;
 
 import java.util.Iterator;
 
+import org.mondoaurora.frame.kernel.MAFKernelConsts.EntityState;
 import org.mondoaurora.frame.shared.*;
 import org.mondoaurora.frame.tools.MAFToolsVariantWrapper;
 
@@ -71,9 +72,15 @@ public class MAFKernelAspect {
 					throw new MAFRuntimeException("setFromString", "Field '" + fld.getName() + "' of type '" + fld.getType() + " cannot be set from string '" + value + "'");
 			}			
 		}
-		
+
+		public MAFVariant getVar() {
+			return aspect.getVar(currItem);
+		}
+
 		public void setFromVariant(MAFKernelEntity.Variant ev) {
-			aspect.getVar(currItem).setData(new MAFKernelConnector(ev.entity.primaryAspect), VariantSetMode.addLast, null);
+			if ( EntityState.NEW == ev.entity.state ) {
+				aspect.getVar(currItem).setData(new MAFKernelConnector(ev.entity.primaryAspect), VariantSetMode.addLast, null);
+			}
 		}		
 
 		@Override

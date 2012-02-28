@@ -262,27 +262,26 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 	@Override
 	public void templateBegin(MAFTemplate template, Object context) {
 		String tName = template.getId();
+		MAFKernelAspect.Variant va = null;
 
 		switch (MAFUtils.indexOf(RULE_WATCH, tName)) {
 		case 0:
 			if (readStack.isEmpty()) {
-				readStack.addFirst(new MAFKernelEntity.Variant());
+				readStack.addFirst(new MAFKernelEntity.Variant(va));
 			} else {
 				MAFKernelEntity.Variant ve = readStack.getFirst();
-				MAFKernelAspect.Variant va = ve.getCurrAspect();
+				va = ve.getCurrAspect();
 
 				if ((null == va)) {
 					ve.startAspect(readingKeyName);
 				} else {
-					readStack.addFirst(new MAFKernelEntity.Variant());
+					readStack.addFirst(new MAFKernelEntity.Variant(va));
 				}
 			}
 			break;
 		case -1:
 			return;
 		}
-
-		// System.out.println("Start   " + template);
 	}
 
 	@Override
@@ -312,8 +311,6 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 					System.out.println(s);
 				}
 			}
-
-			// System.out.println(s);
 		} else if (template instanceof MAFTemplateEval) {
 			if (template.getId().startsWith(RULE_ASSIGNMENT)) {
 				readingKeyName = (String) ret.getOb();
@@ -342,7 +339,6 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 						va.setFromString(value);
 					}
 				}
-				// System.out.println("Read " + readingKeyName + " = " + ret.getOb());
 			}
 		}
 	}
