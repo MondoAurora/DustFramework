@@ -200,6 +200,10 @@ public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 		this.data = ((MAFKernelVariant) from).data;
 	}
 
+	public void setData(Object value, VariantSetMode mode) {
+		setData(value, mode, null);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setData(Object value, VariantSetMode mode, String key) {

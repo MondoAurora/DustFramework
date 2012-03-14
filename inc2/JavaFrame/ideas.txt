@@ -56,3 +56,13 @@ and create a correct, message-oriented solution; upgrade the process package to 
 communication. I don't know enough yet to do this.
 
 
+I can't move forward. I see that to go on with implementing logic, I need the correct interface
+to the data objects. It is sure that I have to GENERATE some Java code, to avoid string problems.
+If I generate Java, it should be as close to "normal" Java coding as possible: if I generate code,
+why should I show Variants instead of properly typed getters and setters?
+Yes, the whole thing could go the other way round: I could use these objects instead of Aspects -
+but in that case I should use reflection to access the content, which is Java-locked, and not available
+in GWT for example.
+The language should be:
+
+source = ( <package>, ws, <import>, ws, <classHead>, ws, <fields>, ws, <classTail>

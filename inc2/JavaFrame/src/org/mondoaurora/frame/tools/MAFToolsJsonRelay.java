@@ -203,28 +203,22 @@ public class MAFToolsJsonRelay implements MAFTemplate.Connector, MAFTemplateCons
 	MAFEval evalValue = new EvalValue();
 
 	public MAFToolsJsonRelay() {
-		MAFTemplate tSpace = new MAFTemplateWhitespace();
-		MAFTemplate tLineFeed = new MAFTemplateWhitespace(MAFStream.Indent.keep);
-		MAFTemplate tIndentInc = new MAFTemplateWhitespace(MAFStream.Indent.inc);
-		MAFTemplate tIndentDec = new MAFTemplateWhitespace(MAFStream.Indent.dec);
 
-		MAFTemplate tConstComma = new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant(","), tLineFeed });
+		MAFTemplate tConstComma = new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant(","), TEMPL_WS_LINEFEED });
 		MAFTemplate tConstQuot = new MAFTemplateConstant("\"");
 
-		new MAFTemplateConstant(",");
-
 		syntax = new MAFTemplateSyntax(RULE_OBJECT, new Initer[] {
-				new Initer(RULE_OBJECT, new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant("{"), tIndentInc,
-						new MAFTemplateRef(RULE_MEMBERS), tIndentDec, new MAFTemplateConstant("}"), })),
+				new Initer(RULE_OBJECT, new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant("{"), TEMPL_WS_INDENT_INC,
+						new MAFTemplateRef(RULE_MEMBERS), TEMPL_WS_INDENT_DEC, new MAFTemplateConstant("}"), })),
 
 				new Initer(RULE_MEMBERS, new MAFTemplateRepeat(null, new MAFTemplateRef(RULE_ASSIGNMENT), tConstComma)),
 
 				new Initer(RULE_ASSIGNMENT, new MAFTemplateSequence(new MAFTemplate[] { tConstQuot,
-						new MAFTemplateEval(evalName), tConstQuot, tSpace, new MAFTemplateConstant(":"), tSpace,
+						new MAFTemplateEval(evalName), tConstQuot, TEMPL_WS_SPACE, new MAFTemplateConstant(":"), TEMPL_WS_SPACE,
 						new MAFTemplateRef(RULE_VALUE), })),
 
-				new Initer(RULE_ARRAY, new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant("["), tIndentInc,
-						new MAFTemplateRef(RULE_ELEMENTS), tIndentDec, new MAFTemplateConstant("]"), })),
+				new Initer(RULE_ARRAY, new MAFTemplateSequence(new MAFTemplate[] { new MAFTemplateConstant("["), TEMPL_WS_INDENT_INC,
+						new MAFTemplateRef(RULE_ELEMENTS), TEMPL_WS_INDENT_DEC, new MAFTemplateConstant("]"), })),
 
 				new Initer(RULE_ELEMENTS, new MAFTemplateRepeat(null, new MAFTemplateRef(RULE_VALUE), tConstComma)),
 

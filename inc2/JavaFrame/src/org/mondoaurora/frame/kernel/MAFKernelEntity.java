@@ -41,6 +41,10 @@ public class MAFKernelEntity implements MAFKernelConsts {
 		return id.asReference();
 	}
 
+	public MAFKernelIdentifier getId() {
+		return id;
+	}
+
 	@Override
 	public String toString() {
 		return "Entity " + id.toString();

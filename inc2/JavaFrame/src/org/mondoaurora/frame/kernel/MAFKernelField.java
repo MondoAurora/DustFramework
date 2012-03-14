@@ -9,12 +9,16 @@ public class MAFKernelField extends MAFKernelLogic {
 	static String strTypeId = MAFKernelIdentifier.buildPath(KERNEL_PATH, ID_TYPENAME_FIELD);
 
 	static final String[] FIELDS = new String[] { FIELD_ID, FIELD_TYPE, FIELD_LENGTH, FIELD_OBTYPE, FIELD_VALUES };
+//	static final String[] FIELDS = new String[] { FIELD_ID, FIELD_TYPE, FIELD_LENGTH, FIELD_OBTYPE, FIELD_VALUES, FIELD_DEFAULT };
 
 	public static final MAFKernelType TYPE = new MAFKernelType(ID_TYPENAME_FIELD, false, new MAFKernelField[] {
 			new MAFKernelField(FIELDS[0], FieldType.STRING, ID_LENGTH),
-			new MAFKernelField(FIELDS[1], EnumSet.allOf(FieldType.class)), new MAFKernelField(FIELDS[2], FieldType.INTEGER),
+			new MAFKernelField(FIELDS[1], EnumSet.allOf(FieldType.class)), 
+			new MAFKernelField(FIELDS[2], FieldType.INTEGER),
 			new MAFKernelField(FIELDS[3], FieldType.STRING, ID_LENGTH),
-			new MAFKernelField(FIELDS[4], FieldType.STRING, LONG_LENGTH), });
+			new MAFKernelField(FIELDS[4], FieldType.STRING, LONG_LENGTH), 
+//			new MAFKernelField(FIELDS[5], FieldType.STRING, LONG_LENGTH), 
+			});
 
 	String name;
 	int idx;
@@ -22,15 +26,16 @@ public class MAFKernelField extends MAFKernelLogic {
 	FieldType type;
 	int length;
 	String obType;
+	String defValue;
 
 	String[] valsetValues;
 
 	public MAFKernelField(String name, FieldType type) {
-		this(name, type, 0, null);
+		this(name, type, 0, null, null);
 	}
 
 	public <T extends Enum<T>> MAFKernelField(String name, EnumSet<T> enumSet) {
-		this(name, FieldType.VALUESET, 0, null);
+		this(name, FieldType.VALUESET, 0, null, null);
 
 		valsetValues = new String[enumSet.size()];
 		int idx = 0;
@@ -40,18 +45,23 @@ public class MAFKernelField extends MAFKernelLogic {
 	}
 
 	public MAFKernelField(String name, FieldType type, int length) {
-		this(name, type, length, null);
+		this(name, type, length, null, null);
 	}
 
 	public MAFKernelField(String name, FieldType type, String obType) {
-		this(name, type, -1, obType);
+		this(name, type, -1, obType, null);
 	}
 
 	public MAFKernelField(String name, FieldType type, int length, String obType) {
+		this(name, type, length, obType, null);
+	}
+
+	public MAFKernelField(String name, FieldType type, int length, String obType, String defValue) {
 		this.name = name;
 		this.type = type;
 		this.length = length;
 		this.obType = obType;
+		this.defValue = defValue;
 	}
 
 	public String getName() {
@@ -60,6 +70,10 @@ public class MAFKernelField extends MAFKernelLogic {
 
 	public FieldType getType() {
 		return type;
+	}
+	
+	public String getObType() {
+		return obType;
 	}
 
 	public Class<?> getJavaClass() {
@@ -101,6 +115,7 @@ public class MAFKernelField extends MAFKernelLogic {
 		conn.setData(2, length);
 		conn.setData(3, obType);
 		conn.setData(4, (null == valsetValues) ? null : MAFUtils.arr2str(valsetValues, SEP_VALSET));
+//		conn.setData(5, defValue);
 
 		return conn;
 	}

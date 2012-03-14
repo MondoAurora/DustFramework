@@ -29,5 +29,6 @@ public interface MAFVariant {
 	Iterable<? extends MAFVariant> getMembers();
 
 	void setData(MAFVariant from);
+//	void setData(Object value, VariantSetMode mode);
 	void setData(Object value, VariantSetMode mode, String key);
 }
