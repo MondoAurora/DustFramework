@@ -1,0 +1,21 @@
+0308
+"char" as field type
+starting "dust.frame.generic" Unit with Text and Char types for messages 
+
+0307
+kernel type management, boot 
+test dump works
+
+0306
+Project structure set up, basic classes
+
+0305
+Restart reasons
+
+I have realized that I will generate codes (both Java and C/C#), at least on constant level
+to avoid String based field/channel identification. If I do that, why should I show that I
+don't "like" Java? The generated code, and the actual frontend logic code should (and can)
+be "normal" Java program, the difference should only be the access of the related data.
+
+This means that string name based access ("reader"), etc is something that I don't want to see
+in the end code. This is what I try to do now. 

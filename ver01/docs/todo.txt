@@ -1,0 +1,10 @@
+make the "stream" as data component, cover with console and file. 
+On input it should emit Char messages, support mark operations
+Output should accept Text messages and indentation commands
+
+
+I should integrate "process" into kernel, connect the Stream to the 
+test KernelDumper, and then remove the DustStream object from the API,
+have a correct dump using message communication.
+
+Then I might start the Eval and Template units.

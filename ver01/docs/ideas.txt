@@ -1,0 +1,52 @@
+I should have a properly typed access interface to the data, when requested from a logic.
+However, that instance must also hold the channels to the target object with the contexts.
+So, the actual data object can have multiple parallel access "proxy" objects containing the
+channel contexts, therefore the data may not be directly generated, perhaps I can keep the
+current generic, variant-based data.
+
+I will also need the field and type names. They must be contained in a TypeInfo structure,
+because even static final String arrays are not safe from modification. A proper type with 
+read only interface will do the job.
+
+REMEMBER: when generating codes, use the list of reserved words and modify the variable names
+accordingly in the generated codes! (this list differs for languages, so the exclusion can't 
+be done in the design phase)
+
+
+Hard to think in dust-way.
+The Stream must be the simplest component: if listened, it sends Chars to the response channel;
+it can also handle texts and end line commands. flush and close.
+The rest: marks and indentation should go to another aspects. But for fun, the initial dumper stream
+logic should implement all of them, and should be connected to them as logic as well.
+I should have an output stream and an input stream
+
+
+The DataWrapper must be the only interface to an internal data object. This is important because
+any modification operation (a "set" either from the current code or in a called logic) should result
+in cloning the actual entity, and update all the wrappers within the same environment. The only way to
+do so is to have registered wrappers to that data instance, and never let that data reference out from
+the wrapper. The wrapper also holds the call context of the actual data (channel local content) - but
+I am not that sure about this :-( 
+
+
+Found something.
+Now I see that the backtrack in the language parser is in fact NOT a trackback. That is parallel
+processing, a "fork" to the children to find the one that fits. The source events should be dispatched
+(perhaps with queuing and delaying) to all the children (perhaps simultaneously). The event source should 
+not know anything about that, it should just be a background, system level queue service.
+The same goes with the environment. The normal call should stay in the same Environment, but the switch
+should NOT:  
+
+This returns me to the calling mechanisms. Although for data access I have chosen a generated, full-Java
+solution, but this is WRONG for messages. When working with messages, the caller might want to use the
+same function with different approaches: sometimes wants to wait for the return, other cases it just
+fires the event and does not care about the result, or wants to listen to the response in another object.
+This can't be done with function calls on the caller side, but a generic message sending interface, where
+parameters show how it should be handled.
+For simple services that return a value? I think the response should have fields in the message sent.
+This allows passing the communication through the line to a remote service component without special
+coding.
+
+The other question is types referring to other types, and overloading their functions.
+The type declaration should contain information about such references. Multi-overloading is a possibility,
+type deployment MUST resolve the overload order!
