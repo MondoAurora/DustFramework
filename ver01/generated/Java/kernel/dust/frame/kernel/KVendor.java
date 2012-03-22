@@ -9,7 +9,7 @@ public class KVendor implements DustKernel, Consts {
 			"Vendor");
 	
 	public static TypeInfo INFO = new TypeInfo(ID, true, new FieldInfo[] { new FieldInfo("domains", VariantType.ARRAY,
-			KDomain.INFO), });
+			KDomain.INFO), }, null);
 
 	public static class Data extends DustKernel.DataWrapper implements IVendor {
 

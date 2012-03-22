@@ -34,18 +34,6 @@ public interface DustConsts {
 		boolean processResponse(DustObject target, Enum<?> msgId, DustObject msgOb, DustObject response);
 	}
 
-	enum Indent { inc, keep, dec };
-
-	public interface DustStream {	
-
-		interface Out extends DustStream {
-			void put(String str);
-			void endLine(Indent indent);		
-		}
-		
-	}
-
-
 	Return CONTINUE = new Return(ReturnType.Continue, null, true);
 	
 	Return SUCCESS_RETRY = new Return(ReturnType.Success, null, false);

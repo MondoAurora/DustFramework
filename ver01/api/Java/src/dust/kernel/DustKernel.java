@@ -290,14 +290,16 @@ public interface DustKernel extends DustConsts {
 		public final boolean referrable;
 		
 		private FieldInfo[] fields;
+		private DustIdentifier[] overrides;
 		
 		
-		public TypeInfo(DustIdentifier id, boolean referrable, FieldInfo[] fields) {
+		public TypeInfo(DustIdentifier id, boolean referrable, FieldInfo[] fields, DustIdentifier[] overrides) {
 			this.id = id;
 			
 			this.name = id.getName();
 			this.referrable = referrable;
 			this.fields = fields;
+			this.overrides = overrides;
 		}
 		
 		public Iterable<FieldInfo> getFields() {
@@ -312,5 +314,8 @@ public interface DustKernel extends DustConsts {
 			return fields[idx];
 		}
 		
+		public Iterable<DustIdentifier> getOverrides() {
+			return new DustUtils.ArrayIter<DustIdentifier>(overrides);
+		}		
 	}
 }

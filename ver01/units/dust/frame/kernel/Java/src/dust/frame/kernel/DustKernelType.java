@@ -21,6 +21,8 @@ public class DustKernelType extends DustLogic.Simple<IType> implements DustKerne
 
 	Map<String, DustKernelType> mapMessages = new TreeMap<String, DustKernelType>();
 
+	Set<DustIdentifier> setOverrides = new HashSet<DustIdentifier>();
+
 	public static DustKernelType getType(String id) {
 		if ( SEP_TYPE_START != id.charAt(0) ) {
 			int l = id.lastIndexOf(SEP_PATH_SEP);
@@ -52,6 +54,10 @@ public class DustKernelType extends DustLogic.Simple<IType> implements DustKerne
 
 		for (DustKernel.FieldInfo fi : ti.getFields()) {
 			addField(fi);
+		}
+
+		for (DustIdentifier id : ti.getOverrides()) {
+			setOverrides.add(id);
 		}
 	}
 	

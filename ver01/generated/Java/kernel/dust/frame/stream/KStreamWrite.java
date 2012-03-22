@@ -9,7 +9,7 @@ import dust.shared.DustObject;
 
 public interface KStreamWrite extends DustKernel, Consts {
 	public static final DustIdentifier ID = Environment.getTypeId(ID_VENDOR_ROOT, ID_DOMAIN_FRAME, ID_UNIT_STREAM, "StreamWrite");
-	public static TypeInfo INFO = new TypeInfo(ID, true, null);
+	public static TypeInfo INFO = new TypeInfo(ID, true, null, null);
 
 	public static class Data extends DustKernel.DataWrapper implements IStreamWrite {
 

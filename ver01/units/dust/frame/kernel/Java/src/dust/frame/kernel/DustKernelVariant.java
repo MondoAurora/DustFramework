@@ -4,6 +4,7 @@ import java.util.*;
 
 import dust.kernel.DustKernel;
 import dust.shared.DustRuntimeException;
+import dust.shared.DustUtils;
 
 public abstract class DustKernelVariant implements DustKernel.Variant, DustKernelConsts {
 	Object data;
@@ -14,6 +15,9 @@ public abstract class DustKernelVariant implements DustKernel.Variant, DustKerne
 		
 		Field(DustKernelField field) {
 			this.field = field;
+			if ( null != field.defValue ) {
+				setData(field.defValue, VariantSetMode.set, null);
+			}
 		}
 		
 		@Override
@@ -24,6 +28,11 @@ public abstract class DustKernelVariant implements DustKernel.Variant, DustKerne
 		@Override
 		public VariantType getType() {
 			return field.type;
+		}
+		
+		@Override
+		public boolean isNull() {
+			return super.isNull() || DustUtils.isEqual(field.defValue, data);
 		}
 	}
 

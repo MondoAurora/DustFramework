@@ -25,6 +25,12 @@ public class DustStreamIndenter extends DustLogic.Simple<IIndenter> implements S
 		@Override
 		public void send(Enum<?> msgId, DustObject msgOb, boolean wait, ResponseProcessor respProc) {
 		}
+		
+		@Override
+		public DustObject getNeighbor(DustIdentifier typeId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	};
 
 	@Override

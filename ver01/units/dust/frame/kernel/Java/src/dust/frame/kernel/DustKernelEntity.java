@@ -28,6 +28,8 @@ public class DustKernelEntity implements DustKernelConsts, DustKernel.Entity {
 	public void addAspect(DustKernelData aspect) {
 		mapAspects.put(aspect.type.getID(), aspect);
 		aspect.entity = this;
+		
+		initAspect(aspect);
 	}
 
 	synchronized DustKernelData addAspect(DustIdentifier id) {
@@ -41,14 +43,22 @@ public class DustKernelEntity implements DustKernelConsts, DustKernel.Entity {
 		return d;
 	}
 
-	public DustObject getAspect(DustIdentifier id) {
-		DustKernelData d = mapAspects.get(id);
-
-		if (null == d) {
-			d = addAspect(id);
-		}
+	public void initAspect(DustKernelData d) {
+		DustKernelData dOR;
 		
-		return ((DustKernelEnvironment)DustKernel.Environment.getEnv()).wrapData(d);
+		for ( DustIdentifier id : d.type.setOverrides ) {
+			dOR = getAspectI(id);
+			dOR.logicWrapper.overload = d.logicWrapper;
+		}
+	}
+
+	public DustObject getAspect(DustIdentifier id) {
+		return ((DustKernelEnvironment)DustKernel.Environment.getEnv()).wrapData(getAspectI(id));
+	}
+
+	DustKernelData getAspectI(DustIdentifier id) {
+		DustKernelData d = mapAspects.get(id);
+		return (null == d) ? addAspect(id) : d;
 	}
 
 	public Iterable<Map.Entry<DustIdentifier, DustKernelData>> getAspects() {

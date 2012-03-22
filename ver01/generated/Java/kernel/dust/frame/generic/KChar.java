@@ -6,7 +6,7 @@ public class KChar implements DustKernel, Consts {
 	public static final DustIdentifier ID = Environment.getTypeId(ID_VENDOR_ROOT, ID_DOMAIN_FRAME, ID_UNIT_GENERIC,
 			"Char");
 	public static TypeInfo INFO = new TypeInfo(ID, true, new FieldInfo[] { new FieldInfo("name", VariantType.STRING,
-			LEN_LONG), });
+			LEN_LONG), }, null);
 
 	public static class Data extends DustKernel.DataWrapper implements IChar {
 		@Override

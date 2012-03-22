@@ -49,8 +49,8 @@ public class DustKernelBoot implements DustKernelConsts {
 		regType(uKernel, new DustKernelType(KStreamWrite.INFO), env);
 		regType(uKernel, new DustKernelType(KIndenter.INFO), env);
 		
-//		e = env.registerEntity(env.getIdI("[dust.frame.stream.StreamWrite]:dump"));
-//		e.addAspect(KIndenter.ID);		
+		e = env.registerEntity(env.getIdI("[dust.frame.stream.StreamWrite]:dump"));
+		e.addAspect(KIndenter.ID);		
 	}
 
 	static void regType(IUnit unit, DustKernelType t, DustKernelEnvironment env) {

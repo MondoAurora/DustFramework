@@ -15,7 +15,7 @@ public class DustTest implements DustConsts {
 	public static void test(String[] args) {
 		System.out.println("Here I am!");
 
-		testDump();
+//		testDump();
 
 		// testJSONExport();
 
@@ -32,13 +32,11 @@ public class DustTest implements DustConsts {
 		DustIdentifier id = DustKernel.Environment.getId("[dust.frame.kernel.Vendor]:dust");
 		return DustKernel.Environment.getInstance(id);
 	}
-
-	static void testDump() {
+	
+	static void testDump(DustTestKernelDumper d) {
 		DustObject conn = getAnObject();
 
-		DustStream.Out out = new DustTestStreamOut();
-
-		DustTestKernelDumper d = new DustTestKernelDumper(out);
+//		DustStream.Out out = new DustTestStreamOut();
 
 		d.dumpObject(conn);
 		System.out.println("\n------------");
@@ -48,7 +46,7 @@ public class DustTest implements DustConsts {
 	static void testDumpEntity() {
 		DustIdentifier id = DustKernel.Environment.getId("[dust.frame.stream.StreamWrite]:dump");
 		IStreamWrite dump = (IStreamWrite) DustKernel.Environment.getInstance(id);
-
+		
 		IText txt = new IText() {
 
 			@Override
@@ -66,9 +64,17 @@ public class DustTest implements DustConsts {
 				// TODO Auto-generated method stub
 				
 			}
+			
+			@Override
+			public DustObject getNeighbor(DustIdentifier typeId) {
+				// TODO Auto-generated method stub
+				return null;
+			}
 		};
 
 		dump.send(IStreamWrite.Messages.write, txt, true, null);
 		dump.send(IStreamWrite.Messages.endLine, null, true, null);
+		
+		testDump(new DustTestKernelDumper(id));
 	}
 }

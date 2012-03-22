@@ -12,7 +12,7 @@ public class KField implements DustKernel, Consts {
 	public static TypeInfo INFO = new TypeInfo(ID, false, new FieldInfo[] {
 			new FieldInfo("type", EnumSet.allOf(VariantType.class)), new FieldInfo("length", VariantType.INTEGER),
 			new FieldInfo("obType", VariantType.STRING, LEN_LONG), new FieldInfo("values", VariantType.STRING, LEN_LONG),
-			new FieldInfo("defValue", VariantType.STRING, LEN_LONG), });
+			new FieldInfo("defValue", VariantType.STRING, LEN_LONG), }, null);
 
 	public static class Data extends DustKernel.DataWrapper implements IField {
 		@Override

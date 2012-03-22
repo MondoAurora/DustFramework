@@ -8,7 +8,7 @@ public class KUnit implements DustKernel, Consts {
 	public static final DustIdentifier ID = Environment
 			.getTypeId(ID_VENDOR_ROOT, ID_DOMAIN_FRAME, ID_UNIT_KERNEL, "Unit");
 	public static TypeInfo INFO = new TypeInfo(ID, true, new FieldInfo[] { new FieldInfo("types", VariantType.ARRAY,
-			KType.INFO), });
+			KType.INFO), }, null);
 
 	public static class Data extends DustKernel.DataWrapper implements IUnit {
 

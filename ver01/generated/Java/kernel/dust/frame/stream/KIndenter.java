@@ -10,7 +10,7 @@ public interface KIndenter extends DustKernel, Consts {
 	public static final DustIdentifier ID = Environment.getTypeId(ID_VENDOR_ROOT, ID_DOMAIN_FRAME, ID_UNIT_STREAM,
 			"Indenter");
 	public static TypeInfo INFO = new TypeInfo(ID, false, new FieldInfo[] { new FieldInfo("indentLead",
-			VariantType.STRING, "  "), });
+			VariantType.STRING, "  "), }, new DustIdentifier[]{KStreamWrite.ID});
 
 	public static class Data extends DustKernel.DataWrapper implements IIndenter {
 		@Override

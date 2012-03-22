@@ -2,58 +2,134 @@ package dust.frame.kernel;
 
 import java.util.*;
 
+import dust.frame.generic.IText;
+import dust.frame.stream.*;
 import dust.kernel.DustKernel;
-import dust.shared.DustConsts;
-import dust.shared.DustObject;
+import dust.shared.*;
 
 public class DustTestKernelDumper implements DustConsts {
 	Set<DustKernelEntity> setEntities = new HashSet<DustKernelEntity>();
-	DustStream.Out target;
+	IIndenter indenter;
+	IStreamWrite target;
 
-	public DustTestKernelDumper(DustStream.Out target) {
-		this.target = target;
+	String msg;
+	IText txt = new IText() {
+		@Override
+		public void send(Enum<?> msgId, DustObject msgOb, boolean wait, ResponseProcessor respProc) {
+		}
+
+		@Override
+		public DustObject getNeighbor(DustIdentifier typeId) {
+			return null;
+		}
+
+		@Override
+		public void setText(String text) {
+		}
+
+		@Override
+		public String getText() {
+			return msg;
+		}
+	};
+
+	IIndent.IndentMode im;
+	int el;
+	IIndent ii = new IIndent() {
+
+		@Override
+		public void send(Enum<?> msgId, DustObject msgOb, boolean wait, ResponseProcessor respProc) {
+		}
+
+		@Override
+		public DustObject getNeighbor(DustIdentifier typeId) {
+			return null;
+		}
+
+		@Override
+		public void setIndentMode(IndentMode indentMode) {
+		}
+
+		@Override
+		public void setEmptyLines(int emptyLines) {
+		}
+
+		@Override
+		public IndentMode getIndentMode() {
+			return im;
+		}
+
+		@Override
+		public int getEmptyLines() {
+			return el;
+		}
+	};
+
+	void write(String msg) {
+		this.msg = msg;
+		DustUtils.send(target, IStreamWrite.Messages.write, txt);
 	}
-		
+
+	void endLine(IIndent.IndentMode im) {
+		endLine(im, 0);
+	}
+
+	void endLine(IIndent.IndentMode im, int el) {
+		if (null != ii) {
+			this.im = im;
+			this.el = el;
+
+			DustUtils.send(indenter, IIndenter.Messages.endLine, ii);
+		} else {
+			DustUtils.send(target, IStreamWrite.Messages.endLine);
+		}
+	}
+
+	public DustTestKernelDumper(DustIdentifier id) {
+		target = (IStreamWrite) DustKernel.Environment.getInstance(id);
+		indenter = (IIndenter) target.getNeighbor(KIndenter.ID);
+	}
+
 	public void dumpObject(DustObject ob) {
-		dumpEntity(((DustKernel.DataWrapper)ob).getEntity());
+		dumpEntity(((DustKernel.DataWrapper) ob).getEntity());
 	}
 
 	public void dumpEntity(DustKernel.Entity entity) {
 		DustKernelEntity e = (DustKernelEntity) entity;
-		target.put("{ \"!ref\" : \"");
-		target.put(e.id.asReference());
-		target.put("\" ");
+		write("{ \"!ref\" : \"");
+		write(e.id.asReference());
+		write("\" ");
 
-		if ( !setEntities.contains(e) ) {
+		if (!setEntities.contains(e)) {
 			setEntities.add(e);
-			
+
 			boolean add = false;
 
 			for (Map.Entry<DustIdentifier, DustKernelData> eData : e.mapAspects.entrySet()) {
-				target.put(",");
-				if ( add ) {
-					target.endLine(Indent.keep);
+				write(",");
+				if (add) {
+					endLine(IIndent.IndentMode.keep);
 				} else {
-					target.endLine(Indent.inc);
+					endLine(IIndent.IndentMode.inc);
 					add = true;
 				}
-				
-				target.put("\"");
-				target.put(eData.getKey().asReference());
-				target.put("\" : ");
+
+				write("\"");
+				write(eData.getKey().asReference());
+				write("\" : ");
 				dumpData(eData.getValue());
 			}
-			
-			target.endLine(Indent.dec);
-		
-		}
-		target.put("}");
-	}
-	
-	void dumpData(DustKernelData data) {
-		target.put("{");
 
-		target.endLine(Indent.inc);
+			endLine(IIndent.IndentMode.dec);
+
+		}
+		write("}");
+	}
+
+	void dumpData(DustKernelData data) {
+		write("{");
+
+		endLine(IIndent.IndentMode.inc);
 
 		boolean add = false;
 
@@ -62,53 +138,53 @@ public class DustTestKernelDumper implements DustConsts {
 
 			if ((null != o) && !o.isNull()) {
 				if (add) {
-					target.put(",");
-					target.endLine(Indent.keep);
+					write(",");
+					endLine(IIndent.IndentMode.keep);
 				} else {
 					add = true;
 				}
-				
+
 				dumpVariant(o);
 			}
 		}
 
-		target.endLine(Indent.dec);
+		endLine(IIndent.IndentMode.dec);
 
-		target.put("}");
+		write("}");
 	}
 
 	void dumpVariant(DustKernel.Variant var) {
-		target.put("\"");
-		target.put(var.getName());
-		target.put("\" : ");
+		write("\"");
+		write(var.getName());
+		write("\" : ");
 
 		switch (var.getType()) {
 		case REFERENCE:
-			dumpEntity(((DustKernel.DataWrapper)var.getData()).getEntity());
+			dumpEntity(((DustKernel.DataWrapper) var.getData()).getEntity());
 			break;
 		case ARRAY:
 		case SET:
-			target.put("[");
-			target.endLine(Indent.inc);
-			
+			write("[");
+			endLine(IIndent.IndentMode.inc);
+
 			boolean add = false;
-			
+
 			for (DustKernel.Variant var1 : var.getMembers()) {
-				if ( add ) {
-					target.put(",");
-					target.endLine(Indent.keep);
+				if (add) {
+					write(",");
+					endLine(IIndent.IndentMode.keep);
 				} else {
 					add = true;
 				}
-				dumpEntity(((DustKernel.DataWrapper)var1.getData()).getEntity());
+				dumpEntity(((DustKernel.DataWrapper) var1.getData()).getEntity());
 			}
-			target.endLine(Indent.dec);
-			target.put("]");
+			endLine(IIndent.IndentMode.dec);
+			write("]");
 			break;
 		default:
-			target.put("\"");
-			target.put(var.getData().toString());
-			target.put("\"");
+			write("\"");
+			write(var.getData().toString());
+			write("\"");
 		}
 	}
 }

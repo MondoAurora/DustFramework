@@ -8,7 +8,7 @@ public class KDomain implements DustKernel, Consts {
 	public static final DustIdentifier ID = Environment.getTypeId(ID_VENDOR_ROOT, ID_DOMAIN_FRAME, ID_UNIT_KERNEL,
 			"Domain");
 	public static TypeInfo INFO = new TypeInfo(ID, true, new FieldInfo[] { new FieldInfo("units", VariantType.ARRAY,
-			KUnit.INFO), });
+			KUnit.INFO), }, null);
 
 	public static class Data extends DustKernel.DataWrapper implements IDomain {
 		@Override
