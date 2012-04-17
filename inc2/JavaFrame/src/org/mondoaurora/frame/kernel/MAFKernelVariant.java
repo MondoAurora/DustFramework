@@ -5,25 +5,25 @@ import java.util.*;
 import org.mondoaurora.frame.shared.*;
 
 public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
-	
+
 	public static class Aspect extends MAFKernelVariant {
 		MAFKernelField fld;
 
 		public Aspect(MAFKernelField fld) {
 			this.fld = fld;
 		}
-		
+
 		@Override
 		public String getKey() {
 			return fld.name;
 		}
-		
+
 		@Override
 		public FieldType getType() {
 			return fld.type;
 		}
 	}
-	
+
 	public static class External extends MAFKernelVariant {
 		FieldType type;
 		String key;
@@ -50,10 +50,8 @@ public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 		};
 
 	}
-	
-	
-	Object data;
 
+	Object data;
 
 	public abstract FieldType getType();
 
@@ -78,7 +76,7 @@ public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return (null == data) ? "" : data.toString();
@@ -122,11 +120,11 @@ public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 		Object val = getDataAssertType(FieldType.REFERENCE);
 		return (null == val) ? null : new MAFKernelConnector((MAFKernelAspect) val, fields);
 	}
-	
+
 	@Override
 	public void getReference(MAFConnector conn) {
 		MAFKernelAspect asp = (MAFKernelAspect) getDataAssertType(FieldType.REFERENCE);
-		((MAFKernelConnector)conn).data = asp;
+		((MAFKernelConnector) conn).data = asp;
 	}
 
 	@Override
@@ -137,6 +135,10 @@ public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Iterable<? extends MAFVariant> getMembers() {
+		if (null == data) {
+			initColl();
+		}
+
 		switch (getType()) {
 		case SET:
 		case ARRAY:
@@ -208,18 +210,18 @@ public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 	@SuppressWarnings("unchecked")
 	public void setData(Object value, VariantSetMode mode, String key) {
 		FieldType type = getType();
-		
+
 		switch (type) {
 		case SET:
 			if (null == data) {
-				data = new HashSet<MAFKernelVariant>();
+				initColl();
 			}
 			((Set<MAFKernelVariant>) data).add(new MAFKernelVariant.External(FieldType.REFERENCE, value));
 
 			break;
 		case ARRAY:
 			if (null == data) {
-				data = new ArrayList<MAFKernelVariant>();
+				initColl();
 			}
 			((ArrayList<MAFKernelVariant>) data).add(new MAFKernelVariant.External(FieldType.REFERENCE, value));
 
@@ -231,22 +233,37 @@ public abstract class MAFKernelVariant implements MAFVariant, MAFKernelConsts {
 			this.data = value;
 		}
 	}
-	
+
+	void initColl() {
+		if (null == data) {
+			FieldType type = getType();
+
+			switch (type) {
+			case SET:
+				data = new HashSet<MAFKernelVariant>();
+				break;
+			case ARRAY:
+				data = new ArrayList<MAFKernelVariant>();
+				break;
+			}
+		}
+	}
+
 	void dump(MAFKernelDumper target) {
 		switch (getType()) {
 		case REFERENCE:
-			target.dumpEntity(((MAFKernelAspect)data).entity);
+			target.dumpEntity(((MAFKernelAspect) data).entity);
 			break;
 		case ARRAY:
 		case SET:
 			Iterable<? extends MAFVariant> val = getMembers();
 			target.put("[");
 			target.endLine(MAFStream.Indent.inc);
-			
+
 			boolean add = false;
-			
+
 			for (MAFVariant var : val) {
-				if ( add ) {
+				if (add) {
 					target.put(",");
 					target.endLine(MAFStream.Indent.keep);
 				} else {

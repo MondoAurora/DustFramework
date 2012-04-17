@@ -17,7 +17,8 @@ public interface MAFKernelConsts {
 
 	char SEP_VALSET = '|';
 
-	String ID_VENDOR_ROOT = "mondoaurora";
+	String ID_VENDOR_ROOT = "dust";
+//	String ID_VENDOR_ROOT = "mondoaurora";
 	String ID_DOMAIN_FRAME = "frame";
 	String ID_UNIT_KERNEL = "kernel";
 	

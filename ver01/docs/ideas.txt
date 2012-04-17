@@ -50,3 +50,7 @@ coding.
 The other question is types referring to other types, and overloading their functions.
 The type declaration should contain information about such references. Multi-overloading is a possibility,
 type deployment MUST resolve the overload order!
+
+
+
+Message sending to the entity level instead of the DustObject?

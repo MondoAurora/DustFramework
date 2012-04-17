@@ -26,7 +26,8 @@ public class MAFTest {
 	}
 
 	static MAFKernelConnector getAnObject() {
-		MAFIdentifier id = MAFEnvironment.getId("[mondoaurora.frame.kernel.Vendor]:mondoaurora");
+		MAFIdentifier id = MAFEnvironment.getId("[dust.frame.kernel.Vendor]:dust");
+//		MAFIdentifier id = MAFEnvironment.getId("[mondoaurora.frame.kernel.Vendor]:mondoaurora");
 		return (MAFKernelConnector) MAFEnvironment.getInstance(id, MAFKernelVendor.FIELDS);
 	}
 
@@ -53,7 +54,9 @@ public class MAFTest {
 	}
 
 	static void testJSONImport() {
-		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.ext.txt");
+		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.dust.pts3.txt");
+//		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.dust.txt");
+//		MAFProcessEventSource src = new MAFTestEventSourceFile("temp/json.template.ext.txt");
 		MAFToolsJsonRelay jr = new MAFToolsJsonRelay();
 
 		MAFConnector conn = jr.read(src).getConnector();
