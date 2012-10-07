@@ -1,0 +1,3 @@
+# Ignore Eclipse workspace - so anyone can create a local Eclipse workspace
+# inside this directory
+.metadata

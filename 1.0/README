@@ -1,0 +1,8 @@
+2012.10.07 Although as I write now, this is just an empty directory, but I believe this will contain the first usable version of Dust Framework.
+
+<other messages will come here later>
+
+Directories
+ - playground: for experimenting with new ideas
+ - obsolete: to keep purged ideas
+ - x_ide: to store folders for different IDEs and related settings. For me and now, this is Eclipse, and the .metadata added to .gitignore
