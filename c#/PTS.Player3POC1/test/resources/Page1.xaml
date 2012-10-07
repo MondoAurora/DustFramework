@@ -1,0 +1,191 @@
+<Page 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Grid>  
+  <Canvas Grid.Row="1">
+
+<Menu Canvas.Top="40" Canvas.Left="18" Width="600">
+  <MenuItem Header="Top One">
+    <MenuItem Header="Sub One" InputGestureText="Ctrl+L" />
+    <MenuItem Header="Sub Two (With an Icon)" InputGestureText="Ctrl+A">
+      <MenuItem.Icon>
+        <Ellipse Width="16" Height="16" Fill="LightBlue" />
+      </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Sub Three" />
+    <Separator />
+    <MenuItem Header="Sub Four">
+      <MenuItem Header="Sub One" />
+      <MenuItem Header="Sub Two" />
+      <MenuItem Header="Sub Three" />
+    </MenuItem>
+    <MenuItem Header="Sub Five" />
+  </MenuItem>
+  <MenuItem Header="Top Two">
+    <MenuItem Header="Sub One" />
+    <MenuItem Header="Sub Tow (Checkable)" IsCheckable="True" />
+    <MenuItem Header="Sub Three" />
+    <Separator />
+    <MenuItem Header="Sub Four">
+      <MenuItem Header="Sub One" />
+      <MenuItem Header="Sub Two" />
+      <MenuItem Header="Sub Three" />
+    </MenuItem>
+    <MenuItem Header="Sub Five" />
+  </MenuItem>
+  <MenuItem Header="Top Three" >
+    <MenuItem Header="Sub One" />
+    <MenuItem Header="Sub Two" />
+    <MenuItem Header="Sub Three" />
+    <Separator />
+    <MenuItem Header="Sub Five" />
+  </MenuItem>
+</Menu>
+
+
+<StackPanel Canvas.Top="95" Canvas.Left="10" >
+  <Button Margin="8" IsDefault="True">Default</Button>
+  <Button Margin="8">Normal</Button>
+</StackPanel>
+
+<StackPanel Canvas.Top="95" Canvas.Left="120">
+  <CheckBox Margin="8">Normal</CheckBox>
+  <CheckBox Margin="8" IsChecked="true">Checked</CheckBox>
+  <CheckBox Margin="8" IsThreeState="true" IsChecked="{x:Null}">Indeterminate</CheckBox>
+</StackPanel>
+
+<StackPanel Canvas.Top="95" Canvas.Left="230">
+  <RadioButton Margin="8">Normal</RadioButton>
+  <RadioButton Margin="8" IsChecked="true">Checked</RadioButton>
+  <RadioButton Margin="8">Normal</RadioButton>
+</StackPanel>
+
+<StackPanel Canvas.Top="95" Canvas.Left="330">
+  <TextBox Width="120" Margin="8" Text="Edit Me" />
+  <PasswordBox Width="120" Margin="8" Password="Password" />
+</StackPanel>
+
+
+<StackPanel Canvas.Top="95" Canvas.Left="490" >
+  <ComboBox Margin="8" Width="120">
+    <ComboBoxItem Content="First Normal Item" />
+    <ComboBoxItem Content="Second Normal Item" />
+    <ComboBoxItem Content="Third Normal Item" />
+    <ComboBoxItem Content="Fourth Normal Item" />
+    <ComboBoxItem Content="Fifth Normal Item" />
+  </ComboBox>
+  <ComboBox Margin="8" Width="120" IsEditable="True" Text="Edit Me">
+    <ComboBoxItem Content="First Normal Item" />
+    <ComboBoxItem Content="Second Normal Item" />
+    <ComboBoxItem Content="Third Normal Item" />
+    <ComboBoxItem Content="Fourth Normal Item" />
+    <ComboBoxItem Content="Fifth Normal Item" />
+  </ComboBox>
+</StackPanel>
+
+
+
+<ListBox Canvas.Top="230" Canvas.Left="18" SelectionMode="Extended" Width="140"  Height="150">
+  <ListBoxItem Content="First Normal Item" />
+  <ListBoxItem Content="Second Normal Item" />
+  <ListBoxItem Content="Third Normal Item" />
+  <ListBoxItem Content="Fourth Normal Item" />
+  <ListBoxItem Content="Fifth Normal Item" />
+  <ListBoxItem Content="Sixth Normal Item" />
+  <ListBoxItem Content="Seventh Normal Item" />
+  <ListBoxItem Content="Eightth Normal Item" />
+</ListBox>
+
+
+<TreeView Canvas.Top="230" Canvas.Left="198" Width="150" Height="150">
+  <TreeViewItem Header="Top One">
+    <TreeViewItem Header="Sub One" />
+    <TreeViewItem Header="Sub Two (Longer than Normal)" />
+    <TreeViewItem Header="Sub Three" />
+    <TreeViewItem Header="Sub Four">
+      <TreeViewItem Header="Sub One" />
+      <TreeViewItem Header="Sub Two" />
+      <TreeViewItem Header="Sub Three" />
+    </TreeViewItem>
+    <TreeViewItem Header="Sub Five" />
+  </TreeViewItem>
+  <TreeViewItem Header="Top Two">
+    <TreeViewItem Header="Sub One" />
+    <TreeViewItem Header="Checkable" />
+    <TreeViewItem Header="Sub Three" />
+    <TreeViewItem Header="Sub Four">
+      <TreeViewItem Header="Sub One" />
+      <TreeViewItem Header="Sub Two" />
+      <TreeViewItem Header="Sub Three" />
+    </TreeViewItem>
+    <TreeViewItem Header="Sub Five" />
+  </TreeViewItem>
+  <TreeViewItem Header="Top Three" >
+    <TreeViewItem Header="Sub One" />
+    <TreeViewItem Header="Sub Two" />
+    <TreeViewItem Header="Sub Three" />
+    <TreeViewItem Header="Sub Five" />
+  </TreeViewItem>
+</TreeView>
+
+<TabControl Canvas.Top="230" Canvas.Left="392" Height="150" Width="225">
+  <TabItem Header="One" />
+  <TabItem Header="Two" />
+  <TabItem Header="Three" />
+  <TabItem Header="Four" />
+</TabControl>
+
+
+<GroupBox Canvas.Top="430" Canvas.Left="18"  Header="GroupBox Header" Width="140" >
+  <Border Height="50" />
+</GroupBox>
+
+<Expander  Canvas.Top="524" Canvas.Left="18" Width="140" Header="Expander Header">
+  <Border Height="100" />
+</Expander>
+
+<ProgressBar Canvas.Top="430" Canvas.Left="198" Width="200" HorizontalAlignment="Center" Value="20" />
+
+<Border Canvas.Top="465" Canvas.Left="220" Padding="17,0,17,0" Background="#EEE" Width="150" Height="50"  CornerRadius="2">
+  <Border.ToolTip>
+    This is a test tooltip!  Woohoo!
+  </Border.ToolTip>
+  <Border.ContextMenu>
+    <ContextMenu>
+      <MenuItem Header="Sub One" InputGestureText="Ctrl+L" />
+      <MenuItem Header="Sub Two (With an Icon)" InputGestureText="Ctrl+A">
+        <MenuItem.Icon>
+          <Ellipse Width="16" Height="16" Fill="LightBlue" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <MenuItem Header="Sub Three" />
+      <Separator />
+      <MenuItem Header="Sub Four">
+        <MenuItem Header="Sub One" />
+        <MenuItem Header="Sub Two" />
+        <MenuItem Header="Sub Three" />
+      </MenuItem>
+      <MenuItem Header="Sub Five" />
+    </ContextMenu>
+  </Border.ContextMenu>
+  <TextBlock TextWrapping="Wrap" TextAlignment="Center" Foreground="#AAA" VerticalAlignment="Center" HorizontalAlignment="Center">(Hover Over Me or Right Click Me)</TextBlock>
+</Border>
+
+<StackPanel Orientation="Horizontal" Canvas.Top="422" Canvas.Left="430">
+  <StackPanel>
+    <Slider Margin="8" Orientation="Horizontal" />
+    <Slider Margin="8" Orientation="Horizontal" TickPlacement="TopLeft" />
+  </StackPanel>
+  <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+    <Slider Margin="8" Orientation="Vertical" />
+    <Slider Margin="8" Orientation="Vertical" TickPlacement="TopLeft" />
+  </StackPanel>
+</StackPanel>
+
+
+
+</Canvas>
+
+  </Grid>
+</Page>

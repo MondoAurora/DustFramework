@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8107F02D-8925-4010-AD0D-50D7675E21C3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dust.Gui</RootNamespace>
+    <AssemblyName>Dust.Gui</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GuiFactory.cs" />
+    <Compile Include="GuiXaml.cs" />
+    <Compile Include="GuiMarquee.cs" />
+    <Compile Include="GuiClock.cs" />
+    <Compile Include="GuiText.cs" />
+    <Compile Include="GuiComponent.cs" />
+    <Compile Include="GuiFlip.cs" />
+    <Compile Include="GuiTable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DustPOCCore\Dust.Core.csproj">
+      <Project>{3F2E5355-9E23-4888-8C20-2585C0FE8B25}</Project>
+      <Name>Dust.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DustPOCTools\Dust.Tools.csproj">
+      <Project>{EB315FC8-DF99-4734-A00C-0CB25415B80E}</Project>
+      <Name>Dust.Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PTS.Player3POC1.Gen.Impl\PTS.Player3POC1.Gen.Impl.csproj">
+      <Project>{73E98F02-8110-41EE-981D-5526ACCEC8F5}</Project>
+      <Name>PTS.Player3POC1.Gen.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PTS.Player3POC1.Gen.Api\PTS.Player3POC1.Gen.API.csproj">
+      <Project>{5A59A83D-5371-4152-A24B-C5E98B7840CF}</Project>
+      <Name>PTS.Player3POC1.Gen.API</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

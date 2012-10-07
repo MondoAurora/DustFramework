@@ -1,0 +1,39 @@
+﻿
+Application
+ - Scheduler
+	- Task list
+	- Task Sorter
+ - EventQueue
+ - currentProgram
+ - Programs
+
+Program
+ - Main Screen (with local components for the whole GUI component tree)
+ - SharedScreens: Clock, RollingText
+ - EventHandlers
+	- InteractiveTimeout (sends a setSelected message to the MainScreen after 10 seconds, activated by the )
+	- InteractionHandler (receives ALL interacted messages, sends a Reset message to the InteractiveTimeout)
+ - AdThumbs (list of pictures)
+ - AdPages (list of HTML refs, linked to the Thumbs)
+
+-----
+
+todo 
+ + mediaactivatedaction - get the referred element
+ + ActionList: switch to the interactive mode AND set the target HTML
+
+ - Scheduler
+	- ListSorter
+	- use sorter and actions in the scheduler
+ + MediaRoller: selectNext command in a scheduled task
+ + On AdPanel VisChg, send list add/remove commands to the Scheduler for the MediaRoller
+
+ + InteractiveTimeout scheduled command to send flipDefault
+ + Interacted event handler to send Reset message to the InteractiveTimeout
+
+ - localinfo to display XAML panel on Interactive area instead of flip
+
+ - External assembly manager - the lazy json loader will not work without that
+
+ - Marquee
+ - reflection based parameter processing - pass parameters during the execution (perhaps will not need for the mediaActivation)
