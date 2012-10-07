@@ -1,0 +1,20 @@
+LogMon
+
+We have created a SpamCatcher system for Hungarian Telekom. They have used quite old Sun mail servers at that time. They were stable and fast, but we had to monitor the mail flow on the fly to filter out and block spamming activities. Based on other iCode systems, I have implemented a framework that could connect to one or more Sun mail server logs, and after parsing the historical content, it could continue listening to them in parallel way (and survive log rotation). The incomint lines were parsed into messages and sent to a collector.
+
+The collector was actually a data cube implementation that aggregated several event attributes. This was important because of the performance: the complex "is spammer" check could be executed in a scheduled fashion, while data collection into the cube was fast enough for the needs. The same way, the obsolete information could be dropped as a "slice" from the cube at the end of the test, with minimal effort.
+
+SpamCatcher was an official, sold service, its sources are closed of course, but we have extracted the knowledge and created a configurable log monitor service based on them. I have added a few tricks here. I have found that finding something is just another event that the checker should broadcast; a notifier component is responsible for formatting and transferring it into outgoing channels. In LogMon, the user preferences contain the required language and notification channels (SMS, email); the event declaration adds the templates for each channel and language. Therefore, the same event is sent automatically in multiple ways, language and with different text to the listeners, according to their preferences.
+
+Some components that might worth taking a look at
+
+generic / shell: IO interface for external components with in and out streams. Ugly a bit, but allows similar connection to the user console, remote SSH, COM, etc. Used in SpamCatcher when I went over the network to application servers, checked some logs and issued some commands there. Reused later when I had to communicate with Telegesis hardware through COM, tested both sides: simulated the responses by typing them thsough the console, and opening shell to the gadget.
+
+generic / db, ldap: persistent connectors
+
+LogMon / datacube: a simple OLAP datacube implementation (enugh for the needs)
+
+WARNING
+This is a historical experiment with very complicated internal structure, this is why I abandoned it a long time ago. 
+
+Reusing or continuing it is not recommended.
