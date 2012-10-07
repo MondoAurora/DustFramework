@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="WINDOWS-1250" standalone="no"?>
+<jardesc>
+    <jar path="D:/iCode-products/generic/icodegen.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/iCodeGen/icodegen.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="false" mainClassHandleIdentifier="=iCodeGen/src&lt;com.icode.generic.remotectrl{ICRemoteCtrlConsole.java[ICRemoteCtrlConsole" manifestLocation="/iCodeGen/MANIFEST.MF" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.log{ICLogMessage.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.event{ICEventDefault.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.event{ICEventSourceStream.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.task{ICTaskStreamReader.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{MtxUtilPassCreator.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.shell{ICShellConsole.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.shell{ICShellOS.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.shell{ICShell.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenConfigurationTree.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.file{ICFileQueue.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.notifier{ICNotifChannelFileQueue.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.remotectrl{ICRemoteCtrlConsole.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenResource.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.notifier{ICNotifChannel.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.base{ICGenConstants.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.log{ICLogSender.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.app{ICAppMain.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.remotectrl{ICRemoteCtrlShellProcessor.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.shell{ICShellCmdProcTrap.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.remotectrl{ICRemoteCtrlSrvSocket.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.log{ICLogChannelConsole.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.servlet{ICServlet.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenConfigurable.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.ldap{ICGenLDAP.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.notifier{ICNotifChannelEmail.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.shell{ICShellSocket.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.task{ICTask.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.base{ICGenObjectDefDefault.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.shell{ICShellSSH.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.task{ICTaskConstants.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenCommand.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.servlet{ICServletFrame.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.file{ICFileIdentifier.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.base{ICGenUtilsBase.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenUtils.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.test{TestSSH.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.notifier{ICNotifChannelSms.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.log{ICLogger.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.notifier{ICNotification.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.log{ICLogChannel.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.shell{ICShellCmdProcessor.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.app{ICAppFrame.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenStringProvider.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.app{ICAppCommand.java"/>
+        <file path="/iCodeGen/src/remoteconsole.properties"/>
+        <file path="/iCodeGen/src/com/icode/generic/app/icgen.properties"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.event{ICEventCyclicBuffer.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.base{ICGenObject.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenObjectDefault.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenDataManageable.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.base{ICGenURLUTF8Encoder.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.event{ICEventDirReader.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.event{ICEvent.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.task{ICTaskTimed.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.task{ICTaskManager.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic{ICGenLineProcessor.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.file{ICFileDirReader.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.notifier{ICNotifDispatcher.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.file{ICFileReader.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.notifier{ICNotifiable.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.base{ICGenTreeNode.java"/>
+        <javaElement handleIdentifier="=iCodeGen/src&lt;com.icode.generic.servlet{ServletHelper.java"/>
+    </selectedElements>
+</jardesc>

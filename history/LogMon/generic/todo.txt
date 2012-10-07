@@ -1,0 +1,25 @@
+What to do with iCodeGen?
+
+Basic objects: 
+ - ICGenObject handlers
+ 
+ ICGenCommand: to remove, the command should be an object - tree???
+
+ICGenObject declaration
+ - 
+
+Context
+ - separate context from application
+ 
+
+
+DataManageable
+ - loadConfig
+ - saveConfig?
+ 
+ - loadState
+ - saveState
+ 
+ - processCommand
+ 
+ - processData

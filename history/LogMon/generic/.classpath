@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/iCodeGenJars/comm/javacomm/comm.jar"/>
+	<classpathentry kind="lib" path="/iCodeGenJars/mail/activation.jar"/>
+	<classpathentry kind="lib" path="/iCodeGenJars/mail/mail.jar"/>
+	<classpathentry kind="lib" path="/iCodeGenJars/mySQL/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="/iCodeGenJars/skype/skype_win32.jar"/>
+	<classpathentry kind="lib" path="/iCodeGenJars/ssh/ganymed-ssh2-build210.jar"/>
+	<classpathentry kind="lib" path="/iCodeGenJars/j2ee/SunAppSrv8/j2ee.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

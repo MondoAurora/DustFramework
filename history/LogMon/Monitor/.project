@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>iCodeLogMonitor</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>gsmmodem</name>
+			<type>2</type>
+			<location>D:/iCode-svn/WMES.ServiceMonitor/src/com/matrix/westel/servicemonitor/gsmmodem</location>
+		</link>
+		<link>
+			<name>smsQueue</name>
+			<type>2</type>
+			<location>D:/Temp/spamcatcher/notifqueue/real</location>
+		</link>
+	</linkedResources>
+</projectDescription>

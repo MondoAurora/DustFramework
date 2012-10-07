@@ -1,0 +1,62 @@
+2010.01.12 03:01:09.08||online@mail.westel900.net||J|0|smtpgw2|189.62.175.67|null
+2010.01.12 03:08:18.76|mail-EMID0AA02980CLK0159A3011VG901VMDJPE@GreenCard.usagc.org|molnarka@t-email.hu|E|11|smtpgw2|84.2.40.73|null
+2010.01.12 03:08:20.58|stretchedg12@shinozawa-ss.com||J|0|smtpgw2|61.161.120.254|null
+
+HashMap
+D:\Temp\spamcatcher\log\imta2\mail.log.20100113 finished reading 883578 lines.
+Run time: 58343 msec
+
+60s time slot TreeMap + dump
+D:\Temp\spamcatcher\log\imta2\mail.log.20100113 finished reading 883578 lines.
+Run time: 57797 msec
+Dump time: 109 msec
+
+Searching res 10000 times took 485 msecs.
+Searching res 100000 times took 140 msecs.
+Searching res 1000000 times took 1266 msecs.
+Searching res 1000000 times took 1265 msecs.
+Searching res 10000000 times took 12687 msecs.
+
+Run time: 53969 msec
+Dump time: 78 msec
+Dump time: 47 msec
+
+
+to talk:
+ - mûködtetés, indítás simán egy tcp stream-re? állapotmentés, visszaolvasás
+ - adatmentés? kocka a collector / agent oldalán
+ - agent státusz mentése, pillanatnyi állapothoz valami
+ - hova menjen? ldap, db, file, log?
+ - értesítés - email, sms, skype?
+ - futó programmal interakció? (tcp, web, skype)
+ - milyen bonyolult agent?
+ - többnyelvûség?
+
+todo:
+ + mûködtetés: remote ctrl + leállítás, konfig módosítás, semmi további interakció
+ + remote consolra esemény output: server socket mint eseménykezelõ, tcp kiensekre broadcast; 
+ 		kliens kezelje a kéretlen tartalmat
+ + switch parser
+ + tcp stream reader bekötése; file tcp socketre játszó kis app
+ - egyelõre kocka mentés nem kell - xml/db, (vizualizáció)? (xml dump)
+ 
+ 
+ 
+Kell egy gyors text/multitext beállítási lehetõség a message alá is, resource nélkül; a kettõt kell 
+összefogni a resolverrrel, ezért az konstruktorban csak a template stringet vagy map-et kapja meg.
+
+A message elõállítás során van egy info blokk, amiben a locale is szerepel, illetve az, hogy személyes 
+adatot tartalmaz-e (pl a nevet az adminból emelte ki). Ehhez az kell, hogy a path resolution alapja 
+nem az ICGenObject, hanem egy új, PathElement interfész legyen, amitõl név szerint kérhetõ el adat. 
+Kérdés, hogy ebbe hogyan (talán hinttel?) lehet betolni azt, hogy a message customized mezõ kitölthetõ 
+legyen. Ennek alapján dönti el a channel, hogy összevonható-e a küldendõ anyag.
+
+lehessen küldéskor megcímezni usert vagy user listát is is alapján. Ez most nem érdekes, de késõbb 
+a message így lesz felhasználható bármilyen környezetben.
+A message feloldása a legalacsonyabb szinten, a channelnél történik meg, végig kell gondolni, hogyan 
+fér ez össze azzal, hogy a message alatt locale specifikus módon eltérõ template-ek szerepelhetnek.
+
+Nem csak a message, hanem minden resource-os elemre igaz, hogy lehet configba írt alapértelmezett adat, 
+amit transzparens módon felülírhat a megfelelõ helyen szereplõ localized resource. Ezek szerint ezt 
+msg feletti õs szinten kellene összefogni. Ez viszont amellett szól, hogy a template kezelõ, belõle 
+üzenetet formázó komponens áll kapcsolatban a resource-szal, és ezt a réteget csak használja a message.
